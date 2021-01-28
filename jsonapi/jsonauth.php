@@ -1,0 +1,32 @@
+<?php
+header('content-type:application/json;charset=utf8');
+require_once(dirname(__FILE__).'/'.'../sql_db.php');
+require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_INC.php');
+require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_DB.php');
+$setup=UsualToolCMSDB::queryData(
+"cms_setup",
+"authcode,weburl,indexlanguage",
+"",
+"",
+"1",
+"0")["querydata"][0];
+    $authcode=$setup["authcode"];
+    $weburl=substr($setup["weburl"],0,-1);
+$type=UsualToolCMS::sqlcheck($_GET["type"]);
+$auth=UsualToolCMS::sqlcheck($_GET["auth"]);
+$code=UsualToolCMS::sqlcheck($_GET["code"]);
+if($authcode==$auth):
+	if($type=="wechat"):
+		$autharr=UsualToolCMSDB::queryData("cms_routine","rteid,rtesecret","","","1","0")["querydata"][0];
+		$appid=$autharr["rteid"];
+		$appkey=$autharr["rtesecret"];
+	    $result=file_get_contents("https://api.weixin.qq.com/sns/jscode2session?appid=".$appid."&secret=".$appkey."&js_code=".$code."&grant_type=authorization_code");
+	else:
+		$appid="";
+		$appkey="";
+		$result="0";
+	endif;
+	echo$result;
+else:
+    echo "0";
+endif;

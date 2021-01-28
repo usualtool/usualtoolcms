@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="<{php=>echo$_COOKIE['UTCMSLanguage'];}>">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="<{$webplace}>,<{$webkeywords}>" />
+    <meta name="description" content="<{$webplace}>,<{$webdescription}>" />
+    <meta name="author" content="UsualToolCMS.com">
+    <title><{$webplace}> - <{$webname}></title>
+    <link href="<{$weburl}>/assets/css/font-awesome.css" rel="stylesheet">
+    <link href="<{$weburl}>/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<{$weburl}>/assets/css/style.css" rel="stylesheet">
+    <script src="<{$weburl}>/assets/js/jquery.min.js"></script>
+    <script src="<{$weburl}>/assets/js/bootstrap.min.js"></script>
+    <script src="<{$weburl}>/assets/js/jquery.localize.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<{$weburl}>/assets/js/language.cookie.js" type="text/javascript" charset="utf-8"></script>
+  </head>
+  <body>
+   <div class="bg-light navbar-light mb-2">
+    <nav class="container navbar navbar-expand-md">
+        <a class="navbar-brand" href="./"><img src="<{$weblogo}>" border=0></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <{loop $inavs $inavt}>
+            <li class="nav-item">
+                <a class="nav-link <{nav:currentpage,inavt=>linkurl,active}><{php=>if(UsualToolCMS::contain(".html",return $currentpage)==false&&UsualToolCMS::contain(".php",return $currentpage)==false&&return $inavt=>linkurl=="index.html"):echo"active";endif;}>" target="<{$inavt=>target}>" href="<{$inavt=>linkurl}>">
+                <{lang::$inavt=>linkname}>
+                </a>
+            </li>
+            <{/loop}>
+        </ul>
+      </div>
+      <div class="disnone">
+        <ul class="list-inline">
+            <{if(is_dir("modules/member"))}>
+                <{if !empty($user)&&!empty($uid)}>
+                    <li class="list-inline-item"><i class="fa fa-user-circle" aria-hidden="true"></i> <a href="home/index.php?ut=my-home"><{lang=>account}></a></li>
+                    <{php=>if(UsualToolCMSDB::modTable("cms_goods")):}>
+                        <li class="list-inline-item"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <a href="home/index.php?ut=my-shopcart"><{lang=>shopcart}></a>(<{$shopcartnum}>)</li>
+                    <{php=>endif;}>
+                    <li class="list-inline-item"><i class="fa fa-sign-out" aria-hidden="true"></i> <a href="index.php?ut=login&t=out"><{lang=>out}></a></li>
+                <{else}>
+                    <{loop $tnavs $tnavt}>
+                    <li class="list-inline-item"><i class="fa fa-sort" aria-hidden="true"></i> <a target="<{$tnavt=>target}>" href="<{$tnavt=>linkurl}>"><{lang::$tnavt=>linkname}></a></li>
+                    <{/loop}>
+                <{/if}>
+            <{/if}>
+              <li class="list-inline-item dropdown">
+                <a data-toggle="dropdown" href="#"><i class="fa fa-language" aria-hidden="true"></i> <{lang=>lg}></a>
+                <div class="dropdown-menu">
+                  <{loop $langdata $langdatas}>
+                      <a class="dropdown-item" href="javascript:void(0);" onclick="clickLang('<{$langdatas=>langtype}>')">
+                          <{$langdatas=>langname}>
+                      </a>
+                  <{/loop}>
+                </div>
+              </li>
+        </ul>
+      </div>
+    </nav>
+ </div>

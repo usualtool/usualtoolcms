@@ -1,0 +1,320 @@
+﻿<{include "head.cms"}>
+<{if(is_dir("modules/article"))}>
+<!--article--><div class="container mb-2">
+    <div class=row>
+        <div class="col-md-12 mb-1">
+            <div class="text-with-hr">
+                <span><h4><i class="fa fa-book" aria-hidden="true"></i> <{lang=>article}></h4></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div id="articlelun" class="carousel slide" data-ride="carousel">
+                        <ul class="carousel-indicators">
+                            <li data-target="#articlelun" data-slide-to="0" class="active"></li>
+                            <li data-target="#articlelun" data-slide-to="1"></li>
+                            <li data-target="#articlelun" data-slide-to="2"></li>
+                        </ul>
+                        <div class="carousel-inner">
+                            <{loop $toparticles $toparticle}>
+                                <{if($toparticle["xu"]<4)}>
+                                    <div class="carousel-item <{if($toparticle["xu"]<2)}>active<{/if}>">
+                                        <a href="index.php?ut=article&id=<{$toparticle=>id}>">
+                                            <img src="<{$toparticle=>indexpic}>" style="width:100%;height:200px;"></a>
+                                    </div>
+                                    <{/if}>
+                                        <{/loop}>
+                        </div>
+                        <a class="carousel-control-prev" href="#articlelun" data-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </a>
+                        <a class="carousel-control-next" href="#articlelun" data-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <div class="col-md-12 ut-none">
+                    <dl>
+                        <{loop $toparticles $toparticlex}>
+                            <{if($toparticlex["xu"]>3 && $toparticlex["xu"]<10)}>
+                                    <dd class="text-truncate"><i class="fa fa-caret-right" aria-hidden="true"></i> 
+                                        <a href="index.php?ut=article&id=<{$toparticlex=>id}>">
+                                            <{$toparticlex=>title}></a></dd>
+                                    <{/if}>
+                                        <{/loop}>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!--/top article-->
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <dl>
+                        <{loop $newarticles $newarticle}>
+                            <{if($newarticle["xu"]<2)}>
+                                <a href="index.php?ut=article&id=<{$newarticle=>id}>">
+                                    <h3 class="text-primary">
+                                        <{$newarticle=>title}></h3>
+                                    <dd class="ut-font-14 text-truncate-2 text-primary">
+                                        <{substr=>$newarticle=>content,0,150}></dd></a>
+                                <{elseif($newarticle["xu"]<11)}>
+                                    <dd class="text-truncate"><i class="fa fa-angle-double-right" aria-hidden="true"></i> 
+                                        <a href="index.php?ut=article&id=<{$newarticle=>id}>">
+                                            <{$newarticle=>title}></a></dd>
+                                    <{/if}>
+                                        <{/loop}>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <!--/new article-->
+        <div class="col-md-4 ut-none">
+            <div class="row">
+                <{loop $hitarticles $hitarticle}>
+                    <{if($hitarticle["xu"]<7)}>
+                        <div class="col-sm-6 col-md-6">
+                            <div class="thumbnail">
+                                <img src="<{$hitarticle=>indexpic}>" class="img-thumbnail rounded-0" style="width:100%;height:100px;">
+                                 <div class="caption">
+                    <a href="index.php?ut=article&id=<{$hitarticle=>id}>">
+                                 <p class="text-truncate"><{$hitarticle=>title}></p>
+                        </a>
+                                 </div>
+                            </div>
+                        </div>
+                        <{/if}>
+                            <{/loop}>
+            </div>
+         </div>
+        <!--/hit article--></div>
+</div><!--/article-->
+<{/if}>
+
+<{if(is_dir("modules/info"))}>
+<!--info--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-12 mb-1">
+            <div class="text-with-hr">
+                <span>
+                    <h4>
+                        <i class="fa fa-send" aria-hidden="true"></i>
+                        <{lang=>classinfo}></h4></span>
+            </div>
+        </div>
+        <div class="col-md-7 mb-2">
+            <div class="col-sm-12 border">
+                <{loop $newinfos $newinfo}>
+                    <{if($newinfo["xu"]<11)}>
+                        <div class="col-md-12 mb-1 <{if($newinfo["xu"]%2==0)}>bg-light<{/if}>">
+                            <div class="row">
+                                <div class="col-md-9 text-truncate">
+                                <{if !empty($newinfo["indexpic"])}><i class="fa fa-picture-o text-success" aria-hidden="true"></i><{/if}> [<{php=>$class=UsualToolCMSDB::queryData("cms_info_cat","classname","id='".return $newinfo=>catid."'","","")["querydata"][0];echo $class['classname'];}>] 
+
+                                <a href="index.php?ut=info&id=<{$newinfo=>id}>"><{$newinfo=>title}></a>
+                                </div>
+                                <div class="col-md-3 text-right ut-none"><{php=>echo date('Y-m-d',strtotime(return $newinfo=>addtime))}></div>
+                            </div>
+                        </div>
+                    <{/if}>
+                <{/loop}>
+            </div>
+        </div>
+        <div class="col-md-5 ut-none">
+        <div class=row>
+                <{loop $infocats $infocat}>
+                    <{if($infocat["xu"]<16)}>
+                            <div class="col-md-4 col-6">
+                                <div class="bg-light border ml-2 mb-2 text-center">
+                                <a href="index.php?ut=infos&catid=<{$infocat=>id}>" class="text-centermb">
+                                    <{$infocat=>classname}>
+                                </a>
+                                </div>
+                            </div>
+                    <{/if}>
+                <{/loop}>
+                </div>
+        </div>
+    </div>
+</div><!--/info-->
+<{/if}>
+<{if(is_dir("modules/job"))}>
+<!--job--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-12 mb-1">
+            <div class="text-with-hr">
+                <span>
+                    <h4>
+                        <i class="fa fa-user-secret" aria-hidden="true"></i>
+                        <{lang=>job}></h4></span>
+            </div>
+        </div>
+        <{loop $newjobs $newjob}>
+            <{if($newjob["xu"]<9)}>
+                <div class="col-md-3 col-6 mb-2">
+                    <div class="card <{if($newjob["xu"]%2==0)}>bg-light<{/if}> <{if($newjob["xu"]>4)}>ut-none<{/if}>" style="border-radius:0px;">
+                        <div class="card-body">
+                            <h4 class="card-title text-truncate">
+                                <{$newjob=>jobname}></h4>
+                            <p class="card-text text-truncate">
+                                <{$newjob=>jobcom}></p>
+                            <a class="btn btn-success mx-auto" href="index.php?ut=job&id=<{$newjob=>id}>" style="color:white;">
+                                <{lang=>application}></a></div>
+                    </div>
+                </div>
+                <{/if}>
+                    <{/loop}>
+    </div>
+</div><!--/job-->
+<{/if}>
+<{if(is_dir("modules/goods"))}>
+<!--goods--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-8 ut-none">
+            <div class="row">
+                <div class="col-md-12 panel-heading">
+                <h5 class="media-heading border-bottom pb-2"><i class="fa fa-shopping-bag" aria-hidden="true"></i> <{lang=>goods}></h5>
+                </div>
+                <{loop $newgoods $newgood}>
+                    <{if($newgood["xu"]<9)}>
+                        <div class="col-md-3 mb-3">
+                           <a href="index.php?ut=product&id=<{$newgood=>id}>">
+                             <img src="<{splits=>$newgood=>indexpic=>0}>" class="img-thumbnail rounded-0 mr-3 ut-border-0" style="width:100%;height:180px;">
+                           </a>
+                            <div class="caption mt-2 ut-text-p">
+                                <a href="index.php?ut=product&id=<{$newgood=>id}>">
+                                   <h6 class="text-truncate"><{$newgood=>title}></h6>
+                                </a>
+                                <p class="ut-font-14"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <{$newgood=>gprice}> <{lang=>unit}></p>
+                            </div>
+                        </div>
+                    <{/if}>
+                <{/loop}>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel-heading">
+            <h5 class="media-heading"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <{lang=>goods}> • <{lang=>ranking}></h5>
+            </div>
+            <div id="goodslun" class="carousel slide" data-ride="carousel">
+                <ul class="carousel-indicators">
+                    <li data-target="#goodslun" data-slide-to="0" class="active"></li>
+                    <li data-target="#goodslun" data-slide-to="1"></li>
+                    <li data-target="#goodslun" data-slide-to="2"></li>
+                </ul>
+                <div class="carousel-inner">
+                <{loop $hitgoods $hitgood}>
+                    <{if($hitgood["xu"]<4)}>
+                        <a href="index.php?ut=product&id=<{$hitgood=>id}>">
+                        <div class="carousel-item <{if($hitgood["xu"]==1)}>active<{/if}>">
+                            <img src="<{splits=>$hitgood=>indexpic=>0}>" style="height:490px;width:100%;">
+                            <div class="carousel-caption ut-lun ut-text-p bg-light text-dark">
+                                <h5 class="text-truncate-1"><strong><{$hitgood=>title}></strong></h5>
+                                <p>
+                                <{lang=>price}>: <a href="index.php?ut=product&id=<{$hitgood=>id}>"><{$hitgood=>gprice}></a> | 
+                                <{lang=>sale}>: <a href="index.php?ut=product&id=<{$hitgood=>id}>"><{$hitgood=>sprice}></a> |
+                                <{lang=>stock}>: <a href="index.php?ut=product&id=<{$hitgood=>id}>"><{$hitgood=>stocks}></a></p>
+                            </div>
+                        </div>
+                        </a>
+                    <{/if}>
+                <{/loop}>
+                <a class="carousel-control-prev" href="#goodslun" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+                </a>
+                <a class="carousel-control-next" href="#goodslun" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!--/goods-->
+<{/if}>
+<{if(is_dir("modules/down"))}>
+<!--down--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-12 mb-1">
+            <div class="text-with-hr">
+                <span>
+                    <h4>
+                        <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                        <{lang=>download}></h4></span>
+            </div>
+        </div>
+        <{loop $newdowns $newdown}>
+            <{if($newdown["xu"]<7)}>
+                <div class="col-6 col-md-2 mb-2">
+                    <div class="card <{if($newdown["xu"]%2==0)}>bg-light<{/if}>" style="border-radius:0px;">
+                        <div class="card-body ut-text-p">
+                            <p class="text-center">
+                                <img src="<{splits=>$newdown=>softpic=>0}>" style="width:80px;height:80px;">
+                            </p>
+                            <p class="card-text text-truncate text-center">
+                                <a href="index.php?ut=down&id=<{$newdown=>id}>"><{$newdown=>softname}></a></p>
+                            <p class="text-truncate-2 ut-font-14">
+                                <{substr=>$newdown=>content,0,60}>
+                            </p>
+                         </div>
+                    </div>
+                </div>
+                <{/if}>
+                    <{/loop}>
+    </div>
+</div><!--/down-->
+<{/if}>
+<{if(is_dir("modules/atlas"))}>
+<!--atlas--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-8 ut-none">
+            <div class="panel-heading">
+                <h5 class="media-heading border-bottom pb-2"><i class="fa fa-photo" aria-hidden="true"></i> <{lang=>atlas}></h5>
+            </div>
+            <div class="col-md-12">
+            <div class="row">
+            <{loop $newatlas $newatla}>
+                <{if($newatla["xu"]<7)}>
+                    <div class="col-md-4<{if($newatla["xu"]==1 || $newatla["xu"]==4)}> pl-0<{/if}><{if($newatla["xu"]%3==0)}> pr-0<{/if}>">
+                        <a href="index.php?ut=atla&id=<{$newatla=>id}>">
+                            <div class="m-auto text-center ut-bg-hui" style="height:135px;">
+                                <img class="img-thumbnail rounded-0 ut-pic-p0-bk0" src="<{splits=>$newatla=>photos=>0}>" style="height:135px;">
+                            </div>
+                                <p class="text-truncate ut-text-p"><{$newatla=>title}></p>
+                        </a>
+                    </div>
+                <{/if}>
+            <{/loop}>
+            </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel-heading">
+                <h5 class="media-heading border-bottom pb-2"><i class="fa fa-photo" aria-hidden="true"></i> <{lang=>atlas}> • <{lang=>recommend}></h5>
+            </div>
+            <{loop $topatlas $topatla}>
+                <{if($topatla["xu"]<4)}>
+                    <a href="index.php?ut=atla&id=<{$topatla=>id}>">
+                        <div class="media mb-2">
+                            <div class="col-4 media-left m-auto text-center ut-bg-hui" style="height:90px;">
+                            <{if !empty($topatla["readpass"])}>
+                               <img class="img-thumbnail rounded-0 ut-pic-p0-bk0" src="<{$weburl}>/assets/images/atlakeys.jpg" style="height:90px;">
+                            <{else}>
+                               <img class="img-thumbnail rounded-0 ut-pic-p0-bk0" src="<{splits=>$topatla=>photos=>0}>" style="height:90px;">
+                            <{/if}>
+                            </div>
+                            <div class="col-8 media-body ut-font-14 ut-text-p">
+                                <h5 class="media-heading"><{$topatla=>title}></h5>
+                                <p style="line-height:25px;"><{lang=>read}>: <{$topatla=>hit}> | <{lang=>picture}>: <{php=>echo count(explode(',',return $topatla=>photos));}></p>
+                                <p class="text-truncate-2"><{substr=>$topatla=>content,0,200}></p>
+                            </div>
+                        </div>
+                    </a>
+                <{/if}>
+            <{/loop}>
+        </div>
+    </div>
+</div><!--/atlas-->
+<{/if}>
+<{include "foot.cms"}>

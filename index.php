@@ -1,0 +1,34 @@
+<?php
+require_once(dirname(__FILE__).'/'.'conn.php');
+$auths=UsualToolCMSDB::authLogin();
+$currentpage=UsualToolCMS::curpageurl();
+$mytpl->runin('currentpage',$currentpage);
+if(!empty($_GET["ut"])):
+	if($_GET["ut"]=="index"):
+	$ut=$indexmodule;
+	else:
+    $ut=UsualToolCMS::sqlcheck($_GET["ut"]);
+	endif;
+else:
+    $ut=$indexmodule;
+endif;
+if(defined('REWRITE')):
+    if(REWRITE=="1"):
+    $listlink="".$ut.".html?";
+    else:
+    $listlink="index.php?ut=".$ut."&";
+    endif;
+else:
+    $listlink="".$ut.".html?";
+endif;
+$modules=json_decode(file_get_contents("modules/module.config"));
+$module=UsualToolCMS::modsearch("".$ut.".php",$modules);
+$modpath="modules/".$module;
+if($module=="error"){
+    require_once(UTF_PATH.'/'.'error.php');
+}
+else{
+    require_once(WEB_PATH.'/'.''.$modpath.'/'.$ut.'.php');
+}
+$mysqli->close();
+?>

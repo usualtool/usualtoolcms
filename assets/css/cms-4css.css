@@ -1,0 +1,16 @@
+#cmshead {background-color: #45b97c !important;}
+#navhead{background-color: #45b97c !important;}
+.subnavbox{background-color: #45b97c !important;background-image:linear-gradient(#45b97c, #d6c760) !important;}
+.mainbox h2 .actionBtn{background-color: #45b97c;}
+.mainbox h2 .add {background: #45b97c url(../images/action_btn.png) no-repeat 20px 50% !important;}
+#head .logo {border-right: 1px solid #45b97c;}
+#menu_left {background-color: #45b97c;}
+.btn {background-color: #45b97c;}
+#head .nav li {border-left: 1px solid #45b97c;border-right: 1px solid #84bf96;}
+.tab {border-bottom: 1px solid #84bf96;}
+.tab a.selected {background-color: #84bf96;color: #FFF;}
+#head .navx li {border-left: 1px solid #45b97c;border-right: 1px solid #84bf96;}
+#head .nav a {color: #fff;}
+.login-head {background: #45b97c !important;}
+.utlogin{background: #45b97c;border: 1px solid #45b97c;}
+.utlogin:hover{color:#45b97c;border:1px solid #45b97c;}

@@ -1,0 +1,62 @@
+﻿——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+WIN IIS伪静态规则
+使用方法：复制代码保存为web.config，放置在根目录下（IIS7及以上版本通过）
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <rewrite>
+            <rules>
+                      <rule name="UT规则 1">
+                      <match url="^([a-zA-Z]+)\.html$" ignoreCase="false" />
+                      <conditions logicalGrouping="MatchAll">
+                      <add input="{QUERY_STRING}" pattern="^(.*)$" ignoreCase="false" />
+                      </conditions>
+                      <action type="Rewrite" url="index.php?ut={R:1}&amp;{C:1}" appendQueryString="false" />
+                      </rule>
+                      <rule name="UT规则 2">
+                      <match url="^([a-zA-Z]+)-([0-9]+)\.html$" ignoreCase="false" />
+                      <conditions logicalGrouping="MatchAll">
+                      <add input="{QUERY_STRING}" pattern="^(.*)$" ignoreCase="false" />
+                      </conditions>
+                      <action type="Rewrite" url="index.php?ut={R:1}&amp;id={R:2}&amp;{C:1}" appendQueryString="false" />
+                      </rule>
+                      <rule name="UT规则 3">
+                      <match url="^home/([a-zA-Z\-]+)\.html$" ignoreCase="false" />
+                      <conditions logicalGrouping="MatchAll">
+                      <add input="{QUERY_STRING}" pattern="^(.*)$" ignoreCase="false" />
+                      </conditions>
+                      <action type="Rewrite" url="home/index.php?ut={R:1}&amp;{C:1}" appendQueryString="false" />
+                      </rule>
+            </rules>
+        </rewrite>
+    </system.webServer>
+</configuration>
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+Apache伪静态规则
+使用方法：复制代码保存为.htaccess，放置在根目录下
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^([a-zA-Z]+)\.html$ index.php?ut=$1&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^([a-zA-Z]+)-([0-9]+)\.html$ index.php?ut=$1&id=$2&%1
+RewriteCond %{QUERY_STRING} ^(.*)$
+RewriteRule ^home/([a-zA-Z\-]+)\.html$ home/index.php?ut=$1&%1
+</IfModule>
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+Nginx伪静态规则
+使用方法：复制代码加入到nginx.conf配置文件server节点中
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+location / {
+if (!-e $request_filename){
+rewrite ^/([a-zA-Z]+)\.html$ /index.php?ut=$1 last;
+rewrite ^/([a-zA-Z]+)-([0-9]+)\.html$ /index.php?ut=$1&id=$2 last;
+rewrite ^/home/([a-zA-Z\-]+)\.html$ /home/index.php?ut=$1 last;
+}
+}
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————
+其他未明系统伪静态规则，请参照以上代码编写。
+——————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————————

@@ -1,0 +1,27 @@
+<?php
+header('content-type:application/json;charset=utf8');
+require_once(dirname(__FILE__).'/'.'../sql_db.php');
+require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_INC.php');
+require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_DB.php');
+$setup=UsualToolCMSDB::queryData(
+"cms_setup",
+"authcode,weburl,indexlanguage",
+"",
+"",
+"1",
+"0")["querydata"][0];
+    $authcode=$setup["authcode"];
+    $weburl=substr($setup["weburl"],0,-1);
+    $indexlg=$setup["indexlanguage"];
+if(!empty($_COOKIE['UTCMSLanguage'])):
+    $language=UsualToolCMS::sqlcheck($_COOKIE['UTCMSLanguage']);
+else:
+    $language=$indexlg;setcookie("UTCMSLanguage",$indexlg);
+endif;
+$auth=UsualToolCMS::sqlcheck($_GET["auth"]);
+$keyword=UsualToolCMS::sqlcheck($_GET["keyword"]);
+if($authcode==$auth):
+    $searchdata=UsualToolCMSDB::searchData($keyword);
+    $jsondata=str_replace("http:","https:",str_replace(',images',','.$weburl.'\/images',str_replace('"images','"'.$weburl.'\/images',json_encode($searchdata,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT))));
+    echo$jsondata;
+endif;

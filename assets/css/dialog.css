@@ -1,0 +1,78 @@
+.utwin-mask{ width:100%; height:100%; display: none; position: fixed; left:0; top:0; background:rgba(0,0,0,0.7); z-index:2222;}
+.utwin{ position: fixed; z-index:3333;  display: none; left:0; right:0; margin:auto; top:50%; transform-origin: center; max-width:80%; max-height:80%; background:#fff; border-radius:5px; overflow: hidden;}
+.utwin.utwin-alert,.utwin.utwin-confirm{ width:250px;}
+.utwin.utwin-model{ width:400px;}
+.utwin.utwin-success,.utwin.utwin-error{  padding:20px 12px; width:140px; }
+.utwin.utwin-tips{ padding:8px 12px; max-width:150px; background:rgba(0,0,0,0.6); }
+.utwin.utwin-tips .utwin-text{ padding:0; color:#fff; }
+.utwin.utwin-loading{  padding:20px 12px; width:100px; background:rgba(0,0,0,0.6); }
+.utwin.utwin-loading .utwin-text{ padding:0; color:#fff; }
+.utwin .utwin-load{ display: flex; align-items: center; padding-top:10px; margin-bottom:15px; justify-content:center;}
+.utwin .utwin-load span{ width:6px;  animation: hsycms-alert-load 1s ease infinite; transform: translateY(10px); animation-delay:0.1s; margin:0 5px; height:6px; opacity:0; border-radius:6px; background:#fff;}
+.utwin .utwin-load span:nth-child(2){ animation-delay:0.2s;}
+.utwin .utwin-load span:nth-child(3){ animation-delay:0.3s;}
+.utwin .utwin-title{ padding:15px 0; opacity:0;  color:#333; transform: translateY(10px); animation: utwin-alert-text 0.3s ease forwards; animation-delay:0.2s; font-weight:bold; font-size: 15px; text-align: center;}
+.utwin .utwin-text{ font-size:14px; text-align: center; color:#333; line-height:23px; padding:0 20px;  opacity:0;transform: translateY(10px); animation: hsycms-alert-text 0.3s ease forwards; animation-delay:0.4s;}
+.utwin .utwin-text.l{ text-align: left;}
+.utwin .utwin-icon{ padding-bottom:12px;}
+.utwin .utwin-icon svg{ margin:0 auto; display: block;}
+.utwin.utwin-success .utwin-text,.utwin.utwin-error .utwin-text{ color:#238af4; padding:0; opacity:0; transform: translateY(10px); animation: hsycms-alert-text 0.3s ease forwards; animation-delay:0.9s; }
+.utwin.utwin-error .utwin-text{ color:#f54655}
+.utwin .utwin-content{ padding:12px; padding-top:0; overflow: hidden auto; max-height:400px; font-size:14px;}
+.utwin .utwin-btn{ display:flex; align-items: center; border-top:1px solid #f1f1f1; justify-content: center; margin-top:20px;  opacity:0; transform: translateY(10px); animation: hsycms-alert-text 0.4s ease forwards; animation-delay:0.6s;}
+.utwin .utwin-btn button{ flex:1; color:#999; cursor: pointer; border:0; background:none; padding:12px;}
+.utwin .utwin-btn button:last-child{ color:#238af4}
+.utwin .utwin-btn button.cancel{ border-right:1px solid #f1f1f1;}
+.utwin .utwin-btn button:active{ opacity:0.8;}
+.utwin-ani-open{ animation: hsycms-open 0.3s ease forwards; }
+.utwin-ani-close{ animation: hsycms-close 0.3s ease forwards; }
+@-webkit-keyframes utwin-open{  
+    0%{ transform: scale(0); opacity:0;} 
+    100%{ transform: scale(1); opacity:1;}
+}
+@-webkit-keyframes utwin-close{  
+     0%{ transform: scale(1); opacity:1;  } 
+     30%{ transform: scale(1.05); opacity: 0.5; }
+     100%{ transform: scale(0.7); opacity: 0;}
+}
+.utwin-alert-svgcircle{
+   stroke-dasharray:200;
+   stroke-dashoffset:200;
+   animation: hsycms-alert-ruand 0.5s ease-in-out forwards
+}
+.utwin-alert-svggou {
+   stroke-dasharray:80;
+   stroke-dashoffset:80;
+   animation: hsycms-alert-tick .6s ease-out forwards;
+   animation-delay: .75s;
+}
+.utwin-alert-svgca1 {
+    stroke-dasharray:80;
+    stroke-dashoffset:80;
+    animation: hsycms-alert-tick .6s ease-out forwards;
+    animation-delay: .75s;
+}
+.utwin-alert-svgca2 {
+ stroke-dasharray:80;
+ stroke-dashoffset:80;
+ animation: hsycms-alert-tick .6s ease-out forwards;
+ animation-delay: .85s;
+}
+
+@keyframes utwin-alert-ruand {
+    form{stroke-dashoffset:200;}
+    to{stroke-dashoffset:400;}
+}
+@keyframes utwin-alert-tick {
+    from {stroke-dashoffset:80;}
+    to {stroke-dashoffset: 0;}
+}
+@keyframes utwin-alert-text {
+    from {transform: translateY(10px);opacity: 0;}
+    to {transform: translateY(0px);opacity: 1;}
+}
+@keyframes utwin-alert-load {
+    0% {transform: translateY(0px);opacity: 0;}
+    50% {transform: translateY(-10px);opacity: 1;}
+    100%{transform: translateY(0px);opacity: 0;}
+}
