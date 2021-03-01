@@ -71,7 +71,7 @@ if($webnames=="web"):
 else:
     $webname=$webnames;
 endif;
-if($webisclose==1 && strpos($_SERVER['PHP_SELF'],"cms")===FALSE &&$_GET["ut"]!=="updating"):
+if($webisclose==1 && strpos($_SERVER['PHP_SELF'],"dev")===FALSE && strpos($_SERVER['PHP_SELF'],"cms")===FALSE && $_GET["ut"]!=="updating"):
     echo"<script>window.location.href='updating.html'</script>";
 endif;
 
