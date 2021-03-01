@@ -92,7 +92,6 @@
         <!--/hit article--></div>
 </div><!--/article-->
 <{/if}>
-
 <{if(is_dir("modules/info"))}>
 <!--info--><div class="container mb-2">
     <div class="row">
@@ -139,6 +138,108 @@
         </div>
     </div>
 </div><!--/info-->
+<{/if}>
+<{if(is_dir("modules/video"))}>
+<!--video--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-12 mb-1">
+            <div class="text-with-hr">
+                <span>
+                    <h4>
+                        <i class="fa fa-film" aria-hidden="true"></i>
+                        <{lang=>video}></h4></span>
+            </div>
+        </div>
+                    <{loop $newvideos $newvideo}>
+                        <{if($newvideo["xu"]<7)}>
+                            <div class="col-md-2 col-2 mb-2">
+                                <a href="index.php?ut=video&id=<{$newvideo=>id}>" class="ut-bg-hui">
+                                    <img src="<{splits=>$newvideo=>vodpic=>0}>" class="rounded-0 ut-border-0" style="width:100%;height:180px;"></a>
+                                <div class="caption mt-2 ut-text-p">
+                                    <a href="index.php?ut=video&id=<{$newvideo=>id}>">
+                                        <h6 class="text-truncate">
+                                            <{$newvideo=>vodname}></h6></a>
+                                </div>
+                            </div>
+                            <{/if}>
+                                <{/loop}>
+    </div>
+</div><!--/video-->
+<{/if}>
+<{if(is_dir("modules/music"))}>
+<!--music--><div class="container mb-2">
+    <div class="row">
+        <div class="col-md-8 ut-none">
+            <div class="panel-heading">
+                <h5 class="media-heading pb-2"><i class="fa fa-music" aria-hidden="true"></i> <{lang=>music}></h5>
+                   <span style="float:right;margin-top:-35px;">
+                        <input type="checkbox" id="all" />
+                    <{lang=>all}> |
+                        <a onclick="play()">
+                            <{lang=>play}></a></span>
+            </div>
+            <div class="col-md-12">
+            <div class="row ut-border-1">
+                        <{loop $newmusics $newmusic}>
+                            <{if($newmusic["xu"]<31)}>
+                                <dd class="col-md-6 col-6 ut-left">
+                                    <input type="checkbox" name="song" id="songid" value="<{$newmusic=>id}>">
+                                    <a href="index.php?ut=song&id=<{$newmusic=>id}>">
+                                        <{$newmusic=>musicname}> -
+                                            <{$newmusic=>singer}></a></dd>
+                            <{/if}>
+                         <{/loop}>
+            </div>
+            </div>
+        </div>
+            <script type="text/javascript">$(function() {
+                    $('#all').on('click',
+                    function() {
+                        if (this.checked) {
+                            $("input[name='song']").attr('checked', true);
+                        } else {
+                            $("input[name='song']").attr('checked', false);
+                        }
+                    });
+                });
+                function play() {
+                    var obj = document.getElementsByName('song');
+                    var demand = '';
+                    for (var i = 0; i < obj.length; i++) {
+                        if (obj[i].checked) {
+                            demand += obj[i].value + ',';
+                        }
+                    }
+                    str = (demand.substring(demand.length - 1) == ',') ? demand.substring(0, demand.length - 1) : demand;
+                    window.location.href = "index.php?ut=song&id=" + str + "";
+                }</script>
+        <div class="col-md-4">
+            <div class="panel-heading">
+                <h5 class="media-heading border-bottom pb-2"><i class="fa fa-music" aria-hidden="true"></i> <{lang=>music}> • <{lang=>album}></h5>
+            </div>
+            <div class="row">
+                    <{loop $musicalbums $musicalbum}>
+                        <{if($musicalbum["xu"]<6)}>
+                            <a href="index.php?ut=song&id=<{$musicalbum=>musicid}>">
+                                <div class="media col-md-12 mb-2">
+                                    <div class="col-md-4 col-4 media-left m-auto text-center ut-bg-hui" style="height:80px;">
+                                        <img src="<{$musicalbum=>albumpic}>" class="img-thumbnail rounded-0 ut-pic-p0-bk0" style="height:80px;"></div>
+                                    <div class="col-8 media-body ut-font-14 ut-text-p">
+                                        <h6 class="media-heading">
+                                            <{$musicalbum=>albumname}></h6>
+                                        <p>
+                                            <{lang=>music}>:
+                                                <{php=>echo count(explode(',',return $musicalbum=>musicid));}></p>
+                                        <p class="text-truncate-2">
+                                            <{substr=>$musicalbum=>content,0,200}></p></div>
+                                </div>
+                            </a>
+                            <{/if}>
+                        <{/loop}>
+        </div>
+    </div>
+    </div>
+</div><!--/music-->
 <{/if}>
 <{if(is_dir("modules/job"))}>
 <!--job--><div class="container mb-2">
