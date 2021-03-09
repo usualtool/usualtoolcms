@@ -169,9 +169,11 @@ if(!empty($copyname)):
                     $enddir="../".$dir[$i]."/";
                     if(is_dir("../".$dir[$i]."/")):
                         UsualToolCMS::movedir($olddir,$enddir);
+                        UsualToolCMS::deldir($olddir);
                     else:
                         UsualToolCMS::makedir("../".$dir[$i]."/");
                         UsualToolCMS::movedir($olddir,$enddir);
+                        UsualToolCMS::deldir($olddir);
                     endif;
                 }
             endif;

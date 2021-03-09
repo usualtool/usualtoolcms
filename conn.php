@@ -43,7 +43,6 @@ $setup=UsualToolCMSDB::queryData(
     $address=$setup["address"];
     $articlesku=$setup["articlesku"];
     $goodssku=$setup["goodssku"];
-    $regdisplay=$setup["regdisplay"];
     $develop=$setup["develop"];
     $template=$setup["template"];
     $openhtml=$setup["openhtml"];

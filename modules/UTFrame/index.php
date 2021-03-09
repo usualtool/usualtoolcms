@@ -16,26 +16,17 @@ $mytpl->runin("newatlas",UsualToolCMSDB::queryData("cms_atlas","","","addtime de
 $mytpl->runin("topatlas",UsualToolCMSDB::queryData("cms_atlas","","recommend=1","addtime desc","")["querydata"]);
 $mytpl->runin("hitatlas",UsualToolCMSDB::queryData("cms_atlas","","","hit desc","")["querydata"]);
 //读取最新/推荐/点击排行招聘
-$mytpl->runin("newjobs",UsualToolCMSDB::queryData("cms_job","","","addtime desc","")["querydata"]);
-$mytpl->runin("topjobs",UsualToolCMSDB::queryData("cms_job","","recommend=1","addtime desc","")["querydata"]);
-$mytpl->runin("hitjobs",UsualToolCMSDB::queryData("cms_job","","","hit desc","")["querydata"]);
+$mytpl->runin("newjobs",UsualToolCMSDB::queryData("cms_job","","shen=1","addtime desc","")["querydata"]);
+$mytpl->runin("topjobs",UsualToolCMSDB::queryData("cms_job","","shen=1 and recommend=1","addtime desc","")["querydata"]);
+$mytpl->runin("hitjobs",UsualToolCMSDB::queryData("cms_job","","shen=1","hit desc","")["querydata"]);
 //读取最新/推荐/下载量排行下载
 $mytpl->runin("newdowns",UsualToolCMSDB::queryData("cms_down","","shen=1","addtime desc","")["querydata"]);
 $mytpl->runin("topdowns",UsualToolCMSDB::queryData("cms_down","","shen=1 and recommend=1","addtime desc","")["querydata"]);
 $mytpl->runin("topdowns",UsualToolCMSDB::queryData("cms_down","","shen=1","downnum desc","")["querydata"]);
-//读取最新/推荐/点击排行分类信息
+//读取最新/推荐/点击排行分类
 $mytpl->runin("newinfos",UsualToolCMSDB::queryData("cms_info","","shen=1","addtime desc","")["querydata"]);
 $mytpl->runin("topinfos",UsualToolCMSDB::queryData("cms_info","","shen=1 and recommend=1","addtime desc","")["querydata"]);
 $mytpl->runin("hitinfos",UsualToolCMSDB::queryData("cms_info","","shen=1","hit desc","")["querydata"]);
-//读取最新/推荐/点击排行视频
-$mytpl->runin("newvideos",UsualToolCMSDB::queryData("cms_video","","","addtime desc","")["querydata"]);
-$mytpl->runin("topvideos",UsualToolCMSDB::queryData("cms_video","","recommend=1","addtime desc","")["querydata"]);
-$mytpl->runin("hitvideos",UsualToolCMSDB::queryData("cms_video","","","hit desc","")["querydata"]);
-//读取最新/推荐/点击/专辑音乐
-$mytpl->runin("newmusics",UsualToolCMSDB::queryData("cms_music","","","addtime desc","")["querydata"]);
-$mytpl->runin("topmusics",UsualToolCMSDB::queryData("cms_music","","recommend=1","addtime desc","")["querydata"]);
-$mytpl->runin("hitmusics",UsualToolCMSDB::queryData("cms_music","","","hit desc","")["querydata"]);
-$mytpl->runin("musicalbums",UsualToolCMSDB::queryData("cms_music_album","","","addtime desc","")["querydata"]);
 //读取自定义内容首图及正文
 $mytpl->runin("customs",UsualToolCMSDB::figureData("cms_page","htmlcontent","id=1"));
 //读取文章/商品/图集/信息一级分类

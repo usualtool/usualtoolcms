@@ -11,6 +11,7 @@
     <link href="<{$weburl}>/assets/css/font-awesome.css" rel="stylesheet">
     <link href="<{$weburl}>/assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<{$weburl}>/assets/css/style.css" rel="stylesheet">
+    <link href="<{$currentpage}>" rel="canonical">
     <script src="<{$weburl}>/assets/js/jquery.min.js"></script>
     <script src="<{$weburl}>/assets/js/bootstrap.min.js"></script>
     <script src="<{$weburl}>/assets/js/jquery.localize.js" type="text/javascript" charset="utf-8"></script>

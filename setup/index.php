@@ -410,7 +410,6 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
       `mailpassword` varchar(50) DEFAULT NULL,
       `usercookname` varchar(50) NOT NULL DEFAULT 'usualtool_',
       `salts` varchar(100) DEFAULT 'usualtoolcms',
-      `regdisplay` varchar(50) DEFAULT '0,0,0,0,0,0,0',
       `webtitle` varchar(20) DEFAULT NULL,
       `language` varchar(250) DEFAULT 'zh,en',
       `indexlanguage` varchar(50) DEFAULT 'zh',
