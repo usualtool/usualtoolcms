@@ -42,16 +42,6 @@ if($do=="update"){
     $water_png=UsualToolCMS::sqlcheck(str_replace($siteurlx,"",str_replace($siteurl,"",$_POST["water_png"])));
     $water_place=UsualToolCMS::sqlcheck($_POST["water_place"]);
     //////
-	$ids=implode("-UT-",$_POST["sid"]);
-    $dbs=implode("-UT-",$_POST["sdb"]);
-    $fields=implode("-UT-",$_POST["sfield"]);
-    $wheres=implode("-UT-",$_POST["swhere"]);
-    $pages=implode("-UT-",$_POST["spage"]);
-	$idx=explode("-UT-",$ids);
-	$dbx=explode("-UT-",$dbs);
-    $fieldx=explode("-UT-",$fields);
-    $wherex=explode("-UT-",$wheres);
-    $pagex=explode("-UT-",$pages);
     if($l=="main"){
 		$sql="UPDATE `cms_setup` SET webisclose='$webisclose',develop='$develop',cmscolor='$cmscolor',usercookname='$usercookname',salts='$salts',webname='$webname',weburl='$weburl',webkeyword='$webkeyword',webdescribe='$webdescribe',weblogo='$weblogo',webicp='$webicp',webple='$webple',address='$address',webtel='$webtel',webfax='$webfax',webqq='$webqq',webemail='$webemail',indexunit='$indexunit',indexmodule='$indexmodule' where id='$id'";
 		$mysqli->query($sql);
@@ -73,6 +63,16 @@ if($do=="update"){
 		$mysqli->query($sql);
 		}
     if($l=="search"){
+        $ids=implode("-UT-",$_POST["sid"]);
+        $dbs=implode("-UT-",$_POST["sdb"]);
+        $fields=implode("-UT-",$_POST["sfield"]);
+        $wheres=implode("-UT-",$_POST["swhere"]);
+        $pages=implode("-UT-",$_POST["spage"]);
+        $idx=explode("-UT-",$ids);
+        $dbx=explode("-UT-",$dbs);
+        $fieldx=explode("-UT-",$fields);
+        $wherex=explode("-UT-",$wheres);
+        $pagex=explode("-UT-",$pages);
 		for($s=0;$s<=count($dbx);$s++){
     if($idx[$s]=="x"){
         $sql="insert into `cms_search_set` (dbs,fields,wheres,pages) values ('$dbx[$s]','$fieldx[$s]','$wherex[$s]','$pagex[$s]')";

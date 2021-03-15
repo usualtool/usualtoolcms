@@ -92,7 +92,7 @@ while($modrow=mysqli_fetch_array($mod)):
     echo"<tr style='line-height:25px;'><td align=center>".$ztitle."</td>";
     if($befoitem!="NULL"):
         for($k=0;$k<count($befoitems);$k++):
-            if(strpos($befoitems[$k],"dir:")===false):
+            if(strpos($befoitems[$k],"dir:")===false && strpos($befoitems[$k],'assets')===false && strpos($befoitems[$k],'templete')===false):
             if(file_exists("../modules/".$zmodid."/".$befoitems[$k]."")):
             //echo"".$befoitems[$k]."Yes<br>";
             else:

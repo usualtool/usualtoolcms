@@ -144,4 +144,4 @@ class pager{
     unset($subPage_link); 
     unset($subPage_type); 
     } 
-    }
+}

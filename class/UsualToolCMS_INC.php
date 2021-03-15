@@ -1,16 +1,16 @@
 <?php
 class UsualToolCMS{
     /*过滤操作函数*/
-    function sqlcheck($StrPost){
+    static function sqlcheck($StrPost){
         $StrPost=UsualToolCMS::sqlchecks($StrPost);
-        if(!get_magic_quotes_gpc()):
+        if(PHP_VERSION>=6 || !get_magic_quotes_gpc()):
             $StrPost=addslashes($StrPost);
         endif;
         $StrPost=nl2br($StrPost);
         $StrPost=htmlspecialchars($StrPost,ENT_QUOTES);
         return $StrPost;
     }
-    function sqlchecks($StrPost){
+    static function sqlchecks($StrPost){
         $StrPost=str_replace("'","’",$StrPost);
         $StrPost=str_replace('"','“',$StrPost);
         $StrPost=str_replace("(","（",$StrPost);
@@ -20,7 +20,7 @@ class UsualToolCMS{
         $StrPost=str_replace("*/","",$StrPost);
         return $StrPost;
     }
-    function sqlcheckv($StrPost){
+    static function sqlcheckv($StrPost){
         $StrPost=str_ireplace("eval","",$StrPost);
         $StrPost=str_ireplace("assert","",$StrPost);
         $StrPost=str_ireplace("create_function","",$StrPost);
@@ -39,7 +39,7 @@ class UsualToolCMS{
         $StrPost=str_ireplace("preg_match","",$StrPost);
         return $StrPost;
     }
-    function sqlcheckx($StrPost){
+    static function sqlcheckx($StrPost){
         $result = false;
         if($StrPost !== '' && !is_null($StrPost)){
         $var = UsualToolCMS::sqlchecks($StrPost);
@@ -55,7 +55,7 @@ class UsualToolCMS{
         }
         return $result;
     }
-    function clearnum($StrPost){
+    static function clearnum($StrPost){
         $StrPost=str_replace("s.php","",$StrPost);
         $StrPost=str_replace("s.html","",$StrPost);
         $StrPost=str_replace("-","",$StrPost);
@@ -73,7 +73,7 @@ class UsualToolCMS{
         $StrPost=str_replace(".html","",$StrPost);
         return $StrPost;
     }
-    function deletehtml($str){
+    static function deletehtml($str){
         global$language;
         $str = strip_tags($str,"");
         $str = str_replace(array("\r\n", "\r", "\n"), "", $str);   
@@ -84,12 +84,12 @@ class UsualToolCMS{
         endif;
         return ltrim(trim($str));
     }
-    function contain($str,$target){
+    static function contain($str,$target){
         $tmpArr = explode($str,$target);
         if(count($tmpArr)>1)return true;
         else return false;
     }
-    function arraymerge(&$a,$b){
+    static function arraymerge(&$a,$b){
         foreach($a as $key=>&$val){
             if(is_array($val) && array_key_exists($key, $b) && is_array($b[$key])){
                 UsualToolCMS::arraymerge($val,$b[$key]);
@@ -101,7 +101,7 @@ class UsualToolCMS{
         $a = $a + $b;
     }
     /*模块操作函数*/
-    function modsearch($module,$array){
+    static function modsearch($module,$array){
         $error="error";
         $json=json_encode($array,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
         if(strpos($json,$module)!==false){
@@ -114,7 +114,7 @@ class UsualToolCMS{
         return $error;
         }
     }
-    function delmodarray($arr,$key){
+    static function delmodarray($arr,$key){
         if(!is_array($arr)){
             return $arr;
         }
@@ -126,7 +126,7 @@ class UsualToolCMS{
         return $arr;
     }
     /*互联操作函数*/
-    function isetup(){
+    static function isetup(){
         if(is_dir('setup')){
             if(file_exists('setup/usualtoolcms.lock')){
                 return true;
@@ -137,7 +137,7 @@ class UsualToolCMS{
             return true;
         }
     }
-    function plugins($pluginname,$pluginroot='index.php'){
+    static function plugins($pluginname,$pluginroot='index.php'){
         if(is_dir("".ROOT_PATH."/plugins/".$pluginname."")):
             if(empty($pluginroot)||UsualToolCMS::contain(".php",$pluginroot)):
                 include_once("".ROOT_PATH."/plugins/".$pluginname."/".$pluginroot."");
@@ -147,14 +147,14 @@ class UsualToolCMS{
             endif;
         endif;
     }
-    function auth($str,$url,$api){
+    static function auth($str,$url,$api){
         $FromUrl=UsualToolCMS::curPageURL();
         $urls="".$url."?AuthCode=".$str."&FromUrl=".$FromUrl."&type=".$api."";
         $content=UsualToolCMS::httpget($urls);
         return str_replace("#","$",str_replace("&","=",UsualToolCMS::str_substr("<php>","</php>",$content)));
     }
     /*其他操作函数*/
-    function getrandomstring($len, $chars=null){
+    static function getrandomstring($len, $chars=null){
         if (is_null($chars)){
             $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         }  
@@ -164,7 +164,7 @@ class UsualToolCMS{
         }
         return $str;
     }
-    function getip(){
+    static function getip(){
         $unknown = 'unknown';
         if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] && strcasecmp($_SERVER['HTTP_X_FORWARDED_FOR'], $unknown) ){
             $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -175,12 +175,12 @@ class UsualToolCMS{
             $ip = reset(explode(',', $ip));
             return $ip;
     }
-    function forbytes($size) { 
+    static function forbytes($size) { 
         $units = array('B','KB','MB','GB','TB'); 
         for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024; 
         return round($size, 0).$units[$i]; 
     } 
-    function cutsubstr($str,$start=0,$length,$charset="utf-8",$suffix=true){
+    static function cutsubstr($str,$start=0,$length=0,$charset="utf-8",$suffix=true){
         if(function_exists("mb_substr"))
             return mb_substr($str, $start, $length, $charset);
         elseif(function_exists('iconv_substr')) {
@@ -195,7 +195,7 @@ class UsualToolCMS{
         if($suffix) return $slice."…";
         return $slice;
     }
-    function opendate($dates,$type){
+    static function opendate($dates,$type){
         if($type==1):
             return date('y',$dates);
         elseif($type==2):
@@ -204,17 +204,17 @@ class UsualToolCMS{
             return date('d',$dates);
         endif;
     }
-    function preg_substr($start,$end,$str){
+    static function preg_substr($start,$end,$str){
         $temp = preg_split($start, $str);
         $content = preg_split($end, $temp[1]);
         return $content[0];
     }
-    function str_substr($start,$end,$str){
+    static function str_substr($start,$end,$str){
         $temp = explode($start, $str, 2);
         $content = explode($end, $temp[1], 2);
         return $content[0];
     }
-    function subkey($str,$key,$len=100,$enc='utf-8'){
+    static function subkey($str,$key,$len=100,$enc='utf-8'){
         $strlen = mb_strlen($str,$enc);
         $keylen = mb_strlen($key,$enc);
         $keypos = mb_strpos($str,$key,0,$enc);
@@ -240,7 +240,7 @@ class UsualToolCMS{
         return $result;
     }
     /*CURL操作函数*/
-    function httppost($url,$data){
+    static function httppost($url,$data){
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -254,7 +254,7 @@ class UsualToolCMS{
         curl_close($curl);
         return $output;
     }
-    function httpget($url,$timeout='10',$chart='1'){
+    static function httpget($url,$timeout='10',$chart='1'){
         if(function_exists($curl_init)){
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
@@ -274,7 +274,7 @@ class UsualToolCMS{
             endif;
         }
     }
-    function httpcode($url){
+    static function httpcode($url){
         $ch = curl_init();
         $timeout =10;
         curl_setopt($ch,CURLOPT_FOLLOWLOCATION,1);
@@ -287,7 +287,7 @@ class UsualToolCMS{
         curl_close($ch);
     }
     /*文件地址操作函数*/
-    function curpageurl(){
+    static function curpageurl(){
         $pageURL = 'http';
         if ($_SERVER["HTTPS"] == "on"){
             $pageURL .= "s";
@@ -300,7 +300,7 @@ class UsualToolCMS{
         }
         return $pageURL;
     }
-    function getfile($url,$save_dir='',$filename='',$type=0){  
+    static function getfile($url,$save_dir='',$filename='',$type=0){  
         if(trim($url) == ''){
             return false;
         }  
@@ -338,7 +338,7 @@ class UsualToolCMS{
         'file_size' => $size  
         );  
     }
-    function unlinkfile($aimUrl){
+    static function unlinkfile($aimUrl){
         if (file_exists($aimUrl)){
             unlink($aimUrl);
             return true;
@@ -346,7 +346,7 @@ class UsualToolCMS{
             return false;
         }
     }
-    function deldir($directory){
+    static function deldir($directory){
         if(file_exists($directory)){
             if($dir_handle = @opendir($directory)){
                 while($filename = readdir($dir_handle)){
@@ -364,12 +364,12 @@ class UsualToolCMS{
             }
         }
     }
-    function searchdir($dir){
+    static function searchdir($dir){
         if(is_dir($dir)){
             return 1;
         }
     }
-    function getsysteminfo(){
+    static function getsysteminfo(){
         $sysos = $_SERVER["SERVER_SOFTWARE"];
         $sysversion = PHP_VERSION;
         $allowurl= ini_get("allow_url_fopen") ? "YES" : "NO";
@@ -391,12 +391,12 @@ class UsualToolCMS{
         }
         return null;
     }
-    function makedir($dir,$mode = 0777){
+    static function makedir($dir,$mode = 0777){
         if(is_dir($dir) || @mkdir($dir, $mode)) return TRUE;
         if(!mkdirs(dirname($dir), $mode)) return FALSE;
         return @mkdir($dir, $mode);
     }
-    function movedir($rootFrom,$rootTo){
+    static function movedir($rootFrom,$rootTo){
         $handle=opendir($rootFrom);
         while(false!==($file = readdir($handle)) && $file!=="usualtoolcms.config"){
             $fileFrom=$rootFrom.DIRECTORY_SEPARATOR.$file;
@@ -412,7 +412,7 @@ class UsualToolCMS{
             }
         }
     }
-    function editdir($oldpath,$newpath){
+    static function editdir($oldpath,$newpath){
         $_path = iconv('utf-8', 'gb2312', $oldpath);
         $__path = iconv('utf-8', 'gb2312',$newpath);
         if(is_dir($_path)){
@@ -429,7 +429,7 @@ class UsualToolCMS{
             return false;
         }
     }
-    function getdir($path){
+    static function getdir($path){
         if(!is_dir($path)){
               return false;
         }

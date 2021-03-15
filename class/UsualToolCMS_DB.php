@@ -2,7 +2,7 @@
 //API接口方法
 class UsualToolCMSDB{
     //判断模块是否存在
-    function modTable($table){
+    public static function modTable($table){
         include(ROOT_PATH.'/'.'sql_db.php');
         if(mysqli_num_rows($mysqli->query("SHOW TABLES LIKE '". $table."'"))==1) {
             return true;
@@ -19,7 +19,7 @@ class UsualToolCMSDB{
     *limit:数据量
     *lang:是否自动开启语言，默认1开启。
     */
-    function queryData($table,$field='',$where='',$order='',$limit='',$lang='1',$cache='0'){
+    public static function queryData($table,$field='',$where='',$order='',$limit='',$lang='1',$cache='0'){
         include(ROOT_PATH.'/'.'sql_db.php');
         global$language;
         if(!empty($field)):
@@ -98,7 +98,7 @@ class UsualToolCMSDB{
     *table:表名
     *data:字段及值的数组
     */
-    function insertData($table,$data){
+    public static function insertData($table,$data){
         include(ROOT_PATH.'/'.'sql_db.php');
         $sql="insert into `".$table."` (".implode(',',array_keys($data)).") values ('".implode("','",array_values($data))."')";
         $query=$mysqli->query($sql);
@@ -114,7 +114,7 @@ class UsualToolCMSDB{
     *data:字段及值的数组
     *where:条件
     */
-    function updateData($table,$data,$where){
+    public static function updateData($table,$data,$where){
         include(ROOT_PATH.'/'.'sql_db.php');
         $updatestr='';
         if(!empty($data)):
@@ -140,7 +140,7 @@ class UsualToolCMSDB{
     *table:表名
     *where:条件
     */
-    function delData($table,$where){
+    public static function delData($table,$where){
     include(ROOT_PATH.'/'.'sql_db.php');
     $sql="delete from `".$table."` where ".$where."";
     $query=$mysqli->query($sql);
@@ -154,7 +154,7 @@ class UsualToolCMSDB{
     *order:排序方式
     *lang:是否自动开启语言，默认1开启。
     */
-    function tagData($table,$field='',$where='',$order='',$lang='1'){
+    public static function tagData($table,$field='',$where='',$order='',$lang='1'){
         include(ROOT_PATH.'/'.'sql_db.php');
         global$language;
         if(!empty($field)):
@@ -199,7 +199,7 @@ class UsualToolCMSDB{
     *field:内容字段名
     *where:查询条件
     */
-    function figureData($table,$field,$where=''){
+    public static function figureData($table,$field,$where=''){
         include(ROOT_PATH.'/'.'sql_db.php');
         if(!empty($where)):
             $wheres="where ".$where."";
@@ -234,7 +234,7 @@ class UsualToolCMSDB{
     *tables:表名，多个表名以半角逗号分隔
     *keyword:关键词
     */
-    function searchData($keyword){
+    public static function searchData($keyword){
         include(ROOT_PATH.'/'.'sql_db.php');
         global$language;
 		if(!empty($keyword)):
@@ -273,56 +273,68 @@ class UsualToolCMSDB{
         return array("searchdata"=>$searchdata,"searchnum"=>$searchnum);	
     }
     //公众号//小程序结构
-    function wechatNavJosn(){
+    public static function wechatNavJosn(){
         include(ROOT_PATH.'/'.'sql_db.php');
-        $sql="select *from `cms_wechat_nav` where bigid='0' order by ordernum asc";
-        $onenav=$mysqli->query($sql); 
-        while($onenavrow=mysqli_fetch_array($onenav)):
-            $id=$onenavrow["id"];
-            $type=$onenavrow["type"];
-            if($type=="click"||$type=="scancode_waitmsg"||$type=="scancode_push"||$type=="pic_sysphoto"||$type=="pic_photo_or_album"||$type=="pic_weixin"||$type=="location_select"):
-                $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'key'=>$onenavrow["tkey"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
-            elseif($type=="view"):
-                $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'url'=>$onenavrow["url"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
-            elseif($type=="miniprogram"):
-                $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'url'=>$onenavrow["url"],'appid'=>$onenavrow["appid"],'pagepath'=>$onenavrow["pagepath"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
-            elseif($type=="media_id"||$type=="view_limited"):
-                $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'media_id'=>$onenavrow["media_id"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
-            endif;
-        endwhile;
-        $navlists=array('button'=>$navlist);
-        return json_encode($navlists,JSON_UNESCAPED_UNICODE);
+        if(UsualToolCMSDB::modTable("cms_wechat_nav")):
+            $sql="select *from `cms_wechat_nav` where bigid='0' order by ordernum asc";
+            $onenav=$mysqli->query($sql); 
+            while($onenavrow=mysqli_fetch_array($onenav)):
+                $id=$onenavrow["id"];
+                $type=$onenavrow["type"];
+                if($type=="click"||$type=="scancode_waitmsg"||$type=="scancode_push"||$type=="pic_sysphoto"||$type=="pic_photo_or_album"||$type=="pic_weixin"||$type=="location_select"):
+                    $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'key'=>$onenavrow["tkey"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
+                elseif($type=="view"):
+                    $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'url'=>$onenavrow["url"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
+                elseif($type=="miniprogram"):
+                    $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'url'=>$onenavrow["url"],'appid'=>$onenavrow["appid"],'pagepath'=>$onenavrow["pagepath"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
+                elseif($type=="media_id"||$type=="view_limited"):
+                    $navlist[]=array_merge_recursive(array('name'=>$onenavrow["navname"],'type'=>$onenavrow["type"],'media_id'=>$onenavrow["media_id"]),array('sub_button'=>UsualToolCMSDB::wechatNav($id)));
+                endif;
+            endwhile;
+            $navlists=array('button'=>$navlist);
+            return json_encode($navlists,JSON_UNESCAPED_UNICODE);
+        else:
+            return "";
+        endif;
     }
-    function wechatNav($id){
+    public static function wechatNav($id){
         include(ROOT_PATH.'/'.'sql_db.php');
-        $sql="SELECT * FROM `cms_wechat_nav` WHERE bigid='$id' order by ordernum asc";
-        $twonav=$mysqli->query($sql); 
-        while($twonavrow=mysqli_fetch_array($twonav)):
-            $types=$twonavrow["type"];
-            if($types=="scancode_waitmsg"||$types=="scancode_push"||$types=="pic_sysphoto"||$types=="pic_photo_or_album"||$types=="pic_weixin"||$types=="location_select"):
-                $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'key'=>$twonavrow["tkey"]);
-            elseif($types=="view"):
-                $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'url'=>$twonavrow["url"]);
-            elseif($types=="miniprogram"):
-                $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'url'=>$twonavrow["url"],'appid'=>$twonavrow["appid"],'pagepath'=>$twonavrow["pagepath"]);
-            elseif($types=="media_id"||$types=="view_limited"):
-                $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'media_id'=>$twonavrow["media_id"]);
-            endif;
-        endwhile;
-        return $nav;
+        if(UsualToolCMSDB::modTable("cms_wechat_nav")):
+            $sql="SELECT * FROM `cms_wechat_nav` WHERE bigid='$id' order by ordernum asc";
+            $twonav=$mysqli->query($sql); 
+            while($twonavrow=mysqli_fetch_array($twonav)):
+                $types=$twonavrow["type"];
+                if($types=="scancode_waitmsg"||$types=="scancode_push"||$types=="pic_sysphoto"||$types=="pic_photo_or_album"||$types=="pic_weixin"||$types=="location_select"):
+                    $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'key'=>$twonavrow["tkey"]);
+                elseif($types=="view"):
+                    $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'url'=>$twonavrow["url"]);
+                elseif($types=="miniprogram"):
+                    $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'url'=>$twonavrow["url"],'appid'=>$twonavrow["appid"],'pagepath'=>$twonavrow["pagepath"]);
+                elseif($types=="media_id"||$types=="view_limited"):
+                    $nav[]=array('name'=>$twonavrow["navname"],'type'=>$twonavrow["type"],'media_id'=>$twonavrow["media_id"]);
+                endif;
+            endwhile;
+            return $nav;
+        else:
+            return array();
+        endif;
     }
     //获取第三方登录数据
-    function authLogin(){
+    public static function authLogin(){
         include(ROOT_PATH.'/'.'sql_db.php');
-        $sql="select qq_appid,qq_appkey,qq_reurl,wb_appid,wb_appkey,wb_reurl,ww_appid,ww_appkey,ww_reurl from `cms_connect` limit 1";
-        $auth=$mysqli->query($sql); 
-        while($setuprow=mysqli_fetch_array($auth)):
-            $authlist=array(
-            'qq_appid'=>$setuprow["qq_appid"],'qq_appkey'=>$setuprow["qq_appkey"],'qq_reurl'=>$setuprow["qq_reurl"],
-            'wb_appid'=>$setuprow["wb_appid"],'wb_appkey'=>$setuprow["wb_appkey"],'wb_reurl'=>$setuprow["wb_reurl"],
-            'ww_appid'=>$setuprow["ww_appid"],'ww_appkey'=>$setuprow["ww_appkey"],'ww_reurl'=>$setuprow["ww_reurl"]
-            );
-        endwhile;
-        return $authlist;
+        if(UsualToolCMSDB::modTable("cms_connect")):
+            $sql="select * from `cms_connect` limit 1";
+            $auth=$mysqli->query($sql); 
+            while($setuprow=mysqli_fetch_array($auth)):
+                $authlist=array(
+                'qq_appid'=>$setuprow["qq_appid"],'qq_appkey'=>$setuprow["qq_appkey"],'qq_reurl'=>$setuprow["qq_reurl"],
+                'wb_appid'=>$setuprow["wb_appid"],'wb_appkey'=>$setuprow["wb_appkey"],'wb_reurl'=>$setuprow["wb_reurl"],
+                'ww_appid'=>$setuprow["ww_appid"],'ww_appkey'=>$setuprow["ww_appkey"],'ww_reurl'=>$setuprow["ww_reurl"]
+                );
+            endwhile;
+            return $authlist;
+        else:
+            return array();
+        endif;
     }
 }

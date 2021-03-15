@@ -5,15 +5,13 @@ require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Page.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Tree.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_WeChat.php');
 require_once(dirname(__FILE__).'/'.'ut-session.php');
-$setup=$mysqli->query("select authcode,authapiurl,copyright,installtime,country,cmscolor from `cms_setup` limit 1");
-while($setuprow=mysqli_fetch_array($setup)):
+$setuprow=UsualToolCMSDB::queryData("cms_setup","authcode,authapiurl,copyright,installtime,country,cmscolor","","","1","0")["querydata"][0];
     $authcode=$setuprow["authcode"];
     $authapiurl=$setuprow["authapiurl"];
     $copyright=$setuprow["copyright"];
     $installtime=$setuprow["installtime"];
     $country=$setuprow["country"];
     $cmscolor=$setuprow["cmscolor"];
-endwhile;
 if(!empty($_COOKIE['navleft'])):
     if($_COOKIE['navleft']>10):
         $navid=4;
@@ -39,10 +37,12 @@ $roleone=explode(",",$adminrange);
 $roletwo=explode(",",$roles);
 $diffrole=array_merge(array_diff($roleone,$roletwo),array_diff($roletwo,$roleone));
 $diffroles=implode(",",$diffrole);
-$dpage=substr($_GET['u'],1,4);
-if(UsualToolCMS::contain($dpage,$diffroles)):
-    header("location:index.php");
-    exit();
+if(!empty($_GET['u'])):
+    $dpage=substr($_GET['u'],1,4);
+    if(UsualToolCMS::contain($dpage,$diffroles)):
+        header("location:index.php");
+        exit();
+    endif;
 endif;
 $lang=Lang();
 ?>
