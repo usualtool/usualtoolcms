@@ -433,6 +433,14 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
       PRIMARY KEY (`id`),
       UNIQUE KEY `id` (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    DROP TABLE IF EXISTS `cms_update`;
+    CREATE TABLE `cms_update` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `updateid` int(11) DEFAULT NULL,
+      `updatetime` datetime DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `id` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
     DROP TABLE IF EXISTS `cms_water`;
     CREATE TABLE IF NOT EXISTS `cms_water` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
