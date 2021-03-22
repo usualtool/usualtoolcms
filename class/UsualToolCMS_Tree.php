@@ -1,5 +1,5 @@
 <?php
-class tree {
+class tree{
     public $arr = array();
     public $icon = array('┊','┣┈','┗┈');
     public $icons = array('┊','┣','┗');

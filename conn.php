@@ -9,6 +9,7 @@ require_once(WEB_PATH.'/'.'class/UsualToolCMS_DB.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_INC.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_Temp.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_Page.php');
+require_once(WEB_PATH.'/'.'class/UsualToolCMS_Mail.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_Tree.php');
 if(UsualToolCMS::isetup()==false):header("location:./setup/");exit();endif;
 

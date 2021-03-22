@@ -80,9 +80,19 @@ if($do=="update"){
         $sql="update `cms_search_set` set dbs='$dbx[$s]',fields='$fieldx[$s]',wheres='$wherex[$s]',pages='$pagex[$s]' where id='$idx[$s]'";
     }
     $mysqli->multi_query($sql);
-
 			}
 			}
+    if($l=="redis" || $l=="sockets"){
+        $info = file_get_contents("../sql_db.php"); 
+        foreach($_POST as $k=>$v){ 
+            if(is_numeric($v)):
+            $info = preg_replace("/define\('{$k}',([0-9]*)\)/","define('{$k}',{$v})",$info); 
+            else:
+            $info = preg_replace("/define\('{$k}','(.*)'\)/","define('{$k}','{$v}')",$info); 
+            endif;
+        } 
+        file_put_contents("../sql_db.php",$info); 
+    }
     echo "<script>window.location.href='?m=system&u=a_system.php&l=$l'</script>";
 }
 $result=$mysqli->query("select * from cms_setup limit 1");
@@ -93,12 +103,14 @@ while($row=mysqli_fetch_array($result)):
     </script>
     <div class="idTabs">
       <ul class="tab">
-        <li><a href="#main" <?php if($l=="main"||empty($l))echo"class=selected";?>>◇ 基础设置 ◇</a></li>
-        <li><a href="#water" <?php if($l=="water")echo"class=selected";?>>◇ 水印设置 ◇</a></li>
-		<li><a href="#mail" <?php if($l=="mail")echo"class=selected";?>>◇ 邮件服务 ◇</a></li>
-        <li><a href="#search" <?php if($l=="search")echo"class=selected";?>>◇ 搜索设置 ◇</a></li>
-        <li><a href="#oss" <?php if($l=="oss")echo"class=selected";?>>◇ 对象存储 ◇</a></li>
-		<li><a href="#editor" <?php if($l=="editor")echo"class=selected";?>>◇ 富文本编辑器 ◇</a></li>
+        <li><a href="#main" <?php if($l=="main"||empty($l)):echo"class=selected";endif;?>>◇ 基础设置 ◇</a></li>
+        <li><a href="#water" <?php if($l=="water"):echo"class=selected";endif;?>>◇ 水印设置 ◇</a></li>
+		<li><a href="#mail" <?php if($l=="mail"):echo"class=selected";endif;?>>◇ 邮件服务 ◇</a></li>
+        <li><a href="#search" <?php if($l=="search"):echo"class=selected";endif;?>>◇ 搜索设置 ◇</a></li>
+        <li><a href="#oss" <?php if($l=="oss"):echo"class=selected";endif;?>>◇ 对象存储 ◇</a></li>
+		<li><a href="#editor" <?php if($l=="editor"):echo"class=selected";endif;?>>◇ 富文本编辑器 ◇</a></li>
+        <li><a href="#redis" <?php if($l=="redis"):echo"class=selected";endif;?>>◇ Redis设置 ◇</a></li>
+        <li><a href="#sockets" <?php if($l=="sockets"):echo"class=selected";endif;?>>◇ Sockets设置 ◇</a></li>
       </ul>
       <div class="items">
         <div id="main">
@@ -494,4 +506,123 @@ endwhile;?>
     }
 	</script>
   </div>
+       <div id="redis">
+	   <form action="?m=system&u=a_system.php&do=update&l=redis" method="post" id="form-redis" name="form-redis">
+       <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
+       <?php
+        if(is_writable("../sql_db.php")){
+        if(class_exists('Redis')){
+        ?>
+         <tr>
+          <td colspan=2>
+           若有PHP缓存设置，设置将在1-60秒内生效。
+          </td>
+         </tr>
+         <tr>
+          <td align="right">Redis是否开启</td>
+          <td>
+            <?php if(defined('UTREDIS')):?>
+            <input type='radio' name='UTREDIS' value='0' <?php if(UTREDIS=='0'):echo"checked";endif;?>>关闭 
+            <input type='radio' name='UTREDIS' value='1' <?php if(UTREDIS=='1'):echo"checked";endif;?>>开启
+            <?php else:?>
+            <input type='radio' name='UTREDIS' value='0' checked>关闭 
+            <input type='radio' name='UTREDIS' value='1'>开启
+            <?php endif;?>
+           </td>
+         </tr>
+         <tr>
+          <td align="right">Redis IP</td>
+          <td>
+           <input type='text' name='UTREDIS_HOST' class="inpMain" value='<?php if(defined('UTREDIS_HOST')):echo UTREDIS_HOST;else:echo"127.0.0.1";endif;?>'>
+          </td>
+         </tr>
+         <tr>
+          <td align="right">Redis 端口</td>
+          <td>
+           <input type='text' name='UTREDIS_PORT' class="inpMain" value='<?php if(defined('UTREDIS_PORT')):echo UTREDIS_PORT;else:echo"6379";endif;?>'>
+          </td>
+         </tr>
+     <tr>
+          <td align="right">Redis 验证密码</td>
+          <td>
+           <input type='text' name='UTREDIS_PASS' class="inpMain" value='<?php if(defined('UTREDIS_PASS')):echo UTREDIS_PASS;else:echo"UT";endif;?>'>
+           <br>无密码验证请保持填写 UT
+          </td>
+         </tr>
+     <tr>
+          <td align="right">Redis键过期时间</td>
+          <td>
+           <input type='text' name='UTREDIS_TIME' class="inpMain" value='<?php if(defined('UTREDIS_TIME')):echo UTREDIS_TIME;else:echo"3600";endif;?>'> 秒
+          </td>
+         </tr>
+         <tr>
+          <td width=20%></td>
+          <td>
+           <input name="submit" class="btn" type="submit" value="保存设置" />
+          </td>
+         </tr>
+         <?php }else{?>
+        <tr><td>服务器未配置Redis服务，无法使用该功能。</td></tr>
+        <?php }
+               }else{
+                   ?>
+        <tr><td>sql_db.php无写入权限，请直接编辑该文件更改相关值。</td></tr>
+           <?php
+       }?>
+        </table>
+        </form>
+        </div>
+       <div id="sockets">
+	   <form action="?m=system&u=a_system.php&do=update&l=sockets" method="post" id="form-redis" name="form-redis">
+       <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
+       <?php
+        if(is_writable("../sql_db.php")){
+        if(extension_loaded('sockets')){
+        ?>
+         <tr>
+          <td colspan=2>
+           若有PHP缓存设置，设置将在1-60秒内生效。
+          </td>
+         </tr>
+         <tr>
+          <td align="right">Sockets是否开启</td>
+          <td>
+            <?php if(defined('UTSOCKETS')):?>
+            <input type='radio' name='UTSOCKETS' value='0' <?php if(UTSOCKETS=='0'):echo"checked";endif;?>>关闭 
+            <input type='radio' name='UTSOCKETS' value='1' <?php if(UTSOCKETS=='1'):echo"checked";endif;?>>开启
+            <?php else:?>
+            <input type='radio' name='UTSOCKETS' value='0' checked>关闭 
+            <input type='radio' name='UTSOCKETS' value='1'>开启
+            <?php endif;?>
+           </td>
+         </tr>
+         <tr>
+          <td align="right">Sockets IP</td>
+          <td>
+           <input type='text' name='UTSOCKETS_HOST' class="inpMain" value='<?php if(defined('UTSOCKETS_HOST')):echo UTSOCKETS_HOST;else:echo"127.0.0.1";endif;?>'>
+          </td>
+         </tr>
+         <tr>
+          <td align="right">Sockets 端口</td>
+          <td>
+           <input type='text' name='UTSOCKETS_PORT' class="inpMain" value='<?php if(defined('UTSOCKETS_PORT')):echo UTSOCKETS_PORT;else:echo"8080";endif;?>'>
+          </td>
+         </tr>
+         <tr>
+          <td width=20%></td>
+          <td>
+           <input name="submit" class="btn" type="submit" value="保存设置" />
+          </td>
+         </tr>
+         <?php }else{?>
+        <tr><td>服务器未配置Socket服务，无法使用该功能。</td></tr>
+        <?php }
+               }else{
+                   ?>
+        <tr><td>sql_db.php无写入权限，请直接编辑该文件更改相关值。</td></tr>
+           <?php
+       }?>
+        </table>
+        </form>
+        </div>
 </div>

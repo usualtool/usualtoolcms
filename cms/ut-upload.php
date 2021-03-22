@@ -22,9 +22,9 @@ $fname="".date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT).".".$ty
 $pic_url = $path . $fname;
 $allow_type = array('jpg','jpeg','gif','png','zip','rar','mp4','mp3','m3u8','lrc');
 if(!in_array($type, $allow_type)){
-    echo "The file format is incorrect!<br>|-|";
+    echo "The file format is incorrect!<br>|-|The file format is incorrect!";
 }elseif(!is_uploaded_file($file['tmp_name'])){
-    echo "Illegal source of documents!<br>|-|";
+    echo "Illegal source of documents!<br>|-|Illegal source of documents!";
 }else{
     if($indexoss=="alioss"):
         require_once '../plugins/alioss/index.php';
