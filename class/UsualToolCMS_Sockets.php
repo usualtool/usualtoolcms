@@ -1,7 +1,6 @@
 <?php
 class Sockets{
-    const LOG_PATH = dirname(dirname(__FILE__))'\debug';
-    const LISTEN_SOCKET_NUM = 9;
+    const LISTEN_SOCKET_NUM = 9;//设置值在1-10
     private $sockets=[];
     private $master;
     public function __construct($host='127.0.0.1',$port='8080') {
@@ -9,17 +8,17 @@ class Sockets{
             $this->master = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
             socket_set_option($this->master, SOL_SOCKET, SO_REUSEADDR, 1);
             socket_bind($this->master,$host,$port);
-            //LISTEN_SOCKET_NUM设置值在10以内最佳。
             socket_listen($this->master, self::LISTEN_SOCKET_NUM);
+            echo"UT Sockets Connected.\r\n";
         } catch (\Exception $e) {
             $err_code = socket_last_error();
             $err_msg = socket_strerror($err_code);
-
             $this->error([
                 'error_init_server',
                 $err_code,
                 $err_msg
             ]);
+            echo$err_msg."\r\n";
         }
         $this->sockets[0] = ['resource' => $this->master];
         if(strpos(php_uname(),"Windows")!==false){
@@ -27,7 +26,7 @@ class Sockets{
         }else{
         $pid = posix_getpid();
         }
-        $this->debug(["server: {$this->master} started,pid: {$pid}"]);
+        $this->debug(array("server"=>$this->master,"pid"=>$pid));
 
         while (true) {
             try {
@@ -199,7 +198,7 @@ class Sockets{
         $data = '';
         $l = strlen($msg);
         for ($i = 0; $i < $l; $i++) {
-            $data .= dechex(ord($msg{$i}));
+            $data .= dechex(ord($msg[$i]));
         }
         $frame[2] = $data;
 
@@ -257,6 +256,7 @@ class Sockets{
                 continue;
             }
             socket_write($socket['resource'], $data, strlen($data));
+            echo$data."\r\n";
         }
     }
     /*
@@ -266,7 +266,7 @@ class Sockets{
         $time = date('Y-m-d H:i:s');
         array_unshift($info, $time);
         $info = array_map('json_encode', $info);
-        file_put_contents(self::LOG_PATH . 'websocket_debug.log', implode(' | ', $info) . "\r\n", FILE_APPEND);
+        file_put_contents(ROOT_PATH.'/modules/UTFrame/debug/socket_debug.log', implode(' | ', $info) . "\r\n", FILE_APPEND);
     }
     /*
      * 记录错误信息
@@ -276,6 +276,6 @@ class Sockets{
         array_unshift($info, $time);
 
         $info = array_map('json_encode', $info);
-        file_put_contents(self::LOG_PATH . 'websocket_error.log', implode(' | ', $info) . "\r\n", FILE_APPEND);
+        file_put_contents(ROOT_PATH.'/modules/UTFrame/debug/socket_error.log', implode(' | ', $info) . "\r\n", FILE_APPEND);
     }
 }
