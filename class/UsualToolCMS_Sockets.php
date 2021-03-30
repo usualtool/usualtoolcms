@@ -1,6 +1,6 @@
 <?php
 class Sockets{
-    const LISTEN_SOCKET_NUM = 9;//设置值在1-10
+    const LISTEN_SOCKET_NUM = 9;
     private $sockets=[];
     private $master;
     public function __construct($host='127.0.0.1',$port='8080') {
@@ -44,7 +44,6 @@ class Sockets{
         $write = $except = NULL;
         $sockets = array_column($this->sockets, 'resource');
         $read_num = socket_select($sockets, $write, $except, NULL);
-        //返回可操作数目或错误false;
         if (false === $read_num) {
             $this->error([
                 'error_select',
@@ -56,7 +55,6 @@ class Sockets{
         foreach ($sockets as $socket) {
             if ($socket == $this->master) {
                 $client = socket_accept($this->master);
-                //若set_socket_blocking或socket_set_noblock()设置了阻塞,返回false;返回资源后,将会持续等待连接。
                 if (false === $client) {
                     $this->error([
                         'err_accept',
@@ -81,7 +79,7 @@ class Sockets{
                     }
                 }
                 array_unshift($recv_msg, 'receive_msg');
-                $msg = self::dealMsg($socket, $recv_msg);
+                $msg = self::dealmsg($socket, $recv_msg);
 
                 $this->broadcast($msg);
             }
@@ -109,11 +107,10 @@ class Sockets{
      */
     private function disconnect($socket) {
         $recv_msg = [
-            'type' => 'logout',
+            'type' => 'ut-out',
             'content' => $this->sockets[(int)$socket]['uname'],
         ];
         unset($this->sockets[(int)$socket]);
-
         return $recv_msg;
     }
 
@@ -122,18 +119,16 @@ class Sockets{
      * @return bool
      */
     public function handshake($socket, $buffer) {
-        //获取密匙
         $line_with_key = substr($buffer, strpos($buffer, 'Sec-WebSocket-Key:') + 18);
         $key = trim(substr($line_with_key, 0, strpos($line_with_key, "\r\n")));
-        //生成密匙,拼接socket头
-        $upgrade_key = base64_encode(sha1($key . "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", true));// 升级key的算法
+        $upgrade_key = base64_encode(sha1($key . "258EAFA5-E914-47DA-95CA-C5AB0DC85B11", true));
         $upgrade_message = "HTTP/1.1 101 Switching Protocols\r\n";
         $upgrade_message .= "Upgrade: websocket\r\n";
         $upgrade_message .= "Sec-WebSocket-Version: 13\r\n";
         $upgrade_message .= "Connection: Upgrade\r\n";
         $upgrade_message .= "Sec-WebSocket-Accept:" . $upgrade_key . "\r\n\r\n";
 
-        socket_write($socket, $upgrade_message, strlen($upgrade_message));// 向socket里写入升级信息
+        socket_write($socket, $upgrade_message, strlen($upgrade_message));
         $this->sockets[(int)$socket]['handshake'] = true;
 
         socket_getpeername($socket, $ip, $port);
@@ -143,7 +138,6 @@ class Sockets{
             $ip,
             $port
         ]);
-        //向客户端发送握手成功消息,以触发客户端发送用户名动作;
         $msg = [
             'type' => 'handshake',
             'content' => 'done',
@@ -211,40 +205,56 @@ class Sockets{
      * 拼装信息
      * @param $socket
      * @param $recv_msg
-     *          [
-     *          'type'=>user/login
-     *          'content'=>content
-     *          ]
      * @return string
      */
-    private function dealMsg($socket, $recv_msg) {
+    private function dealmsg($socket, $recv_msg) {
         $msg_type = $recv_msg['type'];
         $msg_content = $recv_msg['content'];
         $response = [];
-
         switch ($msg_type) {
-            case 'login':
+            //登陆消息
+            case 'ut-login':
                 $this->sockets[(int)$socket]['uname'] = $msg_content;
-                //取得最新的名字记录
-                $user_list = array_column($this->sockets, 'uname');
-                $response['type'] = 'login';
+                $response['type'] = 'ut-login';
                 $response['content'] = $msg_content;
-                $response['user_list'] = $user_list;
+                $response['user_list'] = array_column($this->sockets, 'uname');
+                $response['sendtime'] = date('Y-m-d H:i:s',time());
                 break;
-            case 'logout':
-                $user_list = array_column($this->sockets, 'uname');
-                $response['type'] = 'logout';
+            //退出消息
+            case 'ut-out':
+                $response['type'] = 'ut-out';
                 $response['content'] = $msg_content;
-                $response['user_list'] = $user_list;
+                $response['user_list'] = array_column($this->sockets, 'uname');
+                $response['sendtime'] = date('Y-m-d H:i:s',time());
                 break;
-            case 'user':
-                $uname = $this->sockets[(int)$socket]['uname'];
-                $response['type'] = 'user';
-                $response['from'] = $uname;
+            //单对多消息
+            case 'ut-room':
+                $response['type'] = 'ut-room';
+                $response['roomid'] = $recv_msg['roomid'];
+                $response['from'] = $this->sockets[(int)$socket]['uname'];
                 $response['content'] = $msg_content;
+                $response['sendtime'] = date('Y-m-d H:i:s',time());
+                if(!empty($recv_msg['item']) && !empty($recv_msg['roomid'])){
+                    file_put_contents(ROOT_PATH.'/'.$recv_msg['item'].'/room-'.$recv_msg['roomid'].'-'.date("Ymd").'.utlog', json_encode($response) . "\r\n", FILE_APPEND);
+                }
+                break;
+            //单对单消息
+            case 'ut-chat':
+                $response['type'] = 'ut-chat';
+                $response['startuid'] = $recv_msg['startuid'];
+                $response['enduid'] = $recv_msg['enduid'];
+                $response['from'] = $this->sockets[(int)$socket]['uname'];
+                $response['content'] = $msg_content;
+                $response['sendtime'] = date('Y-m-d H:i:s',time());
+                if(!empty($recv_msg['item'])){
+                    if(strpos($recv_msg['startuid'],'u')!==false){
+                    file_put_contents(ROOT_PATH.'/'.$recv_msg['item'].'/chat-'.$recv_msg['startuid'].'-'.$recv_msg['enduid'].'.utlog', json_encode($response) . "\r\n", FILE_APPEND);
+                    }else{
+                    file_put_contents(ROOT_PATH.'/'.$recv_msg['item'].'/chat-'.$recv_msg['enduid'].'-'.$recv_msg['startuid'].'.utlog', json_encode($response) . "\r\n", FILE_APPEND);
+                    }
+                }
                 break;
         }
-
         return $this->build(json_encode($response));
     }
     /*

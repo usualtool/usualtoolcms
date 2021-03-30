@@ -8,6 +8,7 @@ define('UTREDIS_PASS','UT');
 define('UTREDIS_TIME',3600);
 define('UTSOCKETS',0);
 define('UTSOCKETS_HOST','127.0.0.1');
+define('UTSOCKETS_WSIP','127.0.0.1');
 define('UTSOCKETS_PORT',8080);
 $dbhost="localhost";
 $dbname="";
@@ -21,4 +22,7 @@ if(UTREDIS=='1'):
     if(UTREDIS_PASS!='UT'):
         $redis->auth(UTREDIS_PASS);
     endif;
+endif;
+if(UTSOCKETS=='1'):
+    require_once(ROOT_PATH.'/'.'class/UsualToolCMS_Sockets.php');
 endif;

@@ -21,8 +21,7 @@ if($x=="a"){
 if($x=="m"){
     $password=UsualToolCMS::sqlcheck($_POST["password"]);
     $password_confirm=UsualToolCMS::sqlcheck($_POST["password_confirm"]);
-    $saltsyz=UsualToolCMS::sqlcheck($_POST["saltsyz"]);
-    if($password==$password_confirm):$passwords=sha1($saltsyz.$password);
+    if($password==$password_confirm):$passwords=sha1($salts.$password);
         if(UsualToolCMSDB::updateData("cms_admin",array(
         "roleid"=>UsualToolCMS::sqlcheckx($_POST["roleid"]),
         "password"=>$passwords,
@@ -126,8 +125,7 @@ endwhile;
       <tr>
        <td></td>
        <td>
-	    <input type="hidden" name="saltsyz" value="<?php echo $row[4] ;?>" />
-        <input type="hidden" name="id" value="<?php echo $row[0] ;?>" />
+        <input type="hidden" name="id" value="<?php echo$row[0];?>" />
         <input type="submit" name="submit" class="btn" value="提交" />
        </td>
       </tr>

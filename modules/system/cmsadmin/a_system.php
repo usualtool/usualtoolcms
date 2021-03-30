@@ -597,9 +597,15 @@ endwhile;?>
            </td>
          </tr>
          <tr>
-          <td align="right">Sockets IP</td>
+          <td align="right">Sockets 内网IP</td>
           <td>
            <input type='text' name='UTSOCKETS_HOST' class="inpMain" value='<?php if(defined('UTSOCKETS_HOST')):echo UTSOCKETS_HOST;else:echo"127.0.0.1";endif;?>'>
+          </td>
+         </tr>
+         <tr>
+          <td align="right">Sockets 公网IP</td>
+          <td>
+           <input type='text' name='UTSOCKETS_WSIP' class="inpMain" value='<?php if(defined('UTSOCKETS_WSIP')):echo UTSOCKETS_WSIP;else:echo"127.0.0.1";endif;?>'>
           </td>
          </tr>
          <tr>
