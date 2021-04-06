@@ -385,7 +385,7 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
       `country` varchar(20) DEFAULT 'zh-cn',
       `charset` varchar(10) DEFAULT 'utf-8',
       `cmscolor` int(11) DEFAULT '4',
-      `template` varchar(30) NOT NULL DEFAULT 'templete/default',
+      `template` varchar(30) NOT NULL DEFAULT 'templete/index',
       `webname` varchar(50) NOT NULL,
       `weburl` varchar(50) NOT NULL,
       `webkeyword` varchar(100) DEFAULT NULL,
