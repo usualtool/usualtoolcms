@@ -177,7 +177,7 @@ class PHPMailer{
     }
     public function isSMTP(){
         $this->Mailer = 'smtp';
-    
+    }
     public function isMail(){
         $this->Mailer = 'mail';
     }
