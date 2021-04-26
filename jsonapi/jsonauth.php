@@ -18,12 +18,12 @@ $auth=UsualToolCMS::sqlcheck($_GET["auth"]);
 $code=UsualToolCMS::sqlcheck($_GET["code"]);
 if($authcode==$auth):
 	if($type=="wechat"):
-		$autharr=UsualToolCMSDB::queryData("cms_routine","rteid,rtesecret","","","1","0")["querydata"][0];
-		$appid=$autharr["rteid"];
-		$appkey=$autharr["rtesecret"];
+		$autharr=UsualToolCMSDB::queryData("cms_routine","wxrteid,wxrtesecret","","","1","0")["querydata"][0];
+		$appid=$autharr["wxrteid"];
+		$appkey=$autharr["wxrtesecret"];
 	    $result=file_get_contents("https://api.weixin.qq.com/sns/jscode2session?appid=".$appid."&secret=".$appkey."&js_code=".$code."&grant_type=authorization_code");
 	elseif($type=="wechat-crypt"):
-        $appid=UsualToolCMSDB::queryData("cms_routine","rteid","","","1","0")["querydata"][0]["rteid"];
+        $appid=UsualToolCMSDB::queryData("cms_routine","wxrteid","","","1","0")["querydata"][0]["wxrteid"];
         $encrypteddata=$_POST["encrypteddata"];
         $iv=$_POST["iv"];
         $openid=UsualToolCMS::sqlcheck($_POST["openid"]);
