@@ -1,5 +1,8 @@
 <?php
-require_once 'ut-top.php';?>
+require_once 'ut-top.php';
+$utver=file_get_contents("../UTVER.INI");
+$utendup=substr($utver,-6);
+?>
 <div id="cmsmain">
 <?php require_once 'ut-message.php';?>  
 <div id="index" class="mainbox">
@@ -96,11 +99,18 @@ for($k=0;$k<count($updates);$k++):
               <td><?php echo$updatecon[0];?></td>
               <td style="word-break:break-all;"><a href="http://cms.usualtool.com/down/update/<?php echo$updatecon[1];?>.zip">http://cms.usualtool.com/down/update/<?php echo$updatecon[1];?>.zip</a></td>
               <td align="center">
-                  <?php if($updatenum>0):?>
+              <?php if(intval($utendup)>=intval($updatecon[1])):?>
+                  Included
+              <?php
+                else:                 
+                if($updatenum>0):?>
                   Installed
                   <?php else:?>
                   <a href="?i=<?php echo$updatecon[1];?>&t=setup" style="color:red;">Install</a>
-                  <?php endif;?>
+                  <?php
+                      endif;
+                      endif;
+                  ?>
                   </td>
               <?php endif;?>
              </tr>

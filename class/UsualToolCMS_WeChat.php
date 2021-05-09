@@ -52,7 +52,7 @@ class UsualToolWeChat{
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  
         $output = curl_exec($ch);  
         curl_close($ch);  
-        return  $output=json_decode($output,true);            
+        return $output=json_decode($output,true);            
     } 
     function getUserInfo(){
         $url = "https://{$this->appline}/cgi-bin/user/get?access_token={$this->getToken()}";
@@ -129,8 +129,10 @@ class UsualToolWeChat{
                 $msgcontent=$postObj->PicUrl;
             elseif($msgtype=="voice"):
                 $msgcontent=$postObj->MediaId;
+                $this->getLocal("voice",$msgcontent);
             elseif($msgtype=="video"):
                 $msgcontent=$postObj->MediaId;
+                $this->getLocal("video",$msgcontent);
             elseif($msgtype=="location"):
                 $msgcontent="纬度：".$postObj->Location_X."；经度：".$postObj->Location_Y."；缩放级别：".$postObj->Scale."位置：".$postObj->Label."";
             elseif($msgtype=="link"):
@@ -267,11 +269,59 @@ class UsualToolWeChat{
         $userinfo = "usualtoolcms|usualtoolcms|".$res['nickname']."|usualtoolcms|".$res['sex']."|usualtoolcms|".$res['headimgurl']."";
         return $userinfo;
     }
+    function userBlack(){
+        $url = "https://{$this->appline}/cgi-bin/tags/members/getblacklist?access_token={$this->getToken()}";
+        $data='{"begin_openid":""}';
+        $res = $this->postData($url,$data);
+        $resx=json_encode($res);
+        if(strpos($resx,'errmsg')!==false){
+            return $res["errmsg"];
+        }else{
+            return $res['data']['openid'];
+        }
+    }
+    function userSetblack($openid){
+        $url = "https://{$this->appline}/cgi-bin/tags/members/batchblacklist?access_token={$this->getToken()}";
+        $data='{
+        "openid_list":["'.$openid.'"]
+        }';
+        $res = $this->postData($url,$data);
+        return $res["errmsg"];
+    }
+    function userUnblack($openid){
+        $url = "https://{$this->appline}/cgi-bin/tags/members/batchunblacklist?access_token={$this->getToken()}";
+        $data='{
+        "openid_list":["'.$openid.'"]
+        }';
+        $res = $this->postData($url,$data);
+        return $res["errmsg"];
+    }
     function getVoice($voiceid){
         $url = "https://{$this->appline}/cgi-bin/media/voice/queryrecoresultfortext?access_token={$this->getToken()}&voice_id={$voiceid}&lang=zh_CN";
         $res = $this->postData($url);
         $result =$res['result'];
         return $result;
+    }
+    function getLocal($type,$mediaid){
+        $mediaurl = "https://api.weixin.qq.com/cgi-bin/media/get?access_token={$this->getToken()}&media_id={$mediaid}";
+        $res = file_get_contents($mediaurl);
+        if($type=="voice"){
+        $respath = ROOT_PATH ."/modules/public/media/".$mediaid.".amr";
+        }elseif($type=="video"){
+        $respath = ROOT_PATH ."/modules/public/media/".$mediaid.".mp4";
+        }
+        file_put_contents($respath,$res);
+    }
+    function getMsg($stime,$etime,$msgid,$limit){
+        $url = "https://api.weixin.qq.com/customservice/msgrecord/getmsglist?access_token={$this->getToken()}";
+        $data = '{
+        "starttime":{$stime},
+        "endtime":{$etime},
+        "msgid":{$msgid},
+        "number":{$limit} 
+        }';
+        $res = $this->postData($url,$data);
+        return $res;
     }
 }
 class UTWechatCrypt{

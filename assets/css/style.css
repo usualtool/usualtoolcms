@@ -87,6 +87,9 @@ ul li{
     display: none;
     visibility: hidden;
 }
+#content img{
+max-width:100%;
+}
 .ut-bot p{
     margin-bottom:2px !important;
 	font-size:15px;

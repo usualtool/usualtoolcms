@@ -63,8 +63,9 @@ $lang=Lang();
 <link rel="stylesheet" type="text/css" href="../assets/css/cmsadmin.css">
 <link rel="stylesheet" type="text/css" href="../assets/css/dialog.css">
 <?php if($cmscolor>1):?><link rel="stylesheet" type="text/css" href="../assets/css/cms-<?php echo$cmscolor;?>css.css"><?php endif;?>
+<link rel="stylesheet" type="text/css" href="../assets/css/datatable.css">
 <link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.css">
-<link rel="stylesheet" type="text/css" href="../assets/css/buttons.dataTables.min.css"/>
+<link rel="stylesheet" type="text/css" href="../assets/css/buttons.datatables.min.css"/>
 <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="../assets/js/jquery.tab.js"></script>
 <script type="text/javascript" src="../assets/js/usualtool-cms-2.0.js"></script>
