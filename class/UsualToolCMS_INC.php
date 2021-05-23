@@ -448,6 +448,8 @@ function LangData($word,$type=''){
     global$language;
     if(defined('HTML_PATH')):
         $lgpath="../../../";
+    elseif(defined('PAY_PATH')):
+        $lgpath="../../../../";
     else:
         if(WEB_PATH==getcwd()):
             $lgpath="";
@@ -487,6 +489,8 @@ function LangSet($word,$type=''){
     global$language;
     if(defined('HTML_PATH')):
         $lgpath="../../../";
+    elseif(defined('PAY_PATH')):
+        $lgpath="../../../../";
     else:
         if(WEB_PATH==getcwd()):
             $lgpath="";
