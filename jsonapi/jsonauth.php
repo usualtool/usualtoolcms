@@ -4,6 +4,7 @@ require_once(dirname(__FILE__).'/'.'../sql_db.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_INC.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_DB.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_WeChat.php');
+require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_AliOpen.php');
 $setup=UsualToolCMSDB::queryData(
 "cms_setup",
 "authcode,weburl,indexlanguage",
@@ -35,6 +36,13 @@ if($authcode==$auth):
         else:
             $result=$errCode;
         endif;
+	elseif($type=="alipay"):
+		$autharr=UsualToolCMSDB::queryData("cms_routine","alrteid,alapppubkey,alpaypubkey","","","1","0")["querydata"][0];
+        $appid=$autharr["alrteid"];
+        $appkey=$autharr["alapppubkey"];
+        $alikey=$autharr["alpaypubkey"];
+        $ali=new UsualToolAliOpen($appid,$appkey,$alikey);
+        $result=$ali->apiRequest("alipay.system.oauth.token",array("grant_type"=>"authorization_code","code"=>$code));
 	else:
 		$appid="";
 		$appkey="";
@@ -44,3 +52,4 @@ if($authcode==$auth):
 else:
     echo "0";
 endif;
+?>

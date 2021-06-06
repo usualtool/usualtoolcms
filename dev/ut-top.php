@@ -4,6 +4,7 @@ require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Spider.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Page.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Tree.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_WeChat.php');
+require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_AliOpen.php');
 require_once(dirname(__FILE__).'/'.'ut-session.php');
 $setuprow=UsualToolCMSDB::queryData("cms_setup","authcode,authapiurl,copyright,installtime,country,cmscolor","","","1","0")["querydata"][0];
     $authcode=$setuprow["authcode"];
