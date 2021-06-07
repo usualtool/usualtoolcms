@@ -5,43 +5,36 @@ require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_INC.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_DB.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_WeChat.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_AliOpen.php');
-$setup=UsualToolCMSDB::queryData(
-"cms_setup",
-"authcode,weburl,indexlanguage",
-"",
-"",
-"1",
-"0")["querydata"][0];
+$setup=UsualToolCMSDB::queryData("cms_setup","authcode,weburl,indexlanguage","","","1","0")["querydata"][0];
     $authcode=$setup["authcode"];
     $weburl=substr($setup["weburl"],0,-1);
+$authrow=UsualToolCMSDB::queryData("cms_routine","","","","1","0")["querydata"][0];
+    $wxline=$authrow["wxappline"];
+    $wxid=$authrow["wxrteid"];
+    $wxsecret=$authrow["wxrtesecret"];
+    $alid=$authrow["alrteid"];
+    $alappkey=$authrow["alapppubkey"];
+    $alpaykey=$authrow["alpaypubkey"];
 $type=UsualToolCMS::sqlcheck($_GET["type"]);
 $auth=UsualToolCMS::sqlcheck($_GET["auth"]);
 $code=UsualToolCMS::sqlcheck($_GET["code"]);
 if($authcode==$auth):
 	if($type=="wechat"):
-		$autharr=UsualToolCMSDB::queryData("cms_routine","wxrteid,wxrtesecret","","","1","0")["querydata"][0];
-		$appid=$autharr["wxrteid"];
-		$appkey=$autharr["wxrtesecret"];
-	    $result=file_get_contents("https://api.weixin.qq.com/sns/jscode2session?appid=".$appid."&secret=".$appkey."&js_code=".$code."&grant_type=authorization_code");
+	    $result=file_get_contents("https://api.weixin.qq.com/sns/jscode2session?appid=".$wxid."&secret=".$wxsecret."&js_code=".$code."&grant_type=authorization_code");
 	elseif($type=="wechat-crypt"):
-        $appid=UsualToolCMSDB::queryData("cms_routine","wxrteid","","","1","0")["querydata"][0]["wxrteid"];
         $encrypteddata=$_POST["encrypteddata"];
         $iv=$_POST["iv"];
         $openid=UsualToolCMS::sqlcheck($_POST["openid"]);
         $thirdkey=$_POST["thirdkey"];
-        $crypt=new UTWechatCrypt($appid,$thirdkey);
-        $errCode=$crypt->decryptData($encrypteddata,$iv,$data);
-        if($errCode==0):
+        $wxin=new UsualToolWeChat($wxline,$wxid,$wxsecret);
+        $errcode=$wxin->decryptData($thirdkey,$encrypteddata,$iv,$data);
+        if($errcode==0):
             $result=$data;
         else:
-            $result=$errCode;
+            $result=$errcode;
         endif;
 	elseif($type=="alipay"):
-		$autharr=UsualToolCMSDB::queryData("cms_routine","alrteid,alapppubkey,alpaypubkey","","","1","0")["querydata"][0];
-        $appid=$autharr["alrteid"];
-        $appkey=$autharr["alapppubkey"];
-        $alikey=$autharr["alpaypubkey"];
-        $ali=new UsualToolAliOpen($appid,$appkey,$alikey);
+        $ali=new UsualToolAliOpen($alid,$alappkey,$alpaykey);
         $result=$ali->apiRequest("alipay.system.oauth.token",array("grant_type"=>"authorization_code","code"=>$code));
 	else:
 		$appid="";

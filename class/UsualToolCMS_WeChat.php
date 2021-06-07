@@ -4,7 +4,7 @@ class UsualToolWeChat{
     var $appid;
     var $appsecret;
     var $token;
-    function __construct($appline,$appid,$appsecret,$token){
+    function __construct($appline,$appid,$appsecret,$token=''){
         $this->appline=$appline;
         $this->appid=$appid;
         $this->appsecret=$appsecret;
@@ -36,11 +36,11 @@ class UsualToolWeChat{
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $out = curl_exec($ch);
+        $output = curl_exec($ch);
         curl_close($ch);
-        return json_decode($out,true);
+        return json_decode($output,true);
     }
-    function postData($url,$data = null){         
+    function postData($url,$data=''){         
         $ch = curl_init();  
         curl_setopt($ch, CURLOPT_URL, $url);  
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);   
@@ -52,8 +52,12 @@ class UsualToolWeChat{
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);  
         $output = curl_exec($ch);  
         curl_close($ch);  
-        return $output=json_decode($output,true);            
-    } 
+        if(is_null(json_decode($output))){
+            return "data:image/png;base64,".base64_encode($output);
+        }else{
+            return json_decode($output,true);
+        }        
+    }
     function getUserInfo(){
         $url = "https://{$this->appline}/cgi-bin/user/get?access_token={$this->getToken()}";
         $res = $this->getData($url);
@@ -303,7 +307,7 @@ class UsualToolWeChat{
         return $result;
     }
     function getLocal($type,$mediaid){
-        $mediaurl = "https://api.weixin.qq.com/cgi-bin/media/get?access_token={$this->getToken()}&media_id={$mediaid}";
+        $mediaurl = "https://{$this->appline}/cgi-bin/media/get?access_token={$this->getToken()}&media_id={$mediaid}";
         $res = file_get_contents($mediaurl);
         if($type=="voice"){
         $respath = ROOT_PATH ."/modules/public/media/".$mediaid.".amr";
@@ -313,7 +317,7 @@ class UsualToolWeChat{
         file_put_contents($respath,$res);
     }
     function getMsg($stime,$etime,$msgid,$limit){
-        $url = "https://api.weixin.qq.com/customservice/msgrecord/getmsglist?access_token={$this->getToken()}";
+        $url = "https://{$this->appline}/customservice/msgrecord/getmsglist?access_token={$this->getToken()}";
         $data = '{
         "starttime":{$stime},
         "endtime":{$etime},
@@ -323,20 +327,18 @@ class UsualToolWeChat{
         $res = $this->postData($url,$data);
         return $res;
     }
-}
-class UTWechatCrypt{
-    private $appid;
-	private $sessionKey;
-	public function __construct( $appid, $sessionKey){
-		$this->sessionKey = $sessionKey;
-		$this->appid = $appid;
-	}
-	public function decryptData( $encryptedData, $iv, &$data){
-		$aesKey=base64_decode($this->sessionKey);
+    function getNewQrcode($arr){
+        $url = "https://{$this->appline}/cgi-bin/wxaapp/createwxaqrcode?access_token={$this->getNewToken()}";
+        $data = json_encode($arr);
+        $res = $this->postData($url,$data);
+        return $res;
+    }
+    function decryptData($sessionKey,$encryptedData,$iv,&$data){
+		$aesKey=base64_decode($sessionKey);
 		$aesIV=base64_decode($iv);
 		$aesCipher=base64_decode($encryptedData);
 		$result=openssl_decrypt( $aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
-		$dataObj=json_decode( $result );
+		$dataObj=json_decode($result);
 		if($dataObj==NULL){
 			return "-41003";
 		}

@@ -442,6 +442,25 @@ class UsualToolCMS{
         }
         return $arr;
     }
+    /*图片数流操作函数*/
+    function imgtobase64($img=''){
+        $imageInfo = getimagesize($img);
+        $base64 = "" . chunk_split(base64_encode(file_get_contents($img)));
+        return 'data:' . $imageInfo['mime'] . ';base64,' . chunk_split(base64_encode(file_get_contents($img)));
+    }
+    function base64toimg($base64,$path){
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64, $result)){
+            $type = $result[2];
+            $newfile = $path."/".time().".{$type}";
+            if (file_put_contents($newfile, base64_decode(str_replace($result[1], '', $base64)))){
+                return str_replace("../","",$newfile);
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
 }
 /*语言操作函数*/
 function LangData($word,$type=''){
@@ -489,8 +508,6 @@ function LangSet($word,$type=''){
     global$language;
     if(defined('HTML_PATH')):
         $lgpath="../../../";
-    elseif(defined('PAY_PATH')):
-        $lgpath="../../../../";
     else:
         if(WEB_PATH==getcwd()):
             $lgpath="";
