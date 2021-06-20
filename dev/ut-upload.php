@@ -20,7 +20,7 @@ $name = $file['name'];
 $type = strtolower(substr($name,strrpos($name,'.')+1));
 $fname="".date('Ymd') . str_pad(mt_rand(1, 99999), 5, '0', STR_PAD_LEFT).".".$type."";
 $pic_url = $path . $fname;
-$allow_type = array('jpg','jpeg','gif','png','zip','rar','mp4','mp3','m3u8','lrc');
+$allow_type = array('jpg','jpeg','gif','png','zip','rar','mp4','mp3','m3u8','lrc','ico');
 if(!in_array($type, $allow_type)){
     echo "The file format is incorrect!<br>|-|The file format is incorrect!";
 }elseif(!is_uploaded_file($file['tmp_name'])){

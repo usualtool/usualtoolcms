@@ -26,7 +26,7 @@ if(!empty($_GET['l'])){
 else{
     $l="images/upload/other";
 }
-$typeArr = array('jpg','jpeg','gif','png','zip','rar','mp4','mp3','m3u8','lrc');
+$typeArr = array('jpg','jpeg','gif','png','zip','rar','mp4','mp3','m3u8','lrc','ico');
 $path = "../assets/".$l."/";
 if($_GET['get']=="upimg"&&isset($_POST)){
     $file=$_FILES['file'];
