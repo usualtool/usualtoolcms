@@ -95,6 +95,18 @@ else:
     $shopcartnum=0;
 endif;
 
+if(strpos($_SERVER['HTTP_USER_AGENT'],'miniProgram')!==false):
+    if(!empty($_GET["openid"])):
+        $_SESSION['openid']=UsualToolCMS::sqlcheck($_GET["openid"]);
+    endif;
+    if(isset($_SESSION['openid'])):
+        $udata=UsualToolCMSDB::queryData("cms_users","id,username","wwpass='".$_SESSION['openid']."'","","1","0")["querydata"][0];
+        $_SESSION[''.$usercookname.'user']=$udata["username"];
+        $_SESSION[''.$usercookname.'userid']=$udata['id'];
+        $_SESSION[''.$usercookname.'usermail']="1";
+    endif;
+endif;
+
 /*----Read UT template----*/
 $mode=$develop;
 $tempdir="".$template."/skin/";
