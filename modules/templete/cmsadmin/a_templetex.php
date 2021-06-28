@@ -133,17 +133,15 @@ if($t=="open"){
     }
     $paths=UsualToolCMS::sqlcheck($_GET["paths"]);
     $plan=UsualToolCMS::sqlcheck($_POST["plan"]);
-    $sql1 = "UPDATE cms_setup set template='$paths' WHERE id=1";
-    $sql2 = "UPDATE cms_templete set isopen=0 WHERE id='$oid'";
-    if($mysqli->query($sql1) && $mysqli->query($sql2)){
-        $result=mysqli_query($mysqli,"UPDATE cms_templete set isopen=1 WHERE id=$id");
+    $sql1=UsualToolCMSDB::updateData("cms_setup",array("template"=>$paths),"id=1");
+    $sql2=UsualToolCMSDB::updateData("cms_templete",array("isopen"=>0),"id='$oid'");
+    if($sql1>0 && $sql2>0){
+        $result=UsualToolCMSDB::updateData("cms_templete",array("isopen"=>1),"id='$id'");
         if(!$result){
             echo "<script>alert('模板开启失败!');window.location.href='?m=templete&u=a_templete.php'</script>";
         }else{
-            $sql3 = "UPDATE cms_nav_plan set indexplan='0' WHERE id='$planid'";
-            if($mysqli->query($sql3)):
-                $sql4 = "UPDATE cms_nav_plan set indexplan='1' WHERE id='$plan'";
-                $mysqli->query($sql4);
+            if(UsualToolCMSDB::updateData("cms_nav_plan",array("indexplan"=>0),"id='$oid'")):
+                UsualToolCMSDB::updateData("cms_nav_plan",array("indexplan"=>1),"id='$plan'");
                 echo "<script>alert('模板开启成功!');window.location.href='?m=templete&u=a_templete.php'</script>";
             endif;
         }

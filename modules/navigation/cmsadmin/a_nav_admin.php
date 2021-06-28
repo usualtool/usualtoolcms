@@ -8,8 +8,7 @@ if($x=="m"){
     $idx= explode(",",$ids);
     $lookx= explode(",",$looks);
     for($i=0;$i<count($idx);$i++){
-        $sqls="UPDATE `cms_mod` set look='$lookx[$i]' where id='$idx[$i]'";
-        $mysqli -> multi_query($sqls);
+        UsualToolCMSDB::updateData("cms_mod",array("look"=>$lookx[$i]),"id='$idx[$i]'");
     }
     echo "<script>alert('后端导航设置成功!');window.location.href='?m=navigation&u=a_nav_admin.php'</script>";
     $mysqli->close();
@@ -24,22 +23,31 @@ if($x=="add"){
     $ns= explode(",",$n); 
     $us= explode(",",$u);  
     for($i=0;$i<count($ds);$i++) {
-    $ordernum=$os[$i]; 
-    $linkname=$ns[$i]; 
-    $linkurl=$us[$i]; 
-    $id=$ds[$i]; 
-    if($id=="x"){
-        $sqls="insert into `cms_nav` (place,ordernum,linkname,linkurl,target,planid) values ('cmsadmin','$ordernum','$linkname','$linkurl','_self','0')";
-    }else{
-        $sqls="update `cms_nav` set place='cmsadmin',ordernum='$ordernum',linkname='$linkname',linkurl='$linkurl',target='_self' where id='$id'";
-    }
-    $mysqli -> multi_query($sqls);
+        $ordernum=$os[$i]; 
+        $linkname=$ns[$i]; 
+        $linkurl=$us[$i]; 
+        $id=$ds[$i]; 
+        if($id=="x"){
+                UsualToolCMSDB::insertData("cms_nav",array(
+                    "place"=>"cmsadmin",
+                    "ordernum"=>$ordernum,
+                    "linkname"=>$linkname,
+                    "linkurl"=>$linkurl,
+                    "target"=>"_self",
+                    "planid"=>0));
+        }else{
+                UsualToolCMSDB::updateData("cms_nav",array(
+                    "place"=>"cmsadmin",
+                    "ordernum"=>$ordernum,
+                    "linkname"=>$linkname,
+                    "linkurl"=>$linkurl,
+                    "target"=>"_self"),"id='$id'");
+        }
     }
     echo "<script>window.location.href='?m=navigation&u=a_nav_admin.php'</script>";
 } 
 if($x=="del"){
-    $id=UsualToolCMS::sqlcheckx($_GET["id"]);
-    mysqli_query($mysqli,"DELETE FROM `cms_nav` WHERE id='$id'");
+    UsualToolCMSDB::delData("cms_nav","id='".UsualToolCMS::sqlcheckx($_GET["id"])."'");
     echo "<script>window.location.href='?m=navigation&u=a_nav_admin.php'</script>";
 }
 ?>
@@ -55,28 +63,25 @@ $p=2;
 else:
 $p=4;
 endif;
-$mod=$mysqli->query("select id,bid,modname,modurl from `cms_mod` where bid='0'");
-while($modrow=$mod->fetch_row()){
-    $smod="SELECT id,bid,modname,modurl,isopen,look from`cms_mod` WHERE isopen='1' and bid='$modrow[0]'";
-    $smods=mysqli_query($mysqli,$smod);
-    if(mysqli_num_rows($smods)>0):
-        echo"<tr><td colspan='".$p."'>".$modrow[2]."";
+$mod=UsualToolCMSDB::queryData("cms_mod","id,bid,modname,modurl","bid=0","","","0")["querydata"];
+foreach($mod as $modrow){
+    $moddata=UsualToolCMSDB::queryData("cms_mod","id,bid,modname,modurl,isopen,look","isopen=1 and bid='".$modrow["id"]."'","","","0");
+    if($moddata["querynum"]>0):
+        echo"<tr><td colspan='".$p."'>".$modrow["modname"]."";
         echo"</td></tr><tr>";
-        $xmod=$mysqli->query($smod);
-        while($xmodrow=$xmod->fetch_row()):
-            $i=$i+1;
-            if($xmodrow[5]=="1"):
-                echo"<td><a href='?m=navigation&u=".$xmodrow[3]."' style='color:red;'>".$xmodrow[2]."</a>: <input type=hidden name='navid[]' value='$xmodrow[0]'><select name='look[]'><option value='1' selected>显示</option><option value='0'>隐藏</option></select></td>";
+        foreach($moddata["querydata"] as $xmodrow):
+            if($xmodrow["look"]=="1"):
+                echo"<td><a href='?m=navigation&u=".$xmodrow["modurl"]."' style='color:red;'>".$xmodrow["modname"]."</a>: <input type=hidden name='navid[]' value='".$xmodrow["id"]."'><select name='look[]'><option value='1' selected>显示</option><option value='0'>隐藏</option></select></td>";
             else:
-                echo"<td><a href='?m=navigation&u=".$xmodrow[3]."' style='color:red;'>".$xmodrow[2]."</a>: <input type=hidden name='navid[]' value='$xmodrow[0]'><select name='look[]'><option value='1'>显示</option><option value='0' selected>隐藏</option></select></td>";
+                echo"<td><a href='?m=navigation&u=".$xmodrow["modurl"]."' style='color:red;'>".$xmodrow["modname"]."</a>: <input type=hidden name='navid[]' value='".$xmodrow["id"]."'><select name='look[]'><option value='1'>显示</option><option value='0' selected>隐藏</option></select></td>";
             endif;
-            if($i%$p==0):
+            if($xmodrow["xu"]%$p==0):
                 echo"</tr><tr>";
             endif;
-        endwhile;
+        endforeach;
         echo"</tr>";
     else:
-        echo"<tr><td colspan='".$p."'><a href='?m=navigation&u=".$modrow[3]."'>".$modrow[2]."</a></td></tr>";
+        echo"<tr><td colspan='".$p."'><a href='?m=navigation&u=".$modrow["modurl"]."'>".$modrow["modname"]."</a></td></tr>";
     endif;
 }
 ?>
@@ -97,10 +102,8 @@ while($modrow=$mod->fetch_row()){
        <th align=left>链接地址</th>
       </tr>
 <?php
-$c=0;
-$nav=$mysqli->query("select * from `cms_nav` where place='cmsadmin' order by ordernum asc");
-while($row=mysqli_fetch_array($nav)){
-    $c=$c+1;
+$list=UsualToolCMSDB::queryData("cms_nav","","place='cmsadmin'","ordernum asc","","0")["querydata"];
+foreach($list as $row){
     echo"<tr>";
     echo"<td><input type=hidden name='d[]' value='".$row["id"]."'><a style='color:red;' href='?m=navigation&u=a_nav_admin.php&x=del&id=".$row["id"]."'>删除</a></td>";
     echo"<td><input type=text name='o[]' value='".$row["ordernum"]."' class='inpMain' style='width:80%'></td>";
@@ -122,11 +125,11 @@ echo"<table id='tablea' width='100%' border='0' cellpadding='10' cellspacing='0'
 	</td>
 	</tr>
 	</table>
-	<script type="text/javascript">
+<script type="text/javascript">
 	var k=9999;	
-function addtablex(table){  
-	var table;
-	k++;
-	document.getElementById(""+table+"").innerHTML+="<tr><td width='8%'></td><td width='10%'><input type=hidden name='d[]' value='x'><input type=text name='o[]' class='inpMain' value='1' style='width:80%;text-align:center;'></td><td width='20%'><input type=text name='n[]' class='inpMain' style='width:95%'></td><td><input type=text name='u[]' class='inpMain' style='width:95%'></td></tr>";
-}
+    function addtablex(table){  
+        var table;
+        k++;
+        document.getElementById(""+table+"").innerHTML+="<tr><td width='8%'></td><td width='10%'><input type=hidden name='d[]' value='x'><input type=text name='o[]' class='inpMain' value='1' style='width:80%;text-align:center;'></td><td width='20%'><input type=text name='n[]' class='inpMain' style='width:95%'></td><td><input type=text name='u[]' class='inpMain' style='width:95%'></td></tr>";
+    }
 </script>

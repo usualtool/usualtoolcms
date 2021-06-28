@@ -52,18 +52,17 @@ if($x=="d"){
      <tbody>
 <?php
 $pagenum=10;
-$page=UsualToolCMS::sqlcheck($_GET["page"]);
-if(!empty($page)):$page=$_GET["page"];else:$page=1;endif;
+$page=empty($_GET["page"]) ? 1 : UsualToolCMS::sqlcheck($_GET["page"]);
 $pagelink="?m=$mod&u=$url";
 $minid=$pagenum*($page-1);
 $list=UsualToolCMSDB::queryData("cms_cactask","","","id desc","$minid,$pagenum","0");
 $total=$list["querynum"];
 $totalpage=ceil($total/$pagenum);
 foreach($list["querydata"] as $rows):
-echo"<tr><td>".$rows["cacname"]."</td>";
-echo"<td>".$rows["cacstr"]."<input type='hidden' id='php".$rows["id"]."' value='".$rows["cacstr"]."'></td>";
-echo"<td align=center><a style='color:red;' onclick='phprun(".$rows["id"].")'>执行</a> | ";
-echo"<a href='?m=cactool&u=a_cactool_task.php&x=d&id=".$rows["id"]."'>删除</a></td></tr>";
+    echo"<tr><td>".$rows["cacname"]."</td>";
+    echo"<td>".$rows["cacstr"]."<input type='hidden' id='php".$rows["id"]."' value='".$rows["cacstr"]."'></td>";
+    echo"<td align=center><a style='color:red;' onclick='phprun(".$rows["id"].")'>执行</a> | ";
+    echo"<a href='?m=cactool&u=a_cactool_task.php&x=d&id=".$rows["id"]."'>删除</a></td></tr>";
 endforeach;
 ?>
     </tbody>

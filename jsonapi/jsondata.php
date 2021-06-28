@@ -3,12 +3,16 @@ header('content-type:application/json;charset=utf8');
 require_once(dirname(__FILE__).'/'.'../sql_db.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_INC.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_DB.php');
-$setup=$mysqli->query("select authcode,weburl,indexlanguage from `cms_setup` limit 1");
-while($setuprow=mysqli_fetch_array($setup)):
-    $authcode=$setuprow["authcode"];
-    $weburl=substr($setuprow["weburl"],0,-1);
-    $indexlg=$setuprow["indexlanguage"];
-endwhile;
+$setup=UsualToolCMSDB::queryData("cms_setup","authcode,weburl,indexlanguage","","","1","0")["querydata"][0];
+    $authcode=$setup["authcode"];
+    $weburlx=$setup["weburl"];
+    $indexlg=$setup["indexlanguage"];
+    $endstr=substr($weburlx,strlen($weburlx)-1);
+    if($endstr=="/"):
+        $weburl=substr($weburlx,0,strlen($weburlx)-1);
+    else:
+        $weburl=$weburlx;
+    endif;
 $lang=UsualToolCMS::sqlcheck($_GET["lang"]);
 if($lang==1):
     $lg=1;
@@ -44,6 +48,6 @@ if($authcode==$auth):
         endfor;
         UsualToolCMS::arraymerge($querydata,$catnames);
     endif;
-    $jsondata=str_replace("http:","https:",str_replace(',images',','.$weburl.'\/images',str_replace('"images','"'.$weburl.'\/images',json_encode($querydata,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT))));
+    $jsondata=str_replace("http:","https:",str_replace(',assets\/images',','.$weburl.'\/assets\/images',str_replace('"assets\/images','"'.$weburl.'\/assets\/images',json_encode($querydata,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT))));
     echo$jsondata;
 endif;

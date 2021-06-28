@@ -1,11 +1,10 @@
 <?php
 require_once '../conn.php';
-require_once '../class/UsualToolCMS_INC.php';
 $cmscolor=UsualToolCMSDB::queryData("cms_setup","cmscolor","","","0,1","0")["querydata"][0]["cmscolor"];
 if($_GET["do"]=="out"){
     unset($_SESSION['usualtooladmin']);
     unset($_SESSION['usualtooladminid']);
-    echo"<script>alert('登出UsualToolCMS成功!');window.location.href='ut-login.php'</script>";
+    echo"<script>alert('登出UT Develop成功!');window.location.href='ut-login.php'</script>";
 }
 if($_GET['do']=="login"){
     $uuser=UsualToolCMS::sqlcheck($_POST["uuser"]);
@@ -14,18 +13,16 @@ if($_GET['do']=="login"){
     $uip=UsualToolCMS::sqlcheck(UsualToolCMS::getip());
     if($_SESSION['authcode']==$ucode):
             if(!empty($uuser)&&!empty($upass)):
-                $querys="SELECT id,username,password,salts FROM `cms_admin` WHERE username = '$uuser'";
-                $datas=mysqli_query($mysqli,$querys);
-                if(mysqli_num_rows($datas)==1):
-                    $rows = mysqli_fetch_array($datas);
+                $datas=UsualToolCMSDB::queryData("cms_admin","id,username,password,salts","username='$uuser'","","","0");
+                if($datas["querynum"]==1):
+                    $rows=$datas["querydata"][0];
                     $shaupass=sha1($rows['salts'].$upass);
                     if($shaupass==$rows['password']):
-                        $sql="INSERT INTO `cms_admin_log` (adminusername,ip,logintime) VALUES ('$uuser','$uip',now())";
-                        $mysqli->query($sql);
+                        UsualToolCMSDB::insertData("cms_admin_log",array("adminusername"=>$uuser,"ip"=>$uip,"logintime"=>date('Y-m-d H:i:s',time())));
                         $_SESSION['usualtooladmin']=$rows['username'];
                         $_SESSION['usualtooladminid']=$rows['id'];
                         session_regenerate_id(TRUE);
-                        echo"<script>alert('登陆UsualToolCMS成功!');window.location.href='index.php'</script>";
+                        echo"<script>alert('登陆UT Develop成功!');window.location.href='index.php'</script>";
                     else:
                         echo"<script>alert('账户或密码不匹配!');window.location.href='ut-login.php'</script>";
                     endif;

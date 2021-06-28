@@ -1,14 +1,9 @@
-<?php
-$role=$mysqli->query("select ranges from `cms_admin_role` where id=1");
-while($rolerow=mysqli_fetch_array($role)):
-$roleranges=$rolerow["ranges"];
-endwhile;
-?>
 <h2>安装过程中，不要关闭浏览器......</h2>
 <?php
 $t=UsualToolCMS::sqlcheck($_GET["t"]);
 $do=UsualToolCMS::sqlcheck($_GET["do"]);
 $sign=UsualToolCMS::sqlcheck($_GET["sign"]);
+$roleranges=UsualToolCMSDB::queryData("cms_admin_role","","id=1","","","0")["querydata"][0]["ranges"];
 if(!empty($_GET["id"])):
     $id=UsualToolCMS::sqlcheck(str_replace("../","",$_GET["id"]));
 else:
@@ -48,10 +43,10 @@ if($t=="resetup"):
     $jsondata=UsualToolCMS::delmodarray($data, $id);
     $jsonstrs=json_encode($jsondata);
     file_put_contents("../modules/module.config",$jsonstrs);
-    mysqli_query($mysqli,"DELETE FROM `cms_mod` WHERE modurl='$modurl'");
+    UsualToolCMSDB::delData("cms_mod","modurl='$modurl'");
     $roleurl=substr(str_replace(".php","",$modurl),1);
     $delranges=str_replace(",".$roleurl."","",str_replace("".$roleurl.",","",$roleranges));
-    mysqli_query($mysqli,"UPDATE `cms_admin_role` set ranges='$delranges' WHERE id=1");
+    UsualToolCMSDB::updateData("cms_admin_role",array("ranges"=>$delranges),"id=1");
     $ress=$mysqli->multi_query($uninstallsql);
     if($ress):
         echo"<p>清除数据及文件结构成功...</p>";
@@ -138,16 +133,23 @@ if(!empty($dbname)):
     $itemid=UsualToolCMS::str_substr("<itemid>","</itemid>",$mods);
     $roleurl=substr(str_replace(".php","",$modurl),1);
     $addranges="".$roleranges.",".$roleurl."";
-    mysqli_query($mysqli,"UPDATE `cms_admin_role` set ranges='$addranges' WHERE id=1");
-    $querys="SELECT id FROM `cms_mod` WHERE modurl='$modurl'";
-    $datas=mysqli_query($mysqli,$querys);
-    if(mysqli_num_rows($datas)>0):
-        $rows=mysqli_fetch_array($datas);
-        $resql="UPDATE `cms_mod` SET bid='$itemid',modid='$modid',befoitem='$befoitem',backitem='$backitem' where id='".$rows['id']."'";
+    UsualToolCMSDB::updateData("cms_admin_role",array("ranges"=>$addranges),"id=1");
+    $moddata=UsualToolCMSDB::queryData("cms_mod","","modurl='$modurl'","","1","0");
+    if($moddata["querynum"]>0):
+        $rows=$moddata["querydata"][0];
+        $ress=UsualToolCMSDB::updateData("cms_mod",array("bid"=>$itemid,"modid"=>$modid,"befoitem"=>$befoitem,"backitem"=>$backitem),"id='".$rows["id"]."'");
     else:
-        $resql="INSERT INTO `cms_mod` (bid,modid,modname,modurl,isopen,look,ordernum,befoitem,backitem) VALUES ('$itemid','$modid','$modname','$modurl','1','1','$ordernum','$befoitem','$backitem')";
+    $ress=UsualToolCMSDB::insertData("cms_mod",array(
+        "bid"=>$itemid,
+        "modid"=>$modid,
+        "modname"=>$modname,
+        "modurl"=>$modurl,
+        "isopen"=>1,
+        "look"=>1,
+        "ordernum"=>$ordernum,
+        "befoitem"=>$befoitem,
+        "backitem"=>$backitem));
     endif;
-    $ress=$mysqli->query($resql);
     if($ress):
         echo "<p>构造数据成功</p>";
         echo "<script>window.location.href='?m=module&u=a_modsx.php&id=$id&do=$do&copyname=usualtoolcms'</script>";

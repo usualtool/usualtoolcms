@@ -12,7 +12,6 @@ require_once(WEB_PATH.'/'.'class/UsualToolCMS_Page.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_Mail.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_Tree.php');
 if(UsualToolCMS::isetup()==false):header("location:./setup/");exit();endif;
-
 /*----Read UT Default Seting----*/
 $setup=UsualToolCMSDB::queryData(
 "cms_setup",
@@ -74,12 +73,11 @@ endif;
 if($webisclose==1 && strpos($_SERVER['PHP_SELF'],"dev")===FALSE && strpos($_SERVER['PHP_SELF'],"cms")===FALSE && $_GET["ut"]!=="updating"):
     echo"<script>window.location.href='updating.html'</script>";
 endif;
-
 /*----Read UT Member----*/
 if(isset($_SESSION[''.$usercookname.'user'])&&isset($_SESSION[''.$usercookname.'userid'])&&isset($_SESSION[''.$usercookname.'usermail'])):
     $uid=$_SESSION[''.$usercookname.'userid'];$user=$_SESSION[''.$usercookname.'user'];$usermail=$_SESSION[''.$usercookname.'usermail'];
-    $users=$mysqli->query("select * from cms_users_level as A,cms_users as B where A.id=B.level and B.id=$uid and B.level>0");
-    if($usersrow=mysqli_fetch_array($users)):
+    $users=UsualToolCMSDB::queryData("cms_users_level as A,cms_users as B","","A.id=B.level and B.id='$uid' and B.level>0","","","0");
+    if($users["querynum"]==1):
         $level=$usersrow["level"];
         $levelname=$usersrow["levelname"];
         $discount=$usersrow["discount"];
@@ -94,7 +92,7 @@ if(!empty($uid)):
 else:
     $shopcartnum=0;
 endif;
-
+/*----Read UT miniProgram----*/
 if(strpos($_SERVER['HTTP_USER_AGENT'],'miniProgram')!==false):
     if(!empty($_GET["openid"])):
         $_SESSION['openid']=UsualToolCMS::sqlcheck($_GET["openid"]);
@@ -106,19 +104,24 @@ if(strpos($_SERVER['HTTP_USER_AGENT'],'miniProgram')!==false):
         $_SESSION[''.$usercookname.'usermail']="1";
     endif;
 endif;
-
 /*----Read UT template----*/
-$mode=$develop;
-$tempdir="".$template."/skin/";
-$cachedir="".$template."/cache/";
+$mytpl=new UsualToolTemp($develop,$template."/skin/",$template."/cache/");
 $planid=UsualToolCMSDB::queryData("cms_nav_plan","id","indexplan=1","","1","0")["querydata"][0]["id"];
-$mytpl=new UsualToolTemp($mode,$tempdir,$cachedir);
-$tags=array("rewrite","langdata","weblogo","temproot","webname","weburl","webkeywords","webdescription","webicp","webple","address","webtel","webfax","webemail","webqq");  
-$vals=array(REWRITE,$langdata,$weblogo,$template,$webname,$weburl,$webkeyword,$webdescribe,$webicp,$webple,$address,$webtel,$webfax,$webemail,$webqq);
-$tnavs=UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='top' and planid='$planid'","ordernum asc","","0")["querydata"];
-$inavs=UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='index' and planid='$planid'","ordernum asc","","0")["querydata"];
-$bnavs=UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='bottom' and planid='$planid'","ordernum asc","","0")["querydata"];
-$navtag=array("tnavs","inavs","bnavs","uid","user","usermail","level","levelname","discount","shopcartnum");
-$navval=array($tnavs,$inavs,$bnavs,$uid,$user,$usermail,$level,$levelname,$discount,$shopcartnum);
-$mytpl->runin($tags,$vals);
-$mytpl->runin($navtag,$navval);
+/*----Read UT Basic Setup----*/
+$mytpl->runin(
+    array("rewrite","langdata","weblogo","temproot","webname","weburl","webkeywords","webdescription","webicp","webple","address","webtel","webfax","webemail","webqq"),
+    array(REWRITE,$langdata,$weblogo,$template,$webname,$weburl,$webkeyword,$webdescribe,$webicp,$webple,$address,$webtel,$webfax,$webemail,$webqq)
+);
+/*----Read UT Navigation----*/
+$mytpl->runin(
+    array("tnavs","inavs","bnavs"),
+    array(
+        UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='top' and planid='$planid'","ordernum asc","","0")["querydata"],
+        UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='index' and planid='$planid'","ordernum asc","","0")["querydata"],
+        UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='bottom' and planid='$planid'","ordernum asc","","0")["querydata"])
+);
+/*----Read UT MemberLogin----*/
+$mytpl->runin(
+    array("uid","user","usermail","level","levelname","discount","shopcartnum"),
+    array($uid,$user,$usermail,$level,$levelname,$discount,$shopcartnum)
+);

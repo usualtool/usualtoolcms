@@ -1,33 +1,30 @@
 <?php
 $do=UsualToolCMS::sqlcheck($_GET["do"]);
+$planname=UsualToolCMSDB::queryData("cms_nav_plan","","indexplan=1","","1","0")["querydata"][0]["name"];
+$oid=UsualToolCMSDB::queryData("cms_templete","","isopen=1","","","0")["querydata"][0]["id"];
 ?>
 <h2>已提取模板</h2>
 <div class="page">
 <table width=100% align=center>
 <tr><td>
 <?php
-$open=$mysqli->query("select * from cms_templete where isopen=1");
-while($orow=$open->fetch_row()){
-    $oid=$orow[0];
-}
-if(preg_match("/($Ospat)/i", $Uagent )) {
+if(preg_match("/($Ospat)/i",$Uagent)) {
     $k=4;
 }else{
     $k=6;
 }
-$result=$mysqli->query("select * from cms_templete");
-$i= 0;
-while($rs=mysqli_fetch_array($result)){
+$list=UsualToolCMSDB::queryData("cms_templete","","","","","0")["querydata"];
+foreach($list as $rs){
     echo"<form action='?m=templete&u=a_templetex.php&t=open&paths=".$rs['paths']."&id=".$rs['id']."&oid=".$oid."' method='post' id='form".$i."' name='form".$i."'><dl class=child1>";
     echo"<dt>".$rs['title']."</dt>";
     echo"<dd style='color:#999999;line-height:35px;'>".$rs['version']."</dd>";
     echo"<dd style='color:#999999;line-height:35px;'>".$rs['paths']."</dd>";
     if($rs['isopen']==0){
         echo"<dd style='color:#999999;line-height:30px;'>导航方案:<select style='width:80px;height:25px;padding:0 0;' name='plan'>";
-        $plan=$mysqli->query("select * from cms_nav_plan");
-        while($planrow=mysqli_fetch_array($plan)):
-        echo"<option value='".$planrow["id"]."'>".$planrow["name"]."</option>";
-        endwhile;
+        $listx=UsualToolCMSDB::queryData("cms_nav_plan","","","","","0")["querydata"];
+        foreach($listx as $planrow):
+            echo"<option value='".$planrow["id"]."'>".$planrow["name"]."</option>";
+        endforeach;
         echo"</select></dd>";
     }else{
         echo"<dd style='color:#999999;line-height:30px;'>导航方案:".$planname."</dd>";
@@ -40,8 +37,7 @@ while($rs=mysqli_fetch_array($result)){
         echo"&nbsp;&nbsp;<font style='color:red;'>已启用</font>";
     }
     echo"</dl></form>";
-    $i++;
-    if ($i ==$k){
+    if ($rs["xu"]==$k){
         echo"</td></tr><table width=100% align=center><tr><td>";
     }
 }

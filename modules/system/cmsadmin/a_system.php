@@ -43,25 +43,50 @@ if($do=="update"){
     $water_place=UsualToolCMS::sqlcheck($_POST["water_place"]);
     //////
     if($l=="main"){
-		$sql="UPDATE `cms_setup` SET webisclose='$webisclose',develop='$develop',cmscolor='$cmscolor',usercookname='$usercookname',salts='$salts',webname='$webname',weburl='$weburl',webkeyword='$webkeyword',webdescribe='$webdescribe',weblogo='$weblogo',webicp='$webicp',webple='$webple',address='$address',webtel='$webtel',webfax='$webfax',webqq='$webqq',webemail='$webemail',indexunit='$indexunit',indexmodule='$indexmodule' where id='$id'";
-		$mysqli->query($sql);
-		}
+        UsualToolCMSDB::updateData("cms_setup",array(
+        "webisclose"=>$webisclose,
+        "develop"=>$develop,
+        "cmscolor"=>$cmscolor,
+        "usercookname"=>$usercookname,
+        "salts"=>$salts,
+        "webname"=>$webname,
+        "weburl"=>$weburl,
+        "webkeyword"=>$webkeyword,
+        "webdescribe"=>$webdescribe,
+        "weblogo"=>$weblogo,
+        "webicp"=>$webicp,
+        "webple"=>$webple,
+        "address"=>$address,
+        "webtel"=>$webtel,
+        "webfax"=>$webfax,
+        "webqq"=>$webqq,
+        "webemail"=>$webemail,
+        "indexunit"=>$indexunit,
+        "indexmodule"=>$indexmodule),"id='$id'");
+	}
     if($l=="oss"){
-		$sql="UPDATE `cms_setup` SET indexoss='$indexoss' where id='$id'";
-		$mysqli->query($sql);
-		}
+        UsualToolCMSDB::updateData("cms_setup",array("indexoss"=>$indexoss),"id='$id'");
+	}
     if($l=="editor"){
-		$sql="UPDATE `cms_setup` SET indexeditor='$indexeditor' where id='$id'";
-		$mysqli->query($sql);
-		}
+        UsualToolCMSDB::updateData("cms_setup",array("indexeditor"=>$indexeditor),"id='$id'");
+	}
     if($l=="mail"){
-		$sql="UPDATE `cms_setup` SET mailsmtp='$mailsmtp',mailport='$mailport',mailaccount='$mailaccount',mailpassword='$mailpassword' where id='$id'";
-		$mysqli->query($sql);
-		}
+        UsualToolCMSDB::updateData("cms_setup",array(
+            "mailsmtp"=>$mailsmtp,
+            "mailport"=>$mailport,
+            "mailaccount"=>$mailaccount,
+            "mailpassword"=>$mailpassword),"id='$id'");
+	}
     if($l=="water"){
-		$sql="UPDATE `cms_water` SET water='$water',water_type='$water_type',water_place='$water_place',water_textcolor='$water_textcolor',water_textsize='$water_textsize',water_text='$water_text',water_png='$water_png' where id='$id'";
-		$mysqli->query($sql);
-		}
+        UsualToolCMSDB::updateData("cms_water",array(
+            "water"=>$water,
+            "water_type"=>$water_type,
+            "water_place"=>$water_place,
+            "water_textcolor"=>$water_textcolor,
+            "water_textsize"=>$water_textsize,
+            "water_text"=>$water_text,
+            "water_png"=>$water_png),"id='$id'");
+	}
     if($l=="search"){
         $ids=implode("-UT-",$_POST["sid"]);
         $dbs=implode("-UT-",$_POST["sdb"]);
@@ -74,14 +99,22 @@ if($do=="update"){
         $wherex=explode("-UT-",$wheres);
         $pagex=explode("-UT-",$pages);
 		for($s=0;$s<=count($dbx);$s++){
-    if($idx[$s]=="x"){
-        $sql="insert into `cms_search_set` (dbs,fields,wheres,pages) values ('$dbx[$s]','$fieldx[$s]','$wherex[$s]','$pagex[$s]')";
-    }else{
-        $sql="update `cms_search_set` set dbs='$dbx[$s]',fields='$fieldx[$s]',wheres='$wherex[$s]',pages='$pagex[$s]' where id='$idx[$s]'";
-    }
-    $mysqli->multi_query($sql);
+            if($idx[$s]=="x"){
+                UsualToolCMSDB::insertData("cms_search_set",array(
+                    "dbs"=>$dbx[$s],
+                    "fields"=>$fieldx[$s],
+                    "wheres"=>$wherex[$s],
+                    "pages"=>$pagex[$s]));
+            }else{
+                UsualToolCMSDB::updateData("cms_search_set",array(
+                    "dbs"=>$dbx[$s],
+                    "fields"=>$fieldx[$s],
+                    "wheres"=>$wherex[$s],
+                    "pages"=>$pagex[$s]),"id='".$idx[$s]."'");
+            }
+            $mysqli->multi_query($sql);
 			}
-			}
+	}
     if($l=="redis" || $l=="sockets"){
         $info = file_get_contents("../sql_db.php"); 
         foreach($_POST as $k=>$v){ 
@@ -95,8 +128,8 @@ if($do=="update"){
     }
     echo "<script>window.location.href='?m=system&u=a_system.php&l=$l'</script>";
 }
-$result=$mysqli->query("select * from cms_setup limit 1");
-while($row=mysqli_fetch_array($result)):
+$result=UsualToolCMSDB::queryData("cms_setup","","","","1","0")["querydata"];
+foreach($result as $row):
 ?>
     <script type="text/javascript">
      $(function(){ $(".idTabs").idTabs(); }); 
@@ -379,9 +412,9 @@ while($row=mysqli_fetch_array($result)):
         </form>
         </div>
 <?php
-endwhile;
-$wresult=$mysqli->query("select * from `cms_water` limit 1");
-while($wrow=mysqli_fetch_array($wresult)):
+endforeach;
+$wresult=UsualToolCMSDB::queryData("cms_water","","","","1","0")["querydata"];
+foreach($wresult as $wrow):
 ?>
         <div id="water">
        <form action="?m=system&u=a_system.php&do=update&l=water" method="post" id="form4" name="form4">
@@ -463,7 +496,7 @@ while($wrow=mysqli_fetch_array($wresult)):
 		</form>
         </div>
 <?php
-endwhile;?>
+endforeach;?>
       <div id="search">
        <form action="?m=system&u=a_system.php&do=update&l=search" method="post" id="form6" name="form6">
         <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
@@ -477,8 +510,9 @@ endwhile;?>
           <tr>
           <td style="line-height:30px;">
           <?php
-          $sresult=$mysqli->query("select * from `cms_search_set`");
-          while($srow=mysqli_fetch_array($sresult)){?>
+          $sresult=UsualToolCMSDB::queryData("cms_search_set","","","","","0")["querydata"];
+          foreach($sresult as $srow){
+          ?>
 		      <input type="hidden" name="sid[]" value="<?php echo$srow["id"];?>" />
               表名: <input type="text" name="sdb[]" class="inpMain" style="width:15%;" value="<?php echo$srow["dbs"];?>"> - 
               字段: <input type="text" name="sfield[]" class="inpMain" style="width:15%;" value="<?php echo$srow["fields"];?>"> - 

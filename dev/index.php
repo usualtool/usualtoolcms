@@ -63,9 +63,9 @@ if($_GET["do"]=="deldir"){
           <th width="50%">登陆时间</th>
          </tr>
 <?php
-$adminlogin=$mysqli->query("select * from `cms_admin_log` order by logintime desc LIMIT 4");
-while($loginrecord=$adminlogin->fetch_row()){
-    echo"<tr><td align=center>".$loginrecord[1]."</td><td align=center>".$loginrecord[2]."</td><td align=center>".date('Y-m-d',strtotime($loginrecord[3]))."</td></tr>";
+    $adminlogin=UsualToolCMSDB::queryData("cms_admin_log","","","logintime desc","0,4","0")["querydata"];
+    foreach($adminlogin as $loginrecord){
+        echo"<tr><td align=center>".$loginrecord["adminusername"]."</td><td align=center>".$loginrecord["ip"]."</td><td align=center>".date('Y-m-d',strtotime($loginrecord["logintime"]))."</td></tr>";
 }
 ?>
  </table>

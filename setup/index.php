@@ -208,7 +208,7 @@ echo"<div class='form-group row'><div class='col-sm-12'>请对站点目录开启
 echo"<div class='form-group row'><div class='col-sm-12'>伪静态路由环境配置</div></div>";
 $SystemInfos=getSystemInfo();
 $SystemInfo=explode("|",$SystemInfos);
-echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>架构平台</label><div class='col-sm-9'><font color=red>".$SystemInfo[0]."</font>，系统默认动态路由访问，若需要设置伪静态，请复制以下规则进行设置，<a target='_blank' href='../伪静态规则说明.txt'>设置教程</a><br>设置伪静态后，需要在后端安装『URL路由管理』插件来批量处理模板和导航中的地址。</div></div>";
+echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>架构平台</label><div class='col-sm-9'><font color=red>".$SystemInfo[0]."</font>，默认动态路由访问，若需设置伪静态，请按以下规则进行设置<br>设置伪静态后，需安装『URL路由管理』插件来批量处理模板和导航中的地址。</div></div>";
 echo"<div class='form-group row'><div class='col-sm-12'><textarea id='textarea' style='width:100%;height:120px;line-height:20px;' readonly='readonly'>";
 if(strpos($SystemInfo[0],'IIS')!==false){?>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -305,6 +305,16 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `rolename` varchar(100) NOT NULL,
       `ranges` varchar(250) NOT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `id` (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    DROP TABLE IF EXISTS `cms_cactask`;
+    CREATE TABLE IF NOT EXISTS `cms_cactask` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `cacname` varchar(150) DEFAULT NULL,
+      `cacstr` text DEFAULT NULL,
+      `starttime` datetime DEFAULT NULL,
+      `endtime` datetime DEFAULT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `id` (`id`)
     ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
@@ -477,15 +487,13 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
 //基础设置
 elseif($l=="setup"&&$_SESSION["setuporder"]=="3"):
     echo"<form name='form6' action='?t=update' method='post'>";
-    echo"<input type='hidden' name='template' value='templete/index'><input type='hidden' name='weblogo' value='https://cms.usualtool.com/assets/logo.png'>";
+    echo"<input type='hidden' name='develop' value='1'><input type='hidden' name='webisclose' value='0'><input type='hidden' name='template' value='templete/index'><input type='hidden' name='weblogo' value='https://cms.usualtool.com/assets/logo.png'>";
     echo"<div class='form-group row'><div class='col-sm-12'>全局设置</div></div>";
-    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>UT令牌: </label><div class='col-sm-9'><input type='text' name='authcode' value='0' class='form-control'> 通过 <a target='_blank' href='http://cms.usualtool.com/juan.php' style='color:red;'>捐赠</a> 获得</div></div>";
-    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>网站名称: </label><div class='col-sm-9'><input type='text' name='webname' value='web' class='form-control'> 填写web则按照语言包解析</div></div>";
-    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>绑定域名: </label><div class='col-sm-9'><input type='text' name='weburl' value='http://cms.usualtool.com' class='form-control'> 必须填写</div></div>";
+    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>UT令牌: </label><div class='col-sm-9'><input type='text' name='authcode' value='0' class='form-control'> UT令牌是部分收费项目的通行令牌，支持UT开源发展，通过 <a target='_blank' href='http://cms.usualtool.com/juan.php' style='color:red;'>捐赠</a> 获得</div></div>";
+    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>网站名称: </label><div class='col-sm-9'><input type='text' name='webname' value='web' class='form-control'> 若填写web则按照语言包解析</div></div>";
+    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>绑定域名: </label><div class='col-sm-9'><input type='text' name='weburl' value='http://cms.usualtool.com' class='form-control'> 必须填写，若在多级目录下，请以最后的目录名结尾</div></div>";
     echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>SESSION前缀: </label><div class='col-sm-9'><input type='text' name='usercookname' value='usualtool_' class='form-control'></div></div>";
-    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>初始密码盐值: </label><div class='col-sm-9'><input type='text' name='salts' value='usualtoolcms' class='form-control'> 创建密码时使用</div></div>";
-    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>关闭网站: </label><div class='col-sm-9'><input type='text' name='webisclose' value='0' class='form-control'></div></div>";
-    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>开发模式: </label><div class='col-sm-9'><input type='text' name='develop' value='1' class='form-control'></div></div>";
+    echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>初始密码盐值: </label><div class='col-sm-9'><input type='text' name='salts' value='usualtoolcms' class='form-control'> 初始创建密码时使用，生产环境建议动态更换盐值</div></div>";
     echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>余额账户默认货币: </label><div class='col-sm-9'><input type='text' name='indexunit' value='CNY' class='form-control'> 用户余额支付账户默认货币单位。</div></div>";
     echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'></label><div class='col-sm-9'><input type='submit' class='btn btn-success' value='保存设置'></div></div>";
     echo"</form>";
@@ -502,7 +510,7 @@ elseif($l=="welcome"&&$_SESSION["setuporder"]=="5"):
     echo"<div class='form-group row'><div class='col-sm-12'>特别注意:登录后端后请按系统提示删除安装文件夹!</div></div>";
     echo"<div class='form-group row'><div class='col-sm-12'>请尽快登录开发者平台进行其他设置!地址: <a href='../dev/'>打开</div></div>";
 else:
-    echo"<div class='form-group row'><div class='col-sm-12'>设置错误！上一步骤尚未完成!</div></div>";
+    echo"<div class='form-group row'><div class='col-sm-12'>设置错误！上一步骤尚未完成! <a href='./'>【重新设置】</a></div></div>";
 endif;
 ?>
             </div>

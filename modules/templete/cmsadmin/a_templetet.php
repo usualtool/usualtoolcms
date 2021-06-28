@@ -50,7 +50,12 @@ if(!empty($updatesql)):
     echo"<p>正在更新模板数据...</p>";
     $paths="templete/".$id."";
     $sqls="INSERT INTO `cms_templete` (`paths`, `isopen`, `title`, `version`, `author`) VALUES ('$paths',0,'$c','1.0','---')";
-    if ($mysqli->query($sqls) == TRUE):
+    if(UsualToolCMSDB::insertData("cms_templete",array(
+        "paths"=>$paths,
+        "isopen"=>0,
+        "title"=>$c,
+        "version"=>"1.0",
+        "author"=>"---"))):
         echo "<script>alert('模板安装成功,请在已提取的模板中启用!');window.location.href='?m=templete&u=a_templete.php'</script>";
     else:
         echo "<script>alert('虽然模板已经安装到templete目录,但模板入库失败,请手动更改模板路径!');window.location.href='?m=templete&u=a_templete.php'</script>";

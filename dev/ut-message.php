@@ -4,12 +4,12 @@
 <ul>
     <?php
     if(UsualToolCMSDB::modTable("cms_order")):
-        $noorders=mysqli_num_rows(mysqli_query($mysqli,"SELECT id FROM `cms_order` where state=1"));
+        $noorders=UsualToolCMSDB::queryData("cms_order","","state=1","","","0")["querynum"];
     else:
         $noorders=0;
     endif;
     if(UsualToolCMSDB::modTable("cms_book")):
-        $nobooks=mysqli_num_rows(mysqli_query($mysqli,"SELECT id FROM `cms_book` where aname is null"));
+        $nobooks=UsualToolCMSDB::queryData("cms_book","","aname is null","","","0")["querynum"];;
     else:
         $nobooks=0;
     endif;

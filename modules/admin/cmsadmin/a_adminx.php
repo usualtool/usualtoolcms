@@ -52,14 +52,14 @@ if($x=="m"){
 	   <tr>
        <td align="right">管理员角色</td>
        <td>
-<select name="roleid">
-<?php
-$admin=$mysqli->query("select id,rolename,ranges from `cms_admin_role`");
-while($adminrow=mysqli_fetch_array($admin)):
-echo"<option value='".$adminrow["id"]."'>".$adminrow["rolename"]."</option>";
-endwhile;
-?>
-</select>
+    <select name="roleid">
+    <?php
+    $role=UsualToolCMSDB::queryData("cms_admin_role","id,rolename,ranges","","","","0")["querydata"];
+    foreach($role as $rolerow):
+        echo"<option value='".$rolerow["id"]."'>".$rolerow["rolename"]."</option>";
+    endforeach;
+    ?>
+    </select>
        </td>
       </tr>
       <tr>
@@ -85,65 +85,64 @@ endwhile;
 <?php 
 }
 if($t=="mon"){
-$id=UsualToolCMS::sqlcheckx($_GET["id"]);
-$result=$mysqli->query("select * from cms_admin where id='$id'");
-while($row=$result->fetch_row()){
-?>
-     <form action="?m=admin&u=a_adminx.php&x=m" method="post">
-     <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
-      <tr>
-       <td width="20%" align="right">管理员名称</td>
-       <td>
-        <?php echo $row[2] ;?>
-       </td>
-      </tr>
-	   <tr>
-       <td align="right">管理员角色</td>
-       <td>
-<select name="roleid">
-<?php
-$admin=$mysqli->query("select id,rolename,ranges from `cms_admin_role`");
-while($adminrow=mysqli_fetch_array($admin)):
-echo"<option value='".$adminrow["id"]."'>".$adminrow["rolename"]."</option>";
-endwhile;
-?>
-</select>
-       </td>
-      </tr>
-      <tr>
-       <td align="right">密码</td>
-       <td>
-        <input type="password" name="password" size="40" class="inpMain"/>
-       </td>
-      </tr>
-      <tr>
-       <td align="right">确认密码</td>
-       <td>
-        <input type="password" name="password_confirm" size="40" class="inpMain"/>
-       </td>
-      </tr>
-      <tr>
-       <td></td>
-       <td>
-        <input type="hidden" name="id" value="<?php echo$row[0];?>" />
-        <input type="submit" name="submit" class="btn" value="提交" />
-       </td>
-      </tr>
-     </table>
-    </form>
-<?php 
-}
+    $id=UsualToolCMS::sqlcheckx($_GET["id"]);
+    $row=UsualToolCMSDB::queryData("cms_admin","","id='$id'","","","0")["querydata"][0];
+    ?>
+         <form action="?m=admin&u=a_adminx.php&x=m" method="post">
+         <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
+          <tr>
+           <td width="20%" align="right">管理员名称</td>
+           <td>
+            <?php echo $row["username"] ;?>
+           </td>
+          </tr>
+           <tr>
+           <td align="right">管理员角色</td>
+           <td>
+        <select name="roleid">
+        <?php
+        $role=UsualToolCMSDB::queryData("cms_admin_role","id,rolename,ranges","","","","0")["querydata"];
+        foreach($role as $rolerow):
+            echo"<option value='".$rolerow["id"]."'>".$rolerow["rolename"]."</option>";
+        endforeach;
+        ?>
+        </select>
+           </td>
+          </tr>
+          <tr>
+           <td align="right">密码</td>
+           <td>
+            <input type="password" name="password" size="40" class="inpMain"/>
+           </td>
+          </tr>
+          <tr>
+           <td align="right">确认密码</td>
+           <td>
+            <input type="password" name="password_confirm" size="40" class="inpMain"/>
+           </td>
+          </tr>
+          <tr>
+           <td></td>
+           <td>
+            <input type="hidden" name="id" value="<?php echo$row["id"];?>" />
+            <input type="submit" name="submit" class="btn" value="提交" />
+           </td>
+          </tr>
+         </table>
+        </form>
+    <?php 
 }
 if($t=="del"){
-$adminnum=mysqli_num_rows(mysqli_query($mysqli,"SELECT id FROM `cms_admin`"));
-if($adminnum==1):
-echo "<script>alert('管理员删除失败,已经是最后一条记录!');window.location.href='?m=admin&u=a_admin.php'</script>";
-else:
-if(UsualToolCMSDB::delData("cms_admin","id='".UsualToolCMS::sqlcheckx($_GET["id"])."'")):
-echo "<script>alert('管理员删除成功!');window.location.href='?m=admin&u=a_admin.php'</script>";
-else:echo "<script>alert('管理员删除失败!');window.location.href='?m=admin&u=a_admin.php'</script>";
-endif;
-endif;
+    $adminnum=UsualToolCMSDB::queryData("cms_admin","","","","","0")["querynum"];
+    if($adminnum==1):
+        echo "<script>alert('管理员删除失败,已经是最后一条记录!');window.location.href='?m=admin&u=a_admin.php'</script>";
+    else:
+        if(UsualToolCMSDB::delData("cms_admin","id='".UsualToolCMS::sqlcheckx($_GET["id"])."'")):
+            echo "<script>alert('管理员删除成功!');window.location.href='?m=admin&u=a_admin.php'</script>";
+        else:
+            echo "<script>alert('管理员删除失败!');window.location.href='?m=admin&u=a_admin.php'</script>";
+        endif;
+    endif;
 }
 $mysqli->close();
 ?>

@@ -5,13 +5,10 @@ require_once '../sql_db.php';
 require_once 'ut-session.php';
 require_once '../class/UsualToolCMS_INC.php';
 require_once '../class/UsualToolCMS_Water.php';
-$setup=$mysqli->query("select weburl,indexoss from `cms_setup` limit 1");
-while($setuprow=mysqli_fetch_array($setup)):
+$setuprow=UsualToolCMSDB::queryData("cms_setup","weburl,indexoss","","","1","0")["querydata"][0];
     $weburl=$setuprow["weburl"];
     $indexoss=$setuprow["indexoss"];
-endwhile;
-$wresult=$mysqli->query("select * from `cms_water` limit 1");
-while($wrow=mysqli_fetch_array($wresult)):
+$wrow=UsualToolCMSDB::queryData("cms_water","","","","1","0")["querydata"][0];
     $water=$wrow["water"];
     $water_type=$wrow["water_type"];
     $water_place=$wrow["water_place"];
@@ -19,7 +16,6 @@ while($wrow=mysqli_fetch_array($wresult)):
     $water_textsize=$wrow["water_textsize"];
     $water_text=$wrow["water_text"];
     $water_png="../assets/".$wrow["water_png"]."";
-endwhile;
 if(!empty($_GET['l'])){
     $l=str_replace("..","",$_GET['l']);
 }

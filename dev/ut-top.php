@@ -1,8 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/'.'../conn.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Spider.php');
-require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Page.php');
-require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Tree.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_WeChat.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_AliOpen.php');
 require_once(dirname(__FILE__).'/'.'ut-session.php');
@@ -23,16 +21,17 @@ if(!empty($_COOKIE['navleft'])):
 else:
     $navid="0";
 endif;
-$admin=$mysqli->query("select rolename,ranges from `cms_admin_role` where id=(select roleid from `cms_admin` where id=$adminuserid and username='$adminuser')");
-while($adminrow=mysqli_fetch_array($admin)):
+$theroleid=UsualToolCMSDB::queryData("cms_admin","","id='$adminuserid' and username='$adminuser'","","","0")["querydata"][0]["roleid"];
+$admin=UsualToolCMSDB::queryData("cms_admin_role","rolename,ranges","id='$theroleid'","","","0")["querydata"];
+foreach($admin as $adminrow):
     $adminrolename=$adminrow["rolename"];
     $adminrange=$adminrow["ranges"];
-endwhile;
-$rolex=$mysqli->query("select * from `cms_mod` where bid<>0");
-while($rolexrow=mysqli_fetch_array($rolex)):
+endforeach;
+$rolex=UsualToolCMSDB::queryData("cms_mod","","bid<>0","","","0")["querydata"];
+foreach($rolex as $rolexrow):
     $roleurl=substr(str_replace(".php","",$rolexrow["modurl"]),1);
     $rolesx="".$rolesx.",".$roleurl."";
-endwhile;
+endforeach;
 $roles=substr($rolesx,1);
 $roleone=explode(",",$adminrange);
 $roletwo=explode(",",$roles);
@@ -89,24 +88,22 @@ $lang=Lang();
 </div>
 <ul class="canvi-navigation">
 <?php
-$mod=$mysqli->query("select id,bid,modid,modname,modurl from `cms_mod` where bid='0'");
-while($modrow=$mod->fetch_row()){
-    $smod="SELECT id,bid,modid,modname,modurl,isopen from `cms_mod` WHERE bid='$modrow[0]'";
-    $smods=mysqli_query($mysqli,$smod);
-    if(mysqli_num_rows($smods)>0):
-        echo"<p onclick='opennav(".$modrow[0].")'><b><i class='fa fa-cube'></i> ".$modrow[3]."</b></p><ul class='closenav' id='nav".$modrow[0]."' style='display:none;'>";
-        $xmod=$mysqli->query($smod);
-        while($xmodrow=$xmod->fetch_row()):
+$mod=UsualToolCMSDB::queryData("cms_mod","id,bid,modid,modname,modurl","bid=0","","","0")["querydata"];
+foreach($mod as $modrow){
+    $smod=UsualToolCMSDB::queryData("cms_mod","id,bid,modid,modname,modurl,isopen","bid='".$modrow["id"]."'","","","0");
+    if($smod["querynum"]>0):
+        echo"<p onclick='opennav(".$modrow["id"].")'><b><i class='fa fa-cube'></i> ".$modrow["modname"]."</b></p><ul class='closenav' id='nav".$modrow["id"]."' style='display:none;'>";
+            foreach($smod["querydata"] as $xmodrow):
             ?>
             <li>
-            <a href="ut-view-module.php?m=<?php echo$xmodrow[2];?>&u=<?php echo$xmodrow[4];?>" class="canvi-navigation__item" onclick="navclick('<?php echo$xmodrow[0];?>')"><span class="canvi-navigation__text"><i class="fa fa-th-large" aria-hidden="true"></i> <?php echo$xmodrow[3];?></span>
+            <a href="ut-view-module.php?m=<?php echo$xmodrow["modid"];?>&u=<?php echo$xmodrow["modurl"];?>" class="canvi-navigation__item" onclick="navclick('<?php echo$xmodrow["id"];?>')"><span class="canvi-navigation__text"><i class="fa fa-th-large" aria-hidden="true"></i> <?php echo$xmodrow["modname"];?></span>
             </a>
             </li>
         <?php
-        endwhile;
+        endforeach;
         echo"</ul>";
     else:
-        echo"<p><a href='ut-view-module.php?m=".$modrow[2]."&u=".$modrow[4]."'><i class='fa fa-cube'></i> <b>".$modrow[3]."</b></a></p>";
+        echo"<p><a href='ut-view-module.php?m=".$modrow["modid"]."&u=".$modrow["modurl"]."'><i class='fa fa-cube'></i> <b>".$modrow["modname"]."</b></a></p>";
     endif;
 }
 ?>
@@ -128,28 +125,26 @@ while($modrow=$mod->fetch_row()){
     <ul>
     <li><a href="../cms/" target="_blank"><i class="fa fa-code" aria-hidden="true"></i> CMS平台</a></li>
     <?php
-    $mod=$mysqli->query("select id,bid,modid,modname,modurl from `cms_mod` where bid='0'");
-    while($modrow=$mod->fetch_row()){
-        if($modrow[0]==1):
+    $mod=UsualToolCMSDB::queryData("cms_mod","id,bid,modid,modname,modurl","bid=0","","","0")["querydata"];
+    foreach($mod as $modrow){
+        if($modrow["id"]==1):
             $topnavicon='<i class="fa fa-cube" aria-hidden="true"></i>';
-        elseif($modrow[0]==2):
+        elseif($modrow["id"]==2):
             $topnavicon='<i class="fa fa-handshake-o" aria-hidden="true"></i>';
-        elseif($modrow[0]==3):
+        elseif($modrow["id"]==3):
             $topnavicon='<i class="fa fa-wrench" aria-hidden="true"></i>';
         endif;
-        $smod="SELECT id,bid,modid,modname,modurl,isopen from `cms_mod` WHERE bid='$modrow[0]'";
-        $smods=mysqli_query($mysqli,$smod);
-        if(mysqli_num_rows($smods)>0):
-            echo"<li class='M'><a href='JavaScript:void(0);'>".$topnavicon." ".$modrow[3]."</a><div class='drop mTopad'>";
-            $xmod=$mysqli->query($smod);
-            while($xmodrow=$xmod->fetch_row()):
-            ?>
-                <a href='ut-view-module.php?m=<?php echo$xmodrow[2];?>&u=<?php echo$xmodrow[4];?>' onclick="navclick('<?php echo$xmodrow[0];?>')"><?php echo$xmodrow[3];?></a>
-            <?php
-            endwhile;
-            echo"</div></li>";
+    $smod=UsualToolCMSDB::queryData("cms_mod","id,bid,modid,modname,modurl,isopen","bid='".$modrow["id"]."'","","","0");
+        if($smod["querynum"]>0):
+                echo"<li class='M'><a href='JavaScript:void(0);'>".$topnavicon." ".$modrow["modname"]."</a><div class='drop mTopad'>";
+                foreach($smod["querydata"] as $xmodrow):
+                ?>
+                    <a href='ut-view-module.php?m=<?php echo$xmodrow["modid"];?>&u=<?php echo$xmodrow["modurl"];?>' onclick="navclick('<?php echo$xmodrow["id"];?>')"><?php echo$xmodrow["modname"];?></a>
+                <?php
+                endforeach;
+                echo"</div></li>";
         else:
-            echo"<li><a href='".$modrow[4]."'>".$topnavicon." ".$modrow[3]."</a></li>";
+            echo"<li><a href='".$modrow["modurl"]."'>".$topnavicon." ".$modrow["modname"]."</a></li>";
         endif;
     }
     ?>
@@ -175,16 +170,16 @@ while($modrow=$mod->fetch_row()){
 <div id="menu_left">
 <ul class="lanmu-list">
 <?php
-$nav=$mysqli->query("select id,bid,modid,modname,modurl,backitem from `cms_mod` where bid=3 order by ordernum asc");
-while($navrow=$nav->fetch_row()):
-    if($navrow[0]==$navid):
+$nav=UsualToolCMSDB::queryData("cms_mod","id,bid,modid,modname,modurl,backitem","bid=3","ordernum asc","","0")["querydata"];
+foreach($nav as $navrow):
+    if($navrow["id"]==$navid):
         $class="cur";
     else:
         $class="";
     endif;
     ?>
-    <li class='<?php echo$class;?>'><a href="ut-view-module.php?m=<?php echo$navrow[2];?>&u=<?php echo$navrow[4];?>" onclick="navclick('<?php echo$navrow[0];?>')"><?php echo$navrow[3];?></a></li>
-<?php endwhile;?>
+    <li class='<?php echo$class;?>'><a href="ut-view-module.php?m=<?php echo$navrow["modid"];?>&u=<?php echo$navrow["modurl"];?>" onclick="navclick('<?php echo$navrow["id"];?>')"><?php echo$navrow["modname"];?></a></li>
+<?php endforeach;?>
 </ul>
 <p align='center' style="background-color:#FFFACD;height:35px;"><a href="javascript:;" class="navbtn" style="color:black;text-align:center;line-height:35px;">更多</a></p>
 </div>

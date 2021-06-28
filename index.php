@@ -24,11 +24,8 @@ endif;
 $modules=json_decode(file_get_contents("modules/module.config"));
 $module=UsualToolCMS::modsearch("".$ut.".php",$modules);
 $modpath="modules/".$module;
-if($module=="error"){
+if($module=="error"):
     require_once(UTF_PATH.'/'.'error.php');
-}
-else{
+else:
     require_once(WEB_PATH.'/'.''.$modpath.'/'.$ut.'.php');
-}
-$mysqli->close();
-?>
+endif;

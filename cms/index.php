@@ -25,17 +25,17 @@ if($_GET["do"]=="deldir"){
         <tr>
         <td style="line-height:35px;font-size:15px;">
 <?php
-$cmsnavs=$mysqli->query("select * from `cms_nav` where place='cmsadmin' order by ordernum asc");
-while($cmsrows=mysqli_fetch_array($cmsnavs)):
-echo"<p><a href='".$cmsrows["linkurl"]."'><b><i class='fa fa-cube'></i> ".$cmsrows["linkname"]."</b></a></p>";
-endwhile;
-    $cmod=$mysqli->query("SELECT id,bid,modid,modname,modurl,backitem from `cms_mod` WHERE look='1' and isopen='1' order by id desc");
-    while($cmodrow=$cmod->fetch_row()):
-        echo"<p><b><i class='fa fa-cube'></i> ".$cmodrow[3]."</b></p>";
-        $sbid=$cmodrow[1];
-        $sid=$cmodrow[2];
-        $sname=$cmodrow[3];
-        $snav=$cmodrow[5];
+    $cmsnavs=UsualToolCMSDB::queryData("cms_nav","","place='cmsadmin'","ordernum asc","","0")["querydata"];
+    foreach($cmsnavs as $cmsrows):
+        echo"<p><a href='".$cmsrows["linkurl"]."'><b><i class='fa fa-cube'></i> ".$cmsrows["linkname"]."</b></a></p>";
+    endforeach;
+    $cmod=UsualToolCMSDB::queryData("cms_mod","id,bid,modid,modname,modurl,backitem","look='1' and isopen='1'","id desc","","0")["querydata"];
+    foreach($cmod as $cmodrow):
+        echo"<p><b><i class='fa fa-cube'></i> ".$cmodrow["modname"]."</b></p>";
+        $sbid=$cmodrow["bid"];
+        $sid=$cmodrow["modid"];
+        $sname=$cmodrow["modname"];
+        $snav=$cmodrow["backitem"];
         $snavarr=explode(",",$snav);
         echo"<p>";
         foreach($snavarr as $snv):
@@ -45,14 +45,14 @@ endwhile;
             $sget=str_replace("?","",$suarr[1]);
             ?>
                 <span style="padding-right:15px;">
-                <a href="ut-view-module.php?m=<?php echo$sid;?>&u=<?php echo$surl;?>&<?php echo$sget;?>" onclick="navclick('<?php echo$cmodrow[0];?>')">
+                <a href="ut-view-module.php?m=<?php echo$sid;?>&u=<?php echo$surl;?>&<?php echo$sget;?>" onclick="navclick('<?php echo$cmodrow["id"];?>')">
                 <?php echo$snavs[0];?>
                 </a> 
                 </span>
         <?php
         endforeach;
         echo"</p>";
-    endwhile;
+    endforeach;
     ?>
          </td>
          </tr>
@@ -71,9 +71,9 @@ endwhile;
           <th width="50%">登陆时间</th>
          </tr>
 <?php
-$adminlogin=$mysqli->query("select * from `cms_admin_log` order by logintime desc limit 0,10");
-while($loginrecord=$adminlogin->fetch_row()){
-    echo"<tr><td align=center>".$loginrecord[1]."</td><td align=center>".$loginrecord[2]."</td><td align=center>".$loginrecord[3]."</td></tr>";
+    $adminlogin=UsualToolCMSDB::queryData("cms_admin_log","","","logintime desc","0,10","0")["querydata"];
+    foreach($adminlogin as $loginrecord){
+        echo"<tr><td align=center>".$loginrecord["adminusername"]."</td><td align=center>".$loginrecord["ip"]."</td><td align=center>".date('Y-m-d',strtotime($loginrecord["logintime"]))."</td></tr>";
 }
 ?>
  </table>

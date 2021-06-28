@@ -3,10 +3,7 @@ require_once 'ut-top.php';
 if(!empty($_GET["m"])):$mod=UsualToolCMS::sqlcheck($_GET["m"]);else:$mod=UsualToolCMS::sqlcheck($_POST["m"]);endif;
 if(!empty($_GET["u"])):$url=UsualToolCMS::sqlcheck($_GET["u"]);else:$url=UsualToolCMS::sqlcheck($_POST["u"]);endif;
 $modpath="modules/".$mod;
-$mods=$mysqli->query("select * from `cms_mod` where modid='$mod'");
-while($modsrow=mysqli_fetch_array($mods)): 
-    $modname=$modsrow["modname"];
-endwhile;
+$modname=UsualToolCMSDB::queryData("cms_mod","","modid='$mod'","","","0")["querydata"][0]["modname"];
 if($mod==""):
 elseif($mod=="module"):
     $modicon="fa fa-cubes";

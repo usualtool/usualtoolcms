@@ -20,8 +20,7 @@ if($t=="del"):
         $hooks=file_get_contents($hookconfig);
         $uninstallsql=UsualToolCMS::str_substr("<uninstallsql><![CDATA[","]]></uninstallsql>",$hooks);
         $mysqli->multi_query($uninstallsql);
-        $ress=mysqli_query($mysqli,"DELETE FROM `cms_plugins` where id='".$id."'");
-        if($ress):
+        if(UsualToolCMSDB::delData("cms_plugins","id='$id'")):
             echo "<script>window.location.href='?m=".$mod."&u=a_apix.php&t=$t&id=$id&delfile=usualtoolcms'</script>";
         else:
             echo "<script>alert('插件卸载失败!');window.location.href='?m=".$mod."&u=a_api.php'</script>";
@@ -96,9 +95,14 @@ elseif($t=="setup"&&($ptype=="1"||empty($ptype))):
         $ver=UsualToolCMS::str_substr("<ver>","</ver>",$hooks);
         $description=UsualToolCMS::str_substr("<description>","</description>",$hooks);
         $installsql=UsualToolCMS::str_substr("<installsql><![CDATA[","]]></installsql>",$hooks);
-        $resql="INSERT INTO `cms_plugins` (id,type,auther,title,pluginname,ver,description) VALUES ('$id','$type','---','$title','$pluginname','$ver','$description')";
-        $ress=$mysqli->query($resql);
-        if($ress):
+        if(UsualToolCMSDB::insertData("cms_plugins",array(
+            "id"=>$id,
+            "type"=>$type,
+            "auther"=>"---",
+            "title"=>$title,
+            "pluginname"=>$pluginname,
+            "ver"=>$ver,
+            "description"=>$description))):
             $mysqli->multi_query($installsql);
             echo "<script>alert('插件安装成功!');window.location.href='?m=".$mod."&u=a_api.php'</script>";
         else:

@@ -3,9 +3,9 @@
 <ul id="pageMain">
 <?php
 $do=UsualToolCMS::sqlcheck($_GET["do"]);
-$mod=$mysqli->query("select * from `cms_mod` where bid>0 order by ordernum desc");
-while($modrow=mysqli_fetch_array($mod)):
-    $catname=mysqli_fetch_array(mysqli_query($mysqli,"SELECT modname FROM `cms_mod` where id='".$modrow["bid"]."'"))[0];
+$mod=UsualToolCMSDB::queryData("cms_mod","","bid>0","ordernum desc","","0")["querydata"];
+foreach($mod as $modrow):
+    $catname=UsualToolCMSDB::queryData("cms_mod","","id='".$modrow["bid"]."'","","","0")["querydata"][0]["modname"];
     $zmods=file_get_contents("../modules/".$modrow["modid"]."/usualtoolcms.config");
     $zmodtype=UsualToolCMS::str_substr("<modtype>","</modtype>",$zmods);
     if($zmodtype==1):
@@ -33,7 +33,7 @@ while($modrow=mysqli_fetch_array($mod)):
         echo"<a href='?m=".$modrow["modid"]."&u=".$modrow["modurl"]."'onclick='navclick(".$modrow["id"].")'>使用</a> | <a href='?m=module&u=a_modsx.php&id=".$modrow["modid"]."&t=resetup&do=".$typex."'>卸载</a>";
     endif;
     echo"</li>";
-endwhile;
+endforeach;
 ?>
 </ul>
 </td></tr></table>
@@ -61,8 +61,8 @@ foreach($moduleblocks[1] as $module):
     preg_match_all( "/\<catid\>(.*?)\<\/catid\>/",$module,$catid);   
     preg_match_all( "/\<title\>(.*?)\<\/title\>/",$module,$title);
     preg_match_all( "/\<isfree\>(.*?)\<\/isfree\>/",$module,$isfree);
-    $catname=mysqli_fetch_array(mysqli_query($mysqli,"SELECT modname FROM `cms_mod` where id='".$catid[1][0]."'"))[0];
-    $modnum=mysqli_num_rows(mysqli_query($mysqli,"SELECT id FROM `cms_mod` where modid='".$id[1][0]."'"));
+    $catname=UsualToolCMSDB::queryData("cms_mod","","id='".$catid[1][0]."'","","","0")["querydata"][0]["modname"];
+    $modnum=UsualToolCMSDB::queryData("cms_mod","","modid='".$id[1][0]."'","","","0")["querynum"];
     if(!empty($modnum) && $modnum>0):
         $state="<font color=red>已安装</font>";
     else:
@@ -101,17 +101,14 @@ function zzreadmod($path = '.'){
                 $zztitle=UsualToolCMS::str_substr("<modname>","</modname>",$zzmods);
                 $zzauther=UsualToolCMS::str_substr("<auther>","</auther>",$zzmods);
                 $zzurl=UsualToolCMS::str_substr("<modurl>","</modurl>",$zzmods);
-                $modnum=mysqli_num_rows(mysqli_query($mysqli,"SELECT id FROM `cms_mod` where modid='".$zzid."'"));
+                $modnum=UsualToolCMSDB::queryData("cms_mod","","modid='$zzid'","","","0")["querynum"];
                 if(!empty($modnum) && $modnum>0):
                     $zzstate="<font color=red>已安装</font>";
                 else:
                     $zzstate="<a href='?m=module&u=a_modsx.php&id=".$zzid."&do=z&upname=usualtoolcms'>安装模块</a>";
                 endif;
                 echo"<tr><td>".$zztitle."</td>";
-                $result=$mysqli->query("select * from `cms_mod` where id='".$zzcatid."'");
-                while($row=$result->fetch_row()):
-                    $zzcatname=$row[3];
-                endwhile;
+                $zzcatname=UsualToolCMSDB::queryData("cms_mod","","id='".$zzcatid."'","","","0")["querydata"][0]["modname"];
                 echo"<td>".$zzcatname."</td>";
                 echo"<td>".$zzid."</td>";
                 echo"<td>".$zzstate."</td>";
@@ -149,7 +146,7 @@ foreach($moduleblocks[1] as $module):
     echo"<tr><td>".$orderid[1][0]."</td>";
     echo"<td align=center>".$ordertime[1][0]."</td>";
     echo"<td><a href='//cms.usualtool.com/mokuai_read.php?id=".$module[1][0]."' target='_blank'>".$title[1][0]."</a></td>";
-    $modnum=mysqli_num_rows(mysqli_query($mysqli,"SELECT id FROM `cms_mod` where modid='".$id[1][0]."'"));
+    $modnum=UsualToolCMSDB::queryData("cms_mod","","modid='".$id[1][0]."'","","","0")["querynum"];
     if(!empty($modnum) && $modnum>0):
         echo"<td align=center style='color:red;'>已安装</td></tr>";
     else:
