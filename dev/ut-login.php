@@ -1,6 +1,5 @@
 <?php
 require_once '../conn.php';
-$cmscolor=UsualToolCMSDB::queryData("cms_setup","cmscolor","","","0,1","0")["querydata"][0]["cmscolor"];
 if($_GET["do"]=="out"){
     unset($_SESSION['usualtooladmin']);
     unset($_SESSION['usualtooladminid']);
@@ -45,7 +44,7 @@ if($_GET['do']=="login"){
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>UT Develop 8.0</title>
 <link rel="stylesheet" type="text/css" href="../assets/css/login.css">
-<?php if($cmscolor>1):?><link rel="stylesheet" type="text/css" href="../assets/css/cms-<?php echo$cmscolor;?>css.css"><?php endif;?>
+<?php if($setup["cmscolor"]>1):?><link rel="stylesheet" type="text/css" href="../assets/css/cms-<?php echo$setup["cmscolor"];?>css.css"><?php endif;?>
 <link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.css">
 <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
 <script type="text/javascript">

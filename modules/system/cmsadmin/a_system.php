@@ -128,8 +128,6 @@ if($do=="update"){
     }
     echo "<script>window.location.href='?m=system&u=a_system.php&l=$l'</script>";
 }
-$result=UsualToolCMSDB::queryData("cms_setup","","","","1","0")["querydata"];
-foreach($result as $row):
 ?>
     <script type="text/javascript">
      $(function(){ $(".idTabs").idTabs(); }); 
@@ -148,16 +146,16 @@ foreach($result as $row):
       <div class="items">
         <div id="main">
          <form action="?m=system&u=a_system.php&do=update&l=main" method="post" id=form1 name=form1 onsubmit="return check();">
-	     <input type="hidden" name="id" value="<?php echo$row["id"];?>" />
+	     <input type="hidden" name="id" value="<?php echo$setup["id"];?>" />
          <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic"> 
           <tr>
           <td align="right" width=20%>是否关闭网站</td>
           <td>
            <label for="site_closed_0">
-            <input type="radio" name="webisclose" value="0" <?php if($row["webisclose"]==0){echo"checked=true";}?>>
+            <input type="radio" name="webisclose" value="0" <?php if($setup["webisclose"]==0){echo"checked=true";}?>>
             否</label>
            <label for="site_closed_1">
-            <input type="radio" name="webisclose" value="1" <?php if($row["webisclose"]==1){echo"checked=true";}?>>
+            <input type="radio" name="webisclose" value="1" <?php if($setup["webisclose"]==1){echo"checked=true";}?>>
             是</label>
            </td>
          </tr>
@@ -165,17 +163,17 @@ foreach($result as $row):
           <td align="right" width=20%>开发模式</td>
           <td>
             <label for="site_closed_0">
-            <input type="radio" name="develop" value="0" <?php if($row["develop"]==0){echo"checked=true";}?>>
+            <input type="radio" name="develop" value="0" <?php if($setup["develop"]==0){echo"checked=true";}?>>
             否</label>
            <label for="site_closed_1">
-            <input type="radio" name="develop" value="1" <?php if($row["develop"]==1){echo"checked=true";}?>>
+            <input type="radio" name="develop" value="1" <?php if($setup["develop"]==1){echo"checked=true";}?>>
             是</label>
             </td>
          </tr>
 		 <tr>
            <td align="right" width=20%>站点首页</td>
            <td>
-            <input type="text" name="indexmodule" value="<?php echo$row["indexmodule"];?>" size=80 class="inpMain" />
+            <input type="text" name="indexmodule" value="<?php echo$setup["indexmodule"];?>" size=80 class="inpMain" />
 			<br>默认为index，亦可为其他模块的页面，如articles，请不要带文件名后缀。
             </td>
           </tr>
@@ -183,69 +181,69 @@ foreach($result as $row):
            <td align="right" width=20%>后端色彩</td>
            <td>
             <label for="site_closed_0">
-            <input type="radio" name="cmscolor" value="1" <?php if($row["cmscolor"]==1){echo"checked=true";}?>>
+            <input type="radio" name="cmscolor" value="1" <?php if($setup["cmscolor"]==1){echo"checked=true";}?>>
             蓝色</label>
            <label for="site_closed_1">
-            <input type="radio" name="cmscolor" value="2" <?php if($row["cmscolor"]==2){echo"checked=true";}?>>
+            <input type="radio" name="cmscolor" value="2" <?php if($setup["cmscolor"]==2){echo"checked=true";}?>>
             黑色</label>
            <label for="site_closed_1">
-            <input type="radio" name="cmscolor" value="3" <?php if($row["cmscolor"]==3){echo"checked=true";}?>>
+            <input type="radio" name="cmscolor" value="3" <?php if($setup["cmscolor"]==3){echo"checked=true";}?>>
             橘色</label>
            <label for="site_closed_1">
-            <input type="radio" name="cmscolor" value="4" <?php if($row["cmscolor"]==4){echo"checked=true";}?>>
+            <input type="radio" name="cmscolor" value="4" <?php if($setup["cmscolor"]==4){echo"checked=true";}?>>
             绿色</label>
            <label for="site_closed_1">
-            <input type="radio" name="cmscolor" value="5" <?php if($row["cmscolor"]==5){echo"checked=true";}?>>
+            <input type="radio" name="cmscolor" value="5" <?php if($setup["cmscolor"]==5){echo"checked=true";}?>>
             土色</label>
             </td>
          </tr>
 		 <tr>
            <td align="right" width=20%>用户COOKIES/SESSION前缀</td>
            <td>
-            <input type="text" name="usercookname" value="<?php echo$row["usercookname"];?>" size=80 class="inpMain" />
+            <input type="text" name="usercookname" value="<?php echo$setup["usercookname"];?>" size=80 class="inpMain" />
            </td>
           </tr>
 		  <tr>
            <td align="right" width=20%>初始密码盐值</td>
            <td>
-            <input type="text" name="salts" value="<?php echo$row["salts"];?>" size=80 class="inpMain" />
+            <input type="text" name="salts" value="<?php echo$setup["salts"];?>" size=80 class="inpMain" />
            </td>
           </tr>
 		  <tr>
            <td align="right" width=20%>余额账户默认货币</td>
            <td>
-            <input type="text" name="indexunit" value="<?php echo$row["indexunit"];?>" size=20 class="inpMain" /> 注意修改，若系统运行中期修改将导致用户余额账户属性的更改，造成损失。
+            <input type="text" name="indexunit" value="<?php echo$setup["indexunit"];?>" size=20 class="inpMain" /> 注意修改，若系统运行中期修改将导致用户余额账户属性的更改，造成损失。
             </td>
           </tr>
           <tr>
           <td align="right" width=20%>网站名称</td>
           <td>
-            <input type="text" name="webname" value="<?php echo$row["webname"];?>" size="40" class="inpMain" /> 若填写web则按照语言包解析网站名，否则按实际填写显示。<a href="?m=system&u=a_system_lang.php" style="color:red;">编辑语言包</a>
+            <input type="text" name="webname" value="<?php echo$setup["webname"];?>" size="40" class="inpMain" /> 若填写web则按照语言包解析网站名，否则按实际填写显示。<a href="?m=system&u=a_system_lang.php" style="color:red;">编辑语言包</a>
           </td>
          </tr>
          <tr>
           <td align="right">网站地址</td>
           <td>
-            <input type="text" name="weburl" value="<?php echo$row["weburl"];?>" size="80" class="inpMain" />
+            <input type="text" name="weburl" value="<?php echo$setup["weburl"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">网站关键字</td>
           <td>
-          <input type="text" name="webkeyword" value="<?php echo$row["webkeyword"];?>" size="80" class="inpMain" />
+          <input type="text" name="webkeyword" value="<?php echo$setup["webkeyword"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">网站描述</td>
           <td>
-          <input type="text" name="webdescribe" value="<?php echo$row["webdescribe"];?>" size="80" class="inpMain" />
+          <input type="text" name="webdescribe" value="<?php echo$setup["webdescribe"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">网站标志</td>
           <td>
-            <span id="weblogohtml"><img src="<?php echo$row["weblogo"];?>" height=80 width=80></span>
-            <input type="hidden" name="weblogo" id="weblogo" value="<?php echo$row["weblogo"];?>">
+            <span id="weblogohtml"><img src="<?php echo$setup["weblogo"];?>" height=80 width=80></span>
+            <input type="hidden" name="weblogo" id="weblogo" value="<?php echo$setup["weblogo"];?>">
             <input type="file" class="btn" name=file style="width:40%;">
             <input type="button" value="上传" class="btn" onclick="doupload('1','weblogo')" />
             </td>                              
@@ -254,43 +252,43 @@ foreach($result as $row):
          <tr>
           <td align="right">工信部备案号</td>
           <td>
-           <input type="text" name="webicp" value="<?php echo$row["webicp"];?>" size="80" class="inpMain" />
+           <input type="text" name="webicp" value="<?php echo$setup["webicp"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">公安部备案号</td>
           <td>
-           <input type="text" name="webple" value="<?php echo$row["webple"];?>" size="80" class="inpMain" />
+           <input type="text" name="webple" value="<?php echo$setup["webple"];?>" size="80" class="inpMain" />
           </td>
          </tr>
 		 <tr>
           <td align="right">联系地址</td>
           <td>
-         <input type="text" name="address" value="<?php echo$row["address"];?>" size="80" class="inpMain" />
+         <input type="text" name="address" value="<?php echo$setup["address"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">电子邮件</td>
           <td>
-           <input type="text" name="webemail" value="<?php echo$row["webemail"];?>" size="80" class="inpMain" />
+           <input type="text" name="webemail" value="<?php echo$setup["webemail"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">客服电话</td>
           <td>
-           <input type="text" name="webtel" value="<?php echo$row["webtel"];?>" size="80" class="inpMain" />
+           <input type="text" name="webtel" value="<?php echo$setup["webtel"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">传真</td>
           <td>
-           <input type="text" name="webfax" value="<?php echo$row["webfax"];?>" size="80" class="inpMain" />
+           <input type="text" name="webfax" value="<?php echo$setup["webfax"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">客服QQ号码</td>
           <td>
-           <input type="text" name="webqq" value="<?php echo$row["webqq"];?>" size="80" class="inpMain" />
+           <input type="text" name="webqq" value="<?php echo$setup["webqq"];?>" size="80" class="inpMain" />
            </td>
          </tr>
          <tr>
@@ -304,22 +302,22 @@ foreach($result as $row):
         </div>
       <div id="oss">
        <form action="?m=system&u=a_system.php&do=update&l=oss" method="post" id=form5 name=form5 onsubmit="return check();">
-	   <input type="hidden" name="id" value="<?php echo$row["id"];?>" />
+	   <input type="hidden" name="id" value="<?php echo$setup["id"];?>" />
         <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
          <tr>
           <td align="right" width=20%>对象存储设置<br>请通过插件安装</td>
           <td>
             <label for="site_closed_0">
-            <input type="radio" name="indexoss" value="utcms" <?php if($row["indexoss"]=="utcms"){echo"checked=true";}?>>
+            <input type="radio" name="indexoss" value="utcms" <?php if($setup["indexoss"]=="utcms"){echo"checked=true";}?>>
             本地</label>
 			<?php if(is_dir("../plugins/alioss")):?>
            <label for="site_closed_1">
-            <input type="radio" name="indexoss" value="alioss" <?php if($row["indexoss"]=="alioss"){echo"checked=true";}?>>
+            <input type="radio" name="indexoss" value="alioss" <?php if($setup["indexoss"]=="alioss"){echo"checked=true";}?>>
             阿里云OSS</label>
 			<?php endif;?>
 			<?php if(is_dir("../plugins/qiniuoss")):?>
            <label for="site_closed_1">
-            <input type="radio" name="indexoss" value="qiniuoss" <?php if($row["indexoss"]=="qiniuoss"){echo"checked=true";}?>>
+            <input type="radio" name="indexoss" value="qiniuoss" <?php if($setup["indexoss"]=="qiniuoss"){echo"checked=true";}?>>
             七牛OSS</label>
 			<?php endif;?>
 			</td>
@@ -335,24 +333,24 @@ foreach($result as $row):
         </div>
       <div id="editor">
        <form action="?m=system&u=a_system.php&do=update&l=editor" method="post" id=form2 name=form2 onsubmit="return check();">
-	   <input type="hidden" name="id" value="<?php echo$row["id"];?>" />
+	   <input type="hidden" name="id" value="<?php echo$setup["id"];?>" />
         <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
          <tr>
           <td align="right" width=20%>富文本编辑器设置<br>请通过插件安装</td>
           <td>
 			<?php if(is_dir("../plugins/ueditor")):?>
            <label for="site_closed_1">
-            <input type="radio" name="indexeditor" value="ueditor" <?php if($row["indexeditor"]=="ueditor"){echo"checked=true";}?>>
+            <input type="radio" name="indexeditor" value="ueditor" <?php if($setup["indexeditor"]=="ueditor"){echo"checked=true";}?>>
             百度编辑器（UEditor）</label>
 			<?php endif;?>
 			<?php if(is_dir("../plugins/ckeditor")):?>
            <label for="site_closed_1">
-            <input type="radio" name="indexeditor" value="ckeditor" <?php if($row["indexeditor"]=="ckeditor"){echo"checked=true";}?>>
+            <input type="radio" name="indexeditor" value="ckeditor" <?php if($setup["indexeditor"]=="ckeditor"){echo"checked=true";}?>>
             CK编辑器（CKEditor）</label>
 			<?php endif;?>
 			<?php if(is_dir("../plugins/kindeditor")):?>
            <label for="site_closed_1">
-            <input type="radio" name="indexeditor" value="kindeditor" <?php if($row["indexeditor"]=="kindeditor"){echo"checked=true";}?>>
+            <input type="radio" name="indexeditor" value="kindeditor" <?php if($setup["indexeditor"]=="kindeditor"){echo"checked=true";}?>>
             kind编辑器（kindeditor）</label>
 			<?php endif;?>
 			</td>
@@ -368,7 +366,7 @@ foreach($result as $row):
         </div>
        <div id="mail">
 	   <form action="?m=system&u=a_system.php&do=update&l=mail" method="post" id=form3 name=form3 onsubmit="return check();">
-	   <input type="hidden" name="id" value="<?php echo$row["id"];?>" />
+	   <input type="hidden" name="id" value="<?php echo$setup["id"];?>" />
        <table width="100%" border="0" cellpadding="8" cellspacing="0" class="tablebasic">
         <tr>
           <td align="right" width=20%>邮件服务</td>
@@ -381,25 +379,25 @@ foreach($result as $row):
          <tr>
           <td align="right">SMTP服务器</td>
           <td>
-           <input type="text" name="mailsmtp" value="<?php echo$row["mailsmtp"];?>" size="80" class="inpMain" />
+           <input type="text" name="mailsmtp" value="<?php echo$setup["mailsmtp"];?>" size="80" class="inpMain" />
            </td>
          </tr>
          <tr>
           <td align="right">服务器端口</td>
           <td>
-           <input type="text" name="mailport" value="<?php echo$row["mailport"];?>" size="80" class="inpMain" />
+           <input type="text" name="mailport" value="<?php echo$setup["mailport"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
           <td align="right">发件邮箱</td>
           <td>
-           <input type="text" name="mailaccount" value="<?php echo$row["mailaccount"];?>" size="80" class="inpMain" />
+           <input type="text" name="mailaccount" value="<?php echo$setup["mailaccount"];?>" size="80" class="inpMain" />
           </td>
          </tr>
      <tr>
           <td align="right">发件邮箱密码</td>
           <td>
-           <input type="text" name="mailpassword" value="<?php echo$row["mailpassword"];?>" size="80" class="inpMain" />
+           <input type="text" name="mailpassword" value="<?php echo$setup["mailpassword"];?>" size="80" class="inpMain" />
           </td>
          </tr>
          <tr>
@@ -412,7 +410,6 @@ foreach($result as $row):
         </form>
         </div>
 <?php
-endforeach;
 $wresult=UsualToolCMSDB::queryData("cms_water","","","","1","0")["querydata"];
 foreach($wresult as $wrow):
 ?>

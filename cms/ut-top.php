@@ -4,13 +4,8 @@ require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_Spider.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_WeChat.php');
 require_once(dirname(__FILE__).'/'.'../class/UsualToolCMS_AliOpen.php');
 require_once(dirname(__FILE__).'/'.'ut-session.php');
-$setuprow=UsualToolCMSDB::queryData("cms_setup","authcode,authapiurl,copyright,installtime,country,cmscolor","","","1","0")["querydata"][0];
-    $authcode=$setuprow["authcode"];
-    $authapiurl=$setuprow["authapiurl"];
-    $copyright=$setuprow["copyright"];
-    $installtime=$setuprow["installtime"];
-    $country=$setuprow["country"];
-    $cmscolor=$setuprow["cmscolor"];
+$authcode=$setup["authcode"];
+$authapiurl=$setup["authapiurl"];
 if(!empty($_COOKIE['navleft'])):
     $navid=$_COOKIE['navleft'];
 else:
@@ -57,7 +52,7 @@ $lang=Lang();
 <title>CMS Admin</title>
 <link rel="stylesheet" type="text/css" href="../assets/css/cmsadmin.css">
 <link rel="stylesheet" type="text/css" href="../assets/css/dialog.css">
-<?php if($cmscolor>1):?><link rel="stylesheet" type="text/css" href="../assets/css/cms-<?php echo$cmscolor;?>css.css"><?php endif;?>
+<?php if($setup["cmscolor"]>1):?><link rel="stylesheet" type="text/css" href="../assets/css/cms-<?php echo$setup["cmscolor"];?>css.css"><?php endif;?>
 <link rel="stylesheet" type="text/css" href="../assets/css/datatable.css">
 <link rel="stylesheet" type="text/css" href="../assets/css/font-awesome.css">
 <link rel="stylesheet" type="text/css" href="../assets/css/buttons.datatables.min.css"/>

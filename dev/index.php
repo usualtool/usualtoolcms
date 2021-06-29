@@ -26,12 +26,12 @@ if($_GET["do"]=="deldir"){
          <tr>
           <td align="center"><a href="ut-view-module.php?m=module&u=a_mods.php" style="color:red;">安装模块</a></td>
           <td align="center">CMS版本</td>
-          <td id="utrn"><?php echo$copyright;?> Release</td>
+          <td id="utrn"><?php echo$setup["copyright"];?> Release</td>
          </tr>
          <tr>
           <td align="center"><a href="ut-view-module.php?m=plugin&u=a_api.php" style="color:red;">安装插件</a></td>
           <td align="center">安装国别</td>
-          <td><?php echo$country;?></td>
+          <td><?php echo$setup["country"];?></td>
          </tr>
          <tr>
           <td align="center"><a href="ut-view-module.php?m=templete&u=a_templete.php" style="color:red;">安装模板</a></td>
@@ -46,7 +46,7 @@ if($_GET["do"]=="deldir"){
          <tr>
           <td align="center"><a href="http://bbs.usualtool.com">疑难问答</a></td>
           <td align="center">安装日期</td>
-          <td id="utrn"><?php echo$installtime;?></td>
+          <td id="utrn"><?php echo$setup["installtime"];?></td>
          </tr>
         </table>
        </ul>

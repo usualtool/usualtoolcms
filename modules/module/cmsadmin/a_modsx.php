@@ -47,7 +47,11 @@ if($t=="resetup"):
     $roleurl=substr(str_replace(".php","",$modurl),1);
     $delranges=str_replace(",".$roleurl."","",str_replace("".$roleurl.",","",$roleranges));
     UsualToolCMSDB::updateData("cms_admin_role",array("ranges"=>$delranges),"id=1");
-    $ress=$mysqli->multi_query($uninstallsql);
+    if($setup["delmoddb"]==1):
+        $ress=$mysqli->multi_query($uninstallsql);
+    else:
+        $ress=1;
+    endif;
     if($ress):
         echo"<p>清除数据及文件结构成功...</p>";
         echo "<script>window.location.href='?m=module&u=a_modsx.php&id=$id&do=$do&t=delfile'</script>";

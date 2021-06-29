@@ -135,7 +135,7 @@ $upcopy=$up[0];
 $adv=$up[1];
 ?>
 <tr>
-<td>Installation:<?php echo$copyright;?></td>
+<td>Installation:<?php echo$setup["copyright"];?></td>
 <td>System:<?php echo$upcopy?></td>
 </tr>
 </table>

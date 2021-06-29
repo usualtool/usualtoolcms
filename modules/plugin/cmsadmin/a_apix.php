@@ -17,9 +17,11 @@ $hookconfig="../plugins/".$id."/usualtoolcms.config";
 if($t=="del"):
     if(!empty($zipurl)):
         echo"<p>正在执行卸载..</p>";
-        $hooks=file_get_contents($hookconfig);
-        $uninstallsql=UsualToolCMS::str_substr("<uninstallsql><![CDATA[","]]></uninstallsql>",$hooks);
-        $mysqli->multi_query($uninstallsql);
+        if($setup["delplugindb"]==1):
+            $hooks=file_get_contents($hookconfig);
+            $uninstallsql=UsualToolCMS::str_substr("<uninstallsql><![CDATA[","]]></uninstallsql>",$hooks);
+            $mysqli->multi_query($uninstallsql);
+        endif;
         if(UsualToolCMSDB::delData("cms_plugins","id='$id'")):
             echo "<script>window.location.href='?m=".$mod."&u=a_apix.php&t=$t&id=$id&delfile=usualtoolcms'</script>";
         else:

@@ -426,6 +426,8 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
       `indexeditor` varchar(100) DEFAULT 'utcms',
 	  `indexmodule` varchar(100) DEFAULT 'index',
       `openhtml` int(11) DEFAULT '0',
+      `delmoddb` int(11) DEFAULT '1',
+      `delplugindb` int(11) DEFAULT '1',
       `installtime` datetime NOT NULL,
       PRIMARY KEY (`id`),
       UNIQUE KEY `id` (`id`)
@@ -474,8 +476,8 @@ elseif($l=="sqlback"&&$_SESSION["setuporder"]=="2"):
     INSERT INTO `cms_mod` VALUES (1, 0, '', '内容', '', 0, 0, 0, '', '', '');
     INSERT INTO `cms_mod` VALUES (2, 0, '', '交互', '', 0, 0, 0, '', '', '');
     INSERT INTO `cms_mod` VALUES (3, 0, '', '配置', '', 0, 0, 0, '', '', '');
-    INSERT INTO `cms_mod` VALUES (4, 3, 'module', '模块', 'a_mod.php', 1, 93, 0, '', '', '模块管理:a_mod.php,安装模块:a_mods.php');
-    INSERT INTO `cms_mod` VALUES (5, 3, 'plugin', '插件', 'a_api.php', 1, 94, 0, '', '', '插件管理:a_api.php');
+    INSERT INTO `cms_mod` VALUES (4, 3, 'module', '模块', 'a_mod.php', 1, 93, 0, '', '', '模块管理:a_mod.php,安装模块:a_mods.php,模块设置:a_mod_set.php');
+    INSERT INTO `cms_mod` VALUES (5, 3, 'plugin', '插件', 'a_api.php', 1, 94, 0, '', '', '插件管理:a_api.php,插件设置:a_api_set.php');
     INSERT INTO `cms_mod` VALUES (6, 3, 'templete', '模板', 'a_templete.php', 1, 95, 0, '', '', '模板管理:a_templete.php');
     INSERT INTO `cms_mod` VALUES (7, 3, 'navigation', '导航', 'a_nav.php', 1, 96, 0, '', '', '前端导航:a_nav.php,后端导航:a_nav_admin.php');
     INSERT INTO `cms_mod` VALUES (8, 3, 'cactool', 'CAC', 'a_cactool.php', 1, 97, 0, '', '', 'CAC面板:a_cactool.php,CAC任务:a_cactool_task.php');
