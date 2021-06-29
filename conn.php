@@ -13,13 +13,7 @@ require_once(WEB_PATH.'/'.'class/UsualToolCMS_Mail.php');
 require_once(WEB_PATH.'/'.'class/UsualToolCMS_Tree.php');
 if(UsualToolCMS::isetup()==false):header("location:./setup/");exit();endif;
 /*----Read UT Default Seting----*/
-$setup=UsualToolCMSDB::queryData(
-"cms_setup",
-"",
-"",
-"",
-"1",
-"0")["querydata"][0];
+$setup=UsualToolCMSDB::queryData("cms_setup","","","","1","0")["querydata"][0];
     $weburl=$setup["weburl"];
     $webnames=$setup["webname"];
     $webemail=$setup["webemail"];
