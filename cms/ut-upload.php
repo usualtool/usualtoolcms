@@ -2,14 +2,14 @@
 ini_set("error_reporting","E_ALL & ~E_NOTICE");
 session_start();
 require_once '../sql_db.php';
+require_once '../class/UsualToolCMS_DB.php';
 require_once 'ut-session.php';
 $setup=UsualToolCMSDB::queryData("cms_setup","weburl,indexoss","","","1","0")["querydata"][0];
     $weburl=$setup["weburl"];
     $indexoss=$setup["indexoss"];
 if(!empty($_POST['l'])){
     $l=str_replace("..","",$_POST['l']);
-}
-else{
+}else{
     $l="images/upload/other";
 }
 $path = "../assets/".$l."/";

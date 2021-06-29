@@ -3,6 +3,7 @@ ini_set("error_reporting","E_ALL & ~E_NOTICE");
 session_start();
 require_once '../sql_db.php';
 require_once 'ut-session.php';
+require_once '../class/UsualToolCMS_DB.php';
 require_once '../class/UsualToolCMS_INC.php';
 require_once '../class/UsualToolCMS_Water.php';
 $setup=UsualToolCMSDB::queryData("cms_setup","weburl,indexoss","","","1","0")["querydata"][0];
@@ -18,8 +19,7 @@ $wrow=UsualToolCMSDB::queryData("cms_water","","","","1","0")["querydata"][0];
     $water_png="../assets/".$wrow["water_png"]."";
 if(!empty($_GET['l'])){
     $l=str_replace("..","",$_GET['l']);
-}
-else{
+}else{
     $l="images/upload/other";
 }
 $typeArr = array('jpg','jpeg','gif','png','zip','rar','mp4','mp3','m3u8','lrc','ico');
