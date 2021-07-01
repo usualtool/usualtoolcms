@@ -101,6 +101,7 @@ endif;
 /*----Read UT template----*/
 $mytpl=new UsualToolTemp($develop,$template."/skin/",$template."/cache/");
 $planid=UsualToolCMSDB::queryData("cms_nav_plan","id","indexplan=1","","1","0")["querydata"][0]["id"];
+$currentpage=UsualToolCMS::curpageurl();
 /*----Read UT Basic Setup----*/
 $mytpl->runin(
     array("rewrite","langdata","weblogo","temproot","webname","weburl","webkeywords","webdescription","webicp","webple","address","webtel","webfax","webemail","webqq"),
@@ -108,8 +109,9 @@ $mytpl->runin(
 );
 /*----Read UT Navigation----*/
 $mytpl->runin(
-    array("tnavs","inavs","bnavs"),
+    array("currentpage","tnavs","inavs","bnavs"),
     array(
+        $currentpage,
         UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='top' and planid='$planid'","ordernum asc","","0")["querydata"],
         UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='index' and planid='$planid'","ordernum asc","","0")["querydata"],
         UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='bottom' and planid='$planid'","ordernum asc","","0")["querydata"])

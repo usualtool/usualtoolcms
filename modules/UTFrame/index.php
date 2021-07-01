@@ -40,6 +40,7 @@ $mytpl->runin("goodscats",UsualToolCMSDB::queryData("cms_goods_cat","","bigclass
 $mytpl->runin("atlacats",UsualToolCMSDB::queryData("cms_atlas_cat","","bigclassid=0","ordernum desc","")["querydata"]);
 $mytpl->runin("infocats",UsualToolCMSDB::queryData("cms_info_cat","","bigclassid=0","ordernum desc","")["querydata"]);
 //第三方登录接口
+$auths=UsualToolCMSDB::authLogin();
 $mytpl->runin(
 array("qq_appid","qq_reurl","wb_appid","wb_reurl","ww_appid","ww_reurl"),
 array($auths["qq_appid"],$auths["qq_reurl"],$auths["wb_appid"],$auths["wb_reurl"],$auths["ww_appid"],$auths["ww_reurl"])

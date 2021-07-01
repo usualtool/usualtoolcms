@@ -1,8 +1,6 @@
 <?php
 require_once(dirname(dirname(__FILE__)).'/'.'conn.php');
 define('USER_PATH',$weburl.'/'.'modules/member/home');
-$auths=UsualToolCMSDB::authLogin();
-$currentpage=UsualToolCMS::curpageurl();
 if(!empty($_GET["ut"])):
     $ut=UsualToolCMS::sqlcheck($_GET["ut"]);
 else:

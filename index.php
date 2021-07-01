@@ -1,8 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/'.'conn.php');
-$auths=UsualToolCMSDB::authLogin();
-$currentpage=UsualToolCMS::curpageurl();
-$mytpl->runin('currentpage',$currentpage);
+UsualToolCMS::plugins("webgroup");
 if(!empty($_GET["ut"])):
 	if($_GET["ut"]=="index"):
 	$ut=$indexmodule;
