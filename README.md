@@ -1,4 +1,4 @@
-# UT框架（UsualToolCMS）
+# UT框架
 
 #### 介绍
 UT框架又名UsualToolCMS，简称UTCMS。
@@ -115,7 +115,7 @@ rewrite ^/home/([a-zA-Z\-]+)\.html$ /home/index.php?ut=$1 last;
 使用问答：http://b.usualtool.com                                                                                         
 官方网站：http://cms.usualtool.com                                                                 
 技术博客：http://www.usualtool.com/blog/                                                           
-离线资源：http://gitee.com/usualtool/UsualToolCMS-8.0-Release/attach_files
+离线资源：http://gitee.com/usualtool/UT/attach_files
 
 使用手册：http://cms.usualtool.com/doc/                                                           
 模块列表：http://cms.usualtool.com/mokuai.php                                                     
