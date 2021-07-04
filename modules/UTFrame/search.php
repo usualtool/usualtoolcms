@@ -1,13 +1,19 @@
 <?php
 $key=UsualToolCMS::sqlcheck($_GET["key"]);
-$navname="search";
+$navname="搜索 : ".$key;
 require_once(UTF_PATH.'/'.'top.php');
+UsualToolCMS::plugins("nsfw");
 $data=UsualToolCMSDB::searchData($key);
 if(!empty($_GET["page"])&&is_numeric($_GET["page"])):$page=$_GET["page"];else:$page=1;endif;
 $pagenum=10;
 $pagelink="".$listlink."key=$key";
 $minid=$pagenum*($page-1);
 $querynum=$data["searchnum"];
+if($querynum==0):
+    echo'<script>$(function(){$("title").html("无效搜索")})</script>';
+    echo"<script>alert('没有搜索到有价值的信息!');history.go(-1);</script>";
+    exit();
+endif;
 $querydata=$data["searchdata"];
 $totalpage=ceil($querynum/$pagenum);
 ?>
@@ -19,7 +25,7 @@ $totalpage=ceil($querynum/$pagenum);
             <?php
                 foreach($querydata as $querydatas){
                     echo"<div class='border-bottom pb-2'>".$xu." ";
-                    echo"<a target='_blank' href='../index.php?ut=".$querydatas["thepage"]."&id=".$querydatas["id"]."'>";
+                    echo"<a target='_blank' href='index.php?ut=".$querydatas["thepage"]."&id=".$querydatas["id"]."'>";
                     echo"".str_ireplace($key,"<font color=red><b>".$key."</b></font>",$querydatas["title"])."</a><br><span style='color:#999999;font-size:12px;'>".UsualToolCMS::subkey(UsualToolCMS::deletehtml($querydatas["content"]),$key)."...</span></div>";
                 }
             ?>

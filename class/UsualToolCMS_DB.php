@@ -242,8 +242,6 @@ class UsualToolCMSDB{
 			$sdata=mysqli_query($mysqli,$ssql);
 			if(mysqli_num_rows($sdata)>0):
 			    UsualToolCMSDB::updateData("cms_search",array("hit"=>"hit+1"),"keyword ='$keyword' and lang='$language'");
-			else:
-			    UsualToolCMSDB::insertData("cms_search",array("lang"=>$language,"keyword"=>$keyword));
 			endif;
 		endif;
 		$data=array();
@@ -259,6 +257,9 @@ class UsualToolCMSDB{
 		}
         $search=$mysqli->query($table);
         $searchnum=mysqli_num_rows($search);
+        if($searchnum>0 && mysqli_num_rows($sdata)<=0):
+			UsualToolCMSDB::insertData("cms_search",array("lang"=>$language,"keyword"=>$keyword));
+        endif;
         $searchdata=array(); 
         $xu=0;
         while($rows=mysqli_fetch_array($search,MYSQLI_ASSOC)):
