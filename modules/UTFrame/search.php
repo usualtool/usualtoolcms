@@ -1,6 +1,6 @@
 <?php
 $key=UsualToolCMS::sqlcheck($_GET["key"]);
-$navname="搜索 : ".$key;
+$navname="搜索";
 require_once(UTF_PATH.'/'.'top.php');
 UsualToolCMS::plugins("nsfw");
 $data=UsualToolCMSDB::searchData($key);
@@ -13,6 +13,8 @@ if($querynum==0):
     echo'<script>$(function(){$("title").html("无效搜索")})</script>';
     echo"<script>alert('没有搜索到有价值的信息!');history.go(-1);</script>";
     exit();
+else:
+    echo'<script>$(function(){$("title").html("搜索:'.$key.'")})</script>';
 endif;
 $querydata=$data["searchdata"];
 $totalpage=ceil($querynum/$pagenum);
