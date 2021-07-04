@@ -257,7 +257,7 @@ class UsualToolCMSDB{
 		}
         $search=$mysqli->query($table);
         $searchnum=mysqli_num_rows($search);
-        if($searchnum>0 && mysqli_num_rows($sdata)<=0):
+        if(!empty($keyword) && $searchnum>0 && mysqli_num_rows($sdata)<=0):
 			UsualToolCMSDB::insertData("cms_search",array("lang"=>$language,"keyword"=>$keyword));
         endif;
         $searchdata=array(); 
