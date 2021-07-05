@@ -32,23 +32,23 @@ endif;
        <td width="12%" align="right">权限范围</td>
        <td style="line-height:25px;">
 ---------------------------底层模块权限---------------------------<Br>
-<?php
-$modx=$mysqli->query("select * from cms_mod where bid=3");
-while($rowx=mysqli_fetch_array($modx)):
-    $rolename=$rowx["modname"];
-    $roleurl=substr(str_replace(".php","",$rowx["modurl"]),1);
-    ?>
-    <input type="checkbox" value="<?php echo$roleurl;?>" name="ranges[]"> <?php echo$rolename;?> 
-<?php endwhile;?>
-<br>---------------------------挂载模块权限---------------------------<Br>
-<?php
-$modv=$mysqli->query("select * from cms_mod where bid<>3 and bid<>0");
-while($rowv=mysqli_fetch_array($modv)):
-    $rolenamev=$rowv["modname"];
-    $roleurlv=substr(str_replace(".php","",$rowv["modurl"]),1);
-    ?>
-    <input type="checkbox" value="<?php echo$roleurlv;?>" name="ranges[]"> <?php echo$rolenamev;?> 
-<?php endwhile;?>
+        <?php
+        $modx=UsualToolCMSDB::queryData("cms_mod","","bid=3","","","0")["querydata"];
+        foreach($modx as $rowx):
+            $rolename=$rowx["modname"];
+            $roleurl=substr(str_replace(".php","",$rowx["modurl"]),1);
+            ?>
+            <input type="checkbox" value="<?php echo$roleurl;?>" name="ranges[]"> <?php echo$rolename;?> 
+        <?php endforeach;?>
+        <br>---------------------------挂载模块权限---------------------------<Br>
+        <?php
+        $modv=UsualToolCMSDB::queryData("cms_mod","","bid<>3 and bid<>0","","","0")["querydata"];
+        foreach($modv as $rowv):
+            $rolenamev=$rowv["modname"];
+            $roleurlv=substr(str_replace(".php","",$rowv["modurl"]),1);
+            ?>
+            <input type="checkbox" value="<?php echo$roleurlv;?>" name="ranges[]"> <?php echo$rolenamev;?> 
+        <?php endforeach;?>
        </td>
       </tr>
       <tr>
