@@ -28,14 +28,25 @@ if(!in_array($type, $allow_type)){
         require_once '../plugins/alioss/index.php';
         $utcmsoss = new UTCMSOSS();
         $obj = $utcmsoss->UTCMSToAliOSS($file,".".$type."");
-        if ($obj['status'] == true){echo "File uploaded successfully!<br>|-|".$obj['path']."";}else{echo "File upload failed!<br>|-|";}
+        if($obj['status'] == true){
+            echo "File uploaded successfully!<br>|-|".$obj['path']."";
+        }else{
+            echo "File upload failed!<br>|-|";
+        }
     elseif($indexoss=="qiniuoss"):
         require_once '../plugins/qiniuoss/index.php';
         $utcmsoss = new UTCMSOSS();
         $obj = $utcmsoss->UTCMSToQINIUOSS($file,".".$type."");
-        if ($obj['status'] == true){echo "File uploaded successfully!<br>|-|".$obj['path']."";}else{echo "File upload failed!<br>|-|";}
+        if($obj['status'] == true){
+            echo "File uploaded successfully!<br>|-|".$obj['path']."";
+        }else{
+            echo "File upload failed!<br>|-|";
+        }
     else:
-    if (move_uploaded_file($file['tmp_name'],$pic_url)){
-        echo "File uploaded successfully!<br>|-|".str_replace("../","".$weburl."/",$pic_url)."";}else{echo "File upload failed!<br>|-|";}
+        if(move_uploaded_file($file['tmp_name'],$pic_url)){
+            echo "File uploaded successfully!<br>|-|".str_replace("../","".$weburl."/",$pic_url)."";
+        }else{
+            echo "File upload failed!<br>|-|";
+        }
     endif;
 }

@@ -4,16 +4,17 @@ $x=$_GET["x"];
 if($x=="a"){
     $password=UsualToolCMS::sqlcheck($_POST["password"]);
     $password_confirm=UsualToolCMS::sqlcheck($_POST["password_confirm"]);
-    if($password==$password_confirm):$passwords=sha1($salts.$password);
-    if(UsualToolCMSDB::insertData("cms_admin",array(
-    "roleid"=>UsualToolCMS::sqlcheckx($_POST["roleid"]),
-    "username"=>UsualToolCMS::sqlcheck($_POST["username"]),
-    "password"=>$passwords,
-    "salts"=>$salts,
-    "icon"=>UsualToolCMS::sqlcheck($_POST["icon"]),
-    "createtime"=>date('Y-m-d H:i:s',time())))):
-        echo "<script>alert('管理员已添加成功!');window.location.href='?m=admin&u=a_admin.php'</script>";
-    endif;
+    if($password==$password_confirm):
+        $passwords=sha1($salts.$password);
+        if(UsualToolCMSDB::insertData("cms_admin",array(
+            "roleid"=>UsualToolCMS::sqlcheckx($_POST["roleid"]),
+            "username"=>UsualToolCMS::sqlcheck($_POST["username"]),
+            "password"=>$passwords,
+            "salts"=>$salts,
+            "icon"=>UsualToolCMS::sqlcheck($_POST["icon"]),
+            "createtime"=>date('Y-m-d H:i:s',time())))):
+            echo "<script>alert('管理员已添加成功!');window.location.href='?m=admin&u=a_admin.php'</script>";
+        endif;
     else:
         echo "<script>alert('添加失败,请检查两次密码是否一致!');window.location.href='?m=admin&u=a_adminx.php&t=add'</script>";
     endif;
@@ -21,14 +22,16 @@ if($x=="a"){
 if($x=="m"){
     $password=UsualToolCMS::sqlcheck($_POST["password"]);
     $password_confirm=UsualToolCMS::sqlcheck($_POST["password_confirm"]);
-    if($password==$password_confirm):$passwords=sha1($salts.$password);
+    if($password==$password_confirm):
+        $passwords=sha1($salts.$password);
         if(UsualToolCMSDB::updateData("cms_admin",array(
-        "roleid"=>UsualToolCMS::sqlcheckx($_POST["roleid"]),
-        "password"=>$passwords,
-        "salts"=>$salts),"id='".UsualToolCMS::sqlcheckx($_POST["id"])."'")):
+            "roleid"=>UsualToolCMS::sqlcheckx($_POST["roleid"]),
+            "password"=>$passwords,
+            "salts"=>$salts),"id='".UsualToolCMS::sqlcheckx($_POST["id"])."'")):
             echo "<script>alert('密码修改成功!');window.location.href='?m=admin&u=a_admin.php'</script>";
         endif;
-    else:echo "<script>alert('请检查两次密码是否一致!');window.location.href='?m=admin&u=a_adminx.php&t=mon&id=".$id."'</script>";
+    else:
+        echo "<script>alert('请检查两次密码是否一致!');window.location.href='?m=admin&u=a_adminx.php&t=mon&id=".$id."'</script>";
     endif;
 }
 ?>

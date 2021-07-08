@@ -4,20 +4,20 @@ require_once(dirname(__FILE__).'/'.'../member/home/my-session.php');}?>
 <!doctype>
 <html>
 <head>
-<title><?php echo LangData($navname);?></title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="<?php echo$webname;?>" />
-<meta name="description" content="<?php echo$webname;?>" />
-<link href="<?php echo$weburl;?>/assets/css/font-awesome.css" rel="stylesheet">
-<link href="<?php echo$weburl;?>/assets/css/bootstrap.min.css" rel="stylesheet">
-<link href="<?php echo$weburl;?>/assets/css/style.css" rel="stylesheet">
-<script src="<?php echo$weburl;?>/assets/js/jquery.min.js"></script>
-<script type="text/javascript">window.ROOTPATH='<?php echo$weburl;?>';</script>
-<script src="<?php echo$weburl;?>/assets/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo$weburl;?>/assets/js/jquery.localize.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo$weburl;?>/assets/js/language.cookie.js" type="text/javascript" charset="utf-8"></script>
-<script src="<?php echo$weburl;?>/assets/js/formcheck.js" type="text/javascript"></script>
+    <title><?php echo LangData($navname);?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="<?php echo$webname;?>" />
+    <meta name="description" content="<?php echo$webname;?>" />
+    <link href="<?php echo$weburl;?>/assets/css/font-awesome.css" rel="stylesheet">
+    <link href="<?php echo$weburl;?>/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo$weburl;?>/assets/css/style.css" rel="stylesheet">
+    <script src="<?php echo$weburl;?>/assets/js/jquery.min.js"></script>
+    <script type="text/javascript">window.ROOTPATH='<?php echo$weburl;?>';</script>
+    <script src="<?php echo$weburl;?>/assets/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo$weburl;?>/assets/js/jquery.localize.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo$weburl;?>/assets/js/language.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo$weburl;?>/assets/js/formcheck.js" type="text/javascript"></script>
 </head>
 <body>
 <div class="container mt-2 mb-2">

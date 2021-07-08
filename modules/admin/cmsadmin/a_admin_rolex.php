@@ -3,19 +3,21 @@ $t=$_GET["t"];
 $x=$_GET["x"];
 if($x=="a"){
     if(UsualToolCMSDB::insertData("cms_admin_role",array(
-    "rolename"=>UsualToolCMS::sqlcheck($_POST["rolename"]),
-    "ranges"=>implode(",",UsualToolCMS::sqlchecks($_POST["ranges"]))))):
+        "rolename"=>UsualToolCMS::sqlcheck($_POST["rolename"]),
+        "ranges"=>implode(",",UsualToolCMS::sqlchecks($_POST["ranges"]))))):
     echo "<script>alert('角色已添加成功!');window.location.href='?m=admin&u=a_admin_role.php'</script>";
-    else:echo "<script>alert('角色添加失败!');window.location.href='?m=admin&u=a_admin_rolex.php&t=add'</script>";
+    else:
+        echo "<script>alert('角色添加失败!');window.location.href='?m=admin&u=a_admin_rolex.php&t=add'</script>";
     endif;
 }
 if($x=="m"){
-if(UsualToolCMSDB::updateData("cms_admin_role",array(
-    "rolename"=>UsualToolCMS::sqlcheck($_POST["rolename"]),
-    "ranges"=>implode(",",UsualToolCMS::sqlchecks($_POST["ranges"]))),"id='".UsualToolCMS::sqlcheckx($_POST["id"])."'")):
-    echo "<script>alert('角色修改成功!');window.location.href='?m=admin&u=a_admin_role.php'</script>";
-else:echo "<script>alert('角色修改失败!');window.location.href='?m=admin&u=a_admin_rolex.php&t=mon&id=".$id."'</script>";
-endif;
+    if(UsualToolCMSDB::updateData("cms_admin_role",array(
+        "rolename"=>UsualToolCMS::sqlcheck($_POST["rolename"]),
+        "ranges"=>implode(",",UsualToolCMS::sqlchecks($_POST["ranges"]))),"id='".UsualToolCMS::sqlcheckx($_POST["id"])."'")):
+        echo "<script>alert('角色修改成功!');window.location.href='?m=admin&u=a_admin_role.php'</script>";
+    else:
+        echo "<script>alert('角色修改失败!');window.location.href='?m=admin&u=a_admin_rolex.php&t=mon&id=".$id."'</script>";
+    endif;
 }
 ?>
 <h2><a href="?m=admin&u=a_admin_role.php" class="actionBtn">返回列表</a>角色添加/编辑</h2>

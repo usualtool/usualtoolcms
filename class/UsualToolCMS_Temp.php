@@ -147,7 +147,7 @@ class UsualToolTemp{
         $statement = str_replace("\\\"", "\"", $statement);
         return $expr.$statement;
     }
-    function makehtml($fileName,$htmlName,$webUrl,$rewrite='0'){ 
+    function makehtml($fileName,$htmlName,$webUrl,$rewrite='0'){
         $tplFile=$this->tempdir.$fileName;
         if(!file_exists($tplFile)){
             exit();
@@ -168,15 +168,23 @@ class UsualToolTemp{
         $content = ob_get_contents();
         ob_end_clean();
         $fp = fopen($htmlName, "w");
+        $content=str_replace('\'','"',$content);
+        $filex="article|product|atla|job|info|down|video|custom|song";
+        $filev="articles|products|atlas|jobs|infos|downs|videos|music|musiclist|album";
         if($rewrite=="0"):
-            $content=str_replace('\'','"',$content);
-            $content=preg_replace('/(href|HREF)="(articles|products|atlas|jobs|infos|downs|videos)\.html\?catid\=([0-9]*)&page\=([0-9]*)"(.*?)/is','$1="html/$2-$3_$4.html"$5',$content);
-            $content=preg_replace('/(href|HREF)="(articles|products|atlas|jobs|infos|downs|videos)\.html\?page\=([0-9]*)"(.*?)/is','$1="html/$2_$3.html"$4',$content);
-            $content=preg_replace('/(href|HREF)="(articles|products|atlas|jobs|infos|downs|videos)\.html\?catid\=([0-9]*)"(.*?)/is','$1="html/$2-$3.html"$4',$content);
-            $content=preg_replace('/(href|HREF)="(index|contact|articles|products|atlas|jobs|infos|downs|videos)\.html"(.*?)/is','$1="html/$2.html"$3',$content);
-            $content=preg_replace('/(href|HREF)="(custom|article|product|atla|job|info|down|video)-([0-9]*)\.html"(.*?)/is','$1="html/$2/$2-$3.html"$4',$content);
-            $content=preg_replace('/(href|src|HREF|SRC)="(?!http)(.*?)"(.*?)/is','$1="'.$webUrl.'/$2"$3',$content);
+            $content=preg_replace('/(href|HREF)="index.php\?ut\=('.$filev.')&catid\=([0-9]*)&page\=([0-9]*)"(.*?)/is','$1="html/$2-$3_$4.html"$6',$content);
+            $content=preg_replace('/(href|HREF)="index.php\?ut\=('.$filev.')&page\=([0-9]*)"(.*?)/is','$1="html/$2_$3.html"$4',$content);
+            $content=preg_replace('/(href|HREF)="index.php\?ut\=('.$filev.')&catid\=([0-9]*)"(.*?)/is','$1="html/$2-$3.html"$4',$content);
+            $content=preg_replace('/(href|HREF)="index.php\?ut\=('.$filev.')"(.*?)/is','$1="html/$2.html"$3',$content);
+            $content=preg_replace('/(href|HREF)="index.php\?ut\=('.$filex.')&id\=([0-9]*)"(.*?)/is','$1="html/$2/$2-$3.html"$4',$content);
+        else:
+            $content=preg_replace('/(href|HREF)="('.$filev.')\.html\?catid\=([0-9]*)&page\=([0-9]*)"(.*?)/is','$1="html/$2-$3_$4.html"$5',$content);
+            $content=preg_replace('/(href|HREF)="('.$filev.')\.html\?page\=([0-9]*)"(.*?)/is','$1="html/$2_$3.html"$4',$content);
+            $content=preg_replace('/(href|HREF)="('.$filev.')\.html\?catid\=([0-9]*)"(.*?)/is','$1="html/$2-$3.html"$4',$content);
+            $content=preg_replace('/(href|HREF)="('.$filev.')\.html"(.*?)/is','$1="html/$2.html"$3',$content);
+            $content=preg_replace('/(href|HREF)="('.$filex.')-([0-9]*)\.html"(.*?)/is','$1="html/$2/$2-$3.html"$4',$content);
         endif;
+            $content=preg_replace('/(href|src|HREF|SRC)="(?!http)(.*?)"(.*?)/is','$1="'.$webUrl.'/$2"$3',$content);
         fwrite($fp,$content);
         fclose($fp);
     }

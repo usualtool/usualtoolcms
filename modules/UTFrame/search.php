@@ -4,7 +4,7 @@ $navname="搜索";
 require_once(UTF_PATH.'/'.'top.php');
 UsualToolCMS::plugins("nsfw");
 $data=UsualToolCMSDB::searchData($key);
-if(!empty($_GET["page"])&&is_numeric($_GET["page"])):$page=$_GET["page"];else:$page=1;endif;
+$page=empty($_GET["page"]) ? 1 : UsualToolCMS::sqlcheck($_GET["page"]);
 $pagenum=10;
 $pagelink="".$listlink."key=$key";
 $minid=$pagenum*($page-1);
