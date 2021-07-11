@@ -122,7 +122,7 @@ endif;
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>系统安装|UsualToolCMS|实用的内容管理框架</title>
+<title>UT框架|安装</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="UsualToolCMS,cms" />

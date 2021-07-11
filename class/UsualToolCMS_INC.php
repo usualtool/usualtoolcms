@@ -175,6 +175,26 @@ class UsualToolCMS{
             $ip = reset(explode(',', $ip));
             return $ip;
     }
+    static function isapp(){
+        if(isset($_SERVER['HTTP_X_WAP_PROFILE'])){
+            return true;
+        }
+        if(isset($_SERVER['HTTP_VIA'])){
+            return stristr($_SERVER['HTTP_VIA'], "wap") ? true : false;
+        }
+        if(isset($_SERVER['HTTP_USER_AGENT'])){
+            $clientkeywords = array('nokia','sony','ericsson','mot','samsung','htc','sgh','lg','sharp','sie-','philips','panasonic','alcatel','lenovo','iphone','ipod','blackberry','meizu','android','netfront','symbian','ucweb','windowsce','palm','operamini','operamobi','openwave','nexusone','cldc','midp','wap','mobile','MicroMessenger'); 
+            if(preg_match("/(".implode('|', $clientkeywords).")/i",strtolower($_SERVER['HTTP_USER_AGENT']))){
+                return true;
+            } 
+        }
+        if(isset ($_SERVER['HTTP_ACCEPT'])) {
+            if((strpos($_SERVER['HTTP_ACCEPT'],'vnd.wap.wml')!== false) && (strpos($_SERVER['HTTP_ACCEPT'],'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html')))){
+            return true;
+            } 
+        } 
+        return false;
+    }
     static function forbytes($size) { 
         $units = array('B','KB','MB','GB','TB'); 
         for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024; 
@@ -289,15 +309,11 @@ class UsualToolCMS{
     /*文件地址操作函数*/
     static function curpageurl(){
         $pageURL = 'http';
-        if ($_SERVER["HTTPS"] == "on"){
+        if($_SERVER["HTTPS"] == "on"){
             $pageURL .= "s";
         }
         $pageURL .= "://";
-        if($_SERVER["SERVER_PORT"] != "80"){
-            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-        }else{
-            $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-        }
+        $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
         return $pageURL;
     }
     static function getfile($url,$save_dir='',$filename='',$type=0){  
