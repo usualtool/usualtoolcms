@@ -83,13 +83,13 @@ endif;
             <td>Download url</td>
           <td width="20%" align="center">Install</td>
          </tr>
-<?php
-$update=UsualToolCMS::auth($authcode,$authapiurl,"update");
-$updates=explode("|",$update);
-for($k=0;$k<count($updates);$k++):
-    $updatecon=explode("^",$updates[$k]);
-    $updatenum=UsualToolCMSDB::queryData("cms_update","","updateid='".$updatecon[1]."'","","","0")["querynum"];
-    ?>
+        <?php
+        $update=UsualToolCMS::auth($authcode,$authapiurl,"update");
+        $updates=explode("|",$update);
+        for($k=0;$k<count($updates);$k++):
+            $updatecon=explode("^",$updates[$k]);
+            $updatenum=UsualToolCMSDB::queryData("cms_update","","updateid='".$updatecon[1]."'","","","0")["querynum"];
+            ?>
              <tr>
               <?php if($updatecon[0]=="nodata"):?>
               <td>---</td>
@@ -114,48 +114,70 @@ for($k=0;$k<count($updates);$k++):
                   </td>
               <?php endif;?>
              </tr>
-<?php endfor;?>
+            <?php endfor;?>
         </table>
         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="line-height:25px;margin-top:15px;">
          <tr><td>Site:<a target="_blank" href="//cms.usualtool.com">cms.usualtool.com</a></td></tr>
          <tr><td>Blog:<a target="_blank" href="//www.usualtool.com/blog">www.usualtool.com/blog</a></td></tr>
-</table>
+        </table>
        </ul>
       </div>
      </td>
      <td valign="top" class="pl" id="cmsnone">
       <div class="indexBox">
-       <div class="boxTitle">system information</div>
+       <div class="boxTitle">system information<span style="float:right;"><button type='button' class='btnGray' id='addmodnav' onclick=utwin.alert('model','api')>API Address</button></span></div>
        <ul>
         <table width="100%" border="0" cellspacing="0" cellpadding="7" class="tablebasic">
-<?php
-$ups=UsualToolCMS::auth($authcode,$authapiurl,"upapi");
-$up=explode("|",$ups);
-$upcopy=$up[0];
-$adv=$up[1];
-?>
-<tr>
-<td>Installation:<?php echo$setup["copyright"];?></td>
-<td>System:<?php echo$upcopy?></td>
-</tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="line-height:25px;margin-top:15px;">
-<?php
-$advs=explode("^",$adv);
-for($a=0;$a<count($advs);$a++):
-?>
-<tr style="margin-top:10px;">
-<td><?php echo$advs[$a];?></td>
-</tr>
-<?php endfor;?>
-</table>
+        <?php
+        $ups=UsualToolCMS::auth($authcode,$authapiurl,"upapi");
+        $up=explode("|",$ups);
+        $upcopy=$up[0];
+        $adv=$up[1];
+        ?>
+        <tr>
+        <td>Installation: <?php echo$setup["copyright"];?></td>
+        <td>System: <?php echo$upcopy?></td>
+        <td>Patch: <?php echo file_get_contents(WEB_PATH."/UTVER.INI");?></td>
+        </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="line-height:25px;margin-top:15px;">
+        <?php
+        $advs=explode("^",$adv);
+        for($a=0;$a<count($advs);$a++):
+        ?>
+        <tr style="margin-top:10px;">
+        <td><?php echo$advs[$a];?></td>
+        </tr>
+        <?php endfor;?>
+        </table>
        </ul>
       </div>
      </td>
     </tr>
    </table>
-   <?php endif;?>
+   <?php
+   endif;
+       if($_GET["do"]=="update"){
+           $authcode=UsualToolCMS::sqlcheck($_POST["authcode"]);
+           $authapiurl=UsualToolCMS::sqlcheck($_POST["authapiurl"]);
+           UsualToolCMSDB::updateData("cms_setup",array("authcode"=>$authcode,"authapiurl"=>$authapiurl),"id='".$setup["id"]."'");
+           echo"<script>alert('succeed!');window.location.href='ut-update.php';</script>";
+	   }
+   ?>
+   <div class="utwin-mask" onclick="utwin.closeAll()" id="mask-model">关闭</div>
+   <div class="utwin utwin-model" id="model">
+       <div class="utwin-title">UT API</div>
+       <div class="utwin-content" style="line-height:35px;">
+           <form action="?do=update" method="post" id="form" name="form">
+           <dl>
+               <dd>API Authcode<br><input type="text" style="width:95%;" class="inpMain" name="authcode" value="<?php echo$setup["authcode"];?>"></dd>
+               <dd>API Address<br><input type="text" style="width:95%;" class="inpMain" name="authapiurl" value="<?php echo$setup["authapiurl"];?>"></dd>
+               <dd><input type="submit" value="Save" class="btn"></dd>
+           </dl>
+           </form>
+       </div>
+   </div>
   </div>
- </div>
+</div>
 <?php
 require_once 'ut-bot.php';?>

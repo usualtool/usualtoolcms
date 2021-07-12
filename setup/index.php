@@ -208,7 +208,7 @@ echo"<div class='form-group row'><div class='col-sm-12'>请对站点目录开启
 echo"<div class='form-group row'><div class='col-sm-12'>伪静态路由环境配置</div></div>";
 $SystemInfos=getSystemInfo();
 $SystemInfo=explode("|",$SystemInfos);
-echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>架构平台</label><div class='col-sm-9'><font color=red>".$SystemInfo[0]."</font>，默认动态路由访问，若需设置伪静态，请按以下规则进行设置<br>设置伪静态后，需安装『URL路由管理』插件来批量处理模板和导航中的地址。</div></div>";
+echo"<div class='form-group row'><label class='col-sm-3 control-label form-inline'>架构平台</label><div class='col-sm-9'><font color=red>".$SystemInfo[0]."</font>，默认动态路由访问，若设置伪静态，可按以下规则进行设置。<br>UT安装后，可以通过『URL路由管理』插件批量处理模板和导航中的地址。</div></div>";
 echo"<div class='form-group row'><div class='col-sm-12'><textarea id='textarea' style='width:100%;height:120px;line-height:20px;' readonly='readonly'>";
 if(strpos($SystemInfo[0],'IIS')!==false){?>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
