@@ -66,7 +66,6 @@ $lang=Lang();
 <script type="text/javascript" src="../assets/js/usualtool-cms-2.0.js"></script>
 <script type="text/javascript" src="../assets/js/dialog.js" charset="utf-8"></script>
 <script type="text/javascript" src="../assets/js/plupload.full.min.js"></script>
-<script type="text/javascript" src="../assets/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="../assets/js/jquery.datatables.min.js"></script>
 <script type="text/javascript" src="../assets/js/datatables.buttons.min.js"></script>
 <script type="text/javascript" src="../assets/js/buttons.html5.min.js "></script> 
