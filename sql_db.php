@@ -1,15 +1,15 @@
 <?php
-define('ROOT_PATH',dirname(__FILE__));
-define('REWRITE',0);
-define('UTREDIS',0);
-define('UTREDIS_HOST','127.0.0.1');
-define('UTREDIS_PORT',6379);
-define('UTREDIS_PASS','UT');
-define('UTREDIS_TIME',3600);
-define('UTSOCKETS',0);
-define('UTSOCKETS_HOST','127.0.0.1');
-define('UTSOCKETS_WSIP','127.0.0.1');
-define('UTSOCKETS_PORT',8080);
+defined('ROOT_PATH') or define('ROOT_PATH',dirname(__FILE__));
+defined('REWRITE') or define('REWRITE',0);
+defined('UTREDIS') or define('UTREDIS',0);
+defined('UTREDIS_HOST') or define('UTREDIS_HOST','127.0.0.1');
+defined('UTREDIS_PORT') or define('UTREDIS_PORT',6379);
+defined('UTREDIS_PASS') or define('UTREDIS_PASS','UT');
+defined('UTREDIS_TIME') or define('UTREDIS_TIME',3600);
+defined('UTSOCKETS') or define('UTSOCKETS',0);
+defined('UTSOCKETS_HOST') or define('UTSOCKETS_HOST','127.0.0.1');
+defined('UTSOCKETS_WSIP') or define('UTSOCKETS_WSIP','127.0.0.1');
+defined('UTSOCKETS_PORT') or define('UTSOCKETS_PORT',8080);
 $dbhost="localhost";
 $dbuser="";
 $dbpass="";

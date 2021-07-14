@@ -131,6 +131,7 @@ class UsualToolTemp{
         $hex.="2f6469763ea";
         $hexs="3c2f626f64793e";
         $string="";
+        $strings="";
         for($i=0; $i < strlen($hex)-1; $i+=2):
             $string .= chr(hexdec($hex[$i].$hex[$i+1]));
         endfor;

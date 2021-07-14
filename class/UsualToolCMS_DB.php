@@ -90,7 +90,7 @@ class UsualToolCMSDB{
                 return array("querydata"=>$querydata,"querynum"=>$listnum);
             endif;
         else:
-            return array();
+            return array("querydata"=>array(),"querynum"=>0);
         endif;
     }
     //增加数据
@@ -157,6 +157,7 @@ class UsualToolCMSDB{
     public static function tagData($table,$field='',$where='',$order='',$lang='1'){
         include(ROOT_PATH.'/'.'sql_db.php');
         global$language;
+        $tags="";
         if(!empty($field)):
             $fields=$field;
         else:
@@ -330,12 +331,13 @@ class UsualToolCMSDB{
                 $authlist=array(
                 'qq_appid'=>$setuprow["qq_appid"],'qq_appkey'=>$setuprow["qq_appkey"],'qq_reurl'=>$setuprow["qq_reurl"],
                 'wb_appid'=>$setuprow["wb_appid"],'wb_appkey'=>$setuprow["wb_appkey"],'wb_reurl'=>$setuprow["wb_reurl"],
-                'ww_appid'=>$setuprow["ww_appid"],'ww_appkey'=>$setuprow["ww_appkey"],'ww_reurl'=>$setuprow["ww_reurl"]
-                );
+                'ww_appid'=>$setuprow["ww_appid"],'ww_appkey'=>$setuprow["ww_appkey"],'ww_reurl'=>$setuprow["ww_reurl"]);
             endwhile;
             return $authlist;
         else:
-            return array();
+            return array('qq_appid'=>'','qq_appkey'=>'','qq_reurl'=>'',
+                         'wb_appid'=>'','wb_appkey'=>'','wb_reurl'=>'',
+                         'ww_appid'=>'','ww_appkey'=>'','ww_reurl'=>'');
         endif;
     }
 }

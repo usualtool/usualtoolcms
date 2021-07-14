@@ -112,9 +112,9 @@ $mytpl->runin(
     array("currentpage","tnavs","inavs","bnavs"),
     array(
         $currentpage,
-        UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='top' and planid='$planid'","ordernum asc","","0")["querydata"],
-        UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='index' and planid='$planid'","ordernum asc","","0")["querydata"],
-        UsualToolCMSDB::queryData("cms_nav","linkname,linkurl","place='bottom' and planid='$planid'","ordernum asc","","0")["querydata"])
+        UsualToolCMSDB::queryData("cms_nav","","place='top' and planid='$planid'","ordernum asc","","0")["querydata"],
+        UsualToolCMSDB::queryData("cms_nav","","place='index' and planid='$planid'","ordernum asc","","0")["querydata"],
+        UsualToolCMSDB::queryData("cms_nav","","place='bottom' and planid='$planid'","ordernum asc","","0")["querydata"])
 );
 /*----Read UT MemberLogin----*/
 $mytpl->runin(

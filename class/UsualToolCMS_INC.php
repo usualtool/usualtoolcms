@@ -309,7 +309,7 @@ class UsualToolCMS{
     /*文件地址操作函数*/
     static function curpageurl(){
         $pageURL = 'http';
-        if($_SERVER["HTTPS"] == "on"){
+        if(isset($_SERVER["HTTPS"]) && strtolower($_SERVER["HTTPS"])=="on"){
             $pageURL .= "s";
         }
         $pageURL .= "://";
@@ -481,21 +481,10 @@ class UsualToolCMS{
 /*语言操作函数*/
 function LangData($word,$type=''){
     global$language;
-    if(defined('HTML_PATH')):
-        $lgpath="../../../";
-    elseif(defined('PAY_PATH')):
-        $lgpath="../../../../";
-    else:
-        if(WEB_PATH==getcwd()):
-            $lgpath="";
-        else:
-            $lgpath="../";
-        endif;
-    endif;
     if(!empty($type)):
-        $langdata=json_decode(file_get_contents("".$lgpath."lang/lg-".$type.".json"),true);
+        $langdata=json_decode(file_get_contents(WEB_PATH."/lang/lg-".$type.".json"),true);
     else:
-        $langdata=json_decode(file_get_contents("".$lgpath."lang/lg-".$language.".json"),true);
+        $langdata=json_decode(file_get_contents(WEB_PATH."/lang/lg-".$language.".json"),true);
     endif;
     if(array_key_exists($word,$langdata["l"])){
     $langword=$langdata["l"]["".$word.""];
@@ -507,12 +496,7 @@ function LangData($word,$type=''){
 function ModLangData($word){
 	global$language;
 	global$modpath;
-	if(WEB_PATH==getcwd()):
-		$lgpath="";
-	else:
-		$lgpath="../";
-	endif;
-    $langdata=json_decode(file_get_contents("".$lgpath."".$modpath."/lang/lg-".$language.".json"),true);
+    $langdata=json_decode(file_get_contents(WEB_PATH."/".$modpath."/lang/lg-".$language.".json"),true);
     if(array_key_exists($word,$langdata["l"])){
         $langword=$langdata["l"]["".$word.""];
         return $langword;
@@ -522,19 +506,10 @@ function ModLangData($word){
 }
 function LangSet($word,$type=''){
     global$language;
-    if(defined('HTML_PATH')):
-        $lgpath="../../../";
-    else:
-        if(WEB_PATH==getcwd()):
-            $lgpath="";
-        else:
-            $lgpath="../";
-        endif;
-    endif;
     if(!empty($type)):
-        $langdata=json_decode(file_get_contents("".$lgpath."lang/lg-".$type.".json"),true);
+        $langdata=json_decode(file_get_contents(WEB_PATH."/lang/lg-".$type.".json"),true);
     else:
-        $langdata=json_decode(file_get_contents("".$lgpath."lang/lg-".$language.".json"),true);
+        $langdata=json_decode(file_get_contents(WEB_PATH."/lang/lg-".$language.".json"),true);
     endif;
     $langword=$langdata["s"]["".$word.""];
     return $langword;
