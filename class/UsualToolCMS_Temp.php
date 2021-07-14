@@ -72,7 +72,7 @@ class UsualToolTemp{
         );
         $replacement=array(
         '<?php 
-        if(UsualToolCMS::contain(",","${1}")):$pluginfile=explode(",","${1}");$HOOKPATH="plugins/$pluginfile[0]/";if(is_dir($HOOKPATH)):if(UsualToolCMS::contain(".php","$pluginfile[1]")):include_once($HOOKPATH."".$pluginfile[1]."");else:echo"<iframe src=".$HOOKPATH."".$pluginfile[1]." frameborder=0 id=external-frame></iframe><style>iframe{width:100%;margin:0 0 1em;border:0;}</style><script src=images/js/autoheight.js></script>";endif;endif;else:$HOOKPATH="plugins/${1}/";if(is_dir($HOOKPATH)):include_once($HOOKPATH."index.php");endif;endif;?>',
+        if(UsualToolCMS::contain(",","${1}")):$pluginfile=explode(",","${1}");$HOOKPATH="plugins/$pluginfile[0]/";if(is_dir($HOOKPATH)):if(UsualToolCMS::contain(".php","$pluginfile[1]")):include_once($HOOKPATH."".$pluginfile[1]."");else:echo"<iframe src=".$HOOKPATH."".$pluginfile[1]." frameborder=0 id=external-frame></iframe><style>iframe{width:100%;margin:0 0 1em;border:0;}</style><script src=assets/js/autoheight.js></script>";endif;endif;else:$HOOKPATH="plugins/${1}/";if(is_dir($HOOKPATH)):include_once($HOOKPATH."index.php");endif;endif;?>',
         '<?php if(UsualToolCMS::contain(UsualToolCMS::clearnum($this->tplvars["${2}"]["${3}"]),UsualToolCMS::clearnum($this->tplvars["${1}"]))==true):echo"${4}";endif;?>',
         '<?php echo UsualToolCMS::${1};?>',
         '<?php echo UsualToolCMSDB::${1};?>',
