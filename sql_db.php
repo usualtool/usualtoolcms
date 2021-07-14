@@ -11,11 +11,13 @@ define('UTSOCKETS_HOST','127.0.0.1');
 define('UTSOCKETS_WSIP','127.0.0.1');
 define('UTSOCKETS_PORT',8080);
 $dbhost="localhost";
-$dbname="";
 $dbuser="";
 $dbpass="";
-$mysqli=new mysqli($dbhost,$dbuser,$dbpass,$dbname);
-$mysqli->set_charset('utf8');
+$dbname="";
+if(!empty($dbuser) && !empty($dbpass) && !empty($dbname)):
+    $mysqli=new mysqli($dbhost,$dbuser,$dbpass,$dbname);
+    $mysqli->set_charset('utf8');
+endif;
 if(UTREDIS=='1'):
     $redis=new Redis();
     $redis->connect(UTREDIS_HOST,UTREDIS_PORT);
