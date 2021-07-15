@@ -12,7 +12,6 @@ if(!empty($_POST['l'])){
 }else{
     $l="images/upload/other";
 }
-echo 1;
 $path = "../assets/".$l."/";
 $file = $_FILES['file'];
 $name = $file['name'];
