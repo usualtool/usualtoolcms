@@ -1,5 +1,5 @@
 ﻿<{include "head.cms"}>
-<{if(is_dir("modules/article"))}>
+<{if UsualToolCMSDB::modTable("cms_article")}>
 <!--article--><div class="container mb-2">
     <div class=row>
         <div class="col-md-12 mb-1">
@@ -92,7 +92,7 @@
         <!--/hit article--></div>
 </div><!--/article-->
 <{/if}>
-<{if(is_dir("modules/info"))}>
+<{if UsualToolCMSDB::modTable("cms_info")}>
 <!--info--><div class="container mb-2">
     <div class="row">
         <div class="col-md-12 mb-1">
@@ -139,7 +139,7 @@
     </div>
 </div><!--/info-->
 <{/if}>
-<{if(is_dir("modules/video"))}>
+<{if UsualToolCMSDB::modTable("cms_video")}>
 <!--video--><div class="container mb-2">
     <div class="row">
         <div class="col-md-12 mb-1">
@@ -166,7 +166,7 @@
     </div>
 </div><!--/video-->
 <{/if}>
-<{if(is_dir("modules/music"))}>
+<{if UsualToolCMSDB::modTable("cms_music")}>
 <!--music--><div class="container mb-2">
     <div class="row">
         <div class="col-md-8 ut-none">
@@ -241,7 +241,7 @@
     </div>
 </div><!--/music-->
 <{/if}>
-<{if(is_dir("modules/job"))}>
+<{if UsualToolCMSDB::modTable("cms_job")}>
 <!--job--><div class="container mb-2">
     <div class="row">
         <div class="col-md-12 mb-1">
@@ -270,7 +270,7 @@
     </div>
 </div><!--/job-->
 <{/if}>
-<{if(is_dir("modules/goods"))}>
+<{if UsualToolCMSDB::modTable("cms_goods")}>
 <!--goods--><div class="container mb-2">
     <div class="row">
         <div class="col-md-8 ut-none">
@@ -334,7 +334,7 @@
     </div>
 </div><!--/goods-->
 <{/if}>
-<{if(is_dir("modules/down"))}>
+<{if UsualToolCMSDB::modTable("cms_down")}>
 <!--down--><div class="container mb-2">
     <div class="row">
         <div class="col-md-12 mb-1">
@@ -366,7 +366,7 @@
     </div>
 </div><!--/down-->
 <{/if}>
-<{if(is_dir("modules/atlas"))}>
+<{if UsualToolCMSDB::modTable("cms_atlas")}>
 <!--atlas--><div class="container mb-2">
     <div class="row">
         <div class="col-md-8 ut-none">
